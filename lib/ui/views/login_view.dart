@@ -1,6 +1,7 @@
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/shared/text_styles.dart';
 import 'package:diginote/ui/views/register_view.dart';
+import 'package:diginote/ui/views/screens_view.dart';
 import 'package:diginote/ui/widgets/header_footer.dart';
 import 'package:flutter/material.dart';
 
@@ -46,6 +47,11 @@ class _LoginViewState extends State<LoginView> {
                   if (_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Processing Data')),
+                    );
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ScreensView()),
                     );
                   }
                 },
