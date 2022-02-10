@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1043611456112",
+    "project_id": "diginote-76a6e",
+    "storage_bucket": "diginote-76a6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1043611456112:android:2a5f1bf2df0093ff595ab5",
+        "android_client_info": {
+          "package_name": "com.example.diginote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1043611456112-u9uue8lng83mtbov4hmevkchkl3i65e7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbkC-Spz8TjPIalOxVZ3Rwi2jcHXAoaLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1043611456112-u9uue8lng83mtbov4hmevkchkl3i65e7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
