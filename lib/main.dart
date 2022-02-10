@@ -1,5 +1,7 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
+import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/core/providers/login_provider.dart';
+import 'package:diginote/core/providers/register_provider.dart';
 import 'package:diginote/ui/views/login_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -13,9 +15,13 @@ void main() async {
   );
 
   final LoginProvider loginProvider = FirebaseLoginProvider();
+  final RegisterProvider registerProvider = FirebaseRegisterProvider();
 
-  runApp(ChangeNotifierProvider(
-    create: (context) => loginProvider,
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => loginProvider),
+      ChangeNotifierProvider(create: (context) => registerProvider),
+    ],
     child: const MyApp(),
   ));
 }

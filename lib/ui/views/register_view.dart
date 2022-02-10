@@ -1,8 +1,10 @@
+import 'package:diginote/core/providers/register_provider.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/shared/text_styles.dart';
 import 'package:diginote/ui/views/login_view.dart';
 import 'package:diginote/ui/widgets/header_footer.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -13,6 +15,9 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   @override
@@ -31,27 +36,26 @@ class _RegisterViewState extends State<RegisterView> {
                 alignment: Alignment.topLeft,
               ),
               TextFormField(
+                controller: _usernameController,
                 decoration: const InputDecoration(hintText: 'Username'),
                 validator: isEmptyValidator,
               ),
               TextFormField(
+                controller: _emailController,
                 decoration: const InputDecoration(hintText: 'Email'),
                 validator: isEmptyValidator,
               ),
               TextFormField(
+                controller: _passwordController,
                 decoration: const InputDecoration(hintText: 'Password'),
                 validator: isEmptyValidator,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
-                    );
-                  }
-                },
-                child: const Text('Register'),
-              ),
+              Consumer<RegisterProvider>(builder: (context, registerProvider, child) {
+                return ElevatedButton(
+                  onPressed: () => _register(registerProvider),
+                  child: const Text('Register'),
+                );
+              }),
               Footer(
                 footerText: "Already have an account?",
                 buttonText: 'Login',
@@ -68,5 +72,12 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
+  }
+
+  Future<void> _register(RegisterProvider registerProvider) async {
+    if (_formKey.currentState!.validate()) {
+      await registerProvider.createUserWithEmailAndPassword(
+          _emailController.text, _passwordController.text);
+    }
   }
 }

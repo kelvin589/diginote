@@ -74,7 +74,7 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> _login(LoginProvider loginProvider) async {
     if (_formKey.currentState!.validate()) {
-      loginProvider.signInWithEmailAndPassword(_emailController.text, _passwordController.text);
+      await loginProvider.signInWithEmailAndPassword(_emailController.text, _passwordController.text);
       // ScaffoldMessenger.of(context).showSnackBar(
       //   const SnackBar(content: Text('Processing Data')),
       // );
