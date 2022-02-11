@@ -1,14 +1,24 @@
 import 'package:diginote/core/repositories/firebase_login_repository.dart';
-import 'package:diginote/core/repositories/login_repository.dart';
+import 'package:diginote/ui/shared/state_enums.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'login_provider.dart';
+class FirebaseLoginProvider extends ChangeNotifier {
+  final FirebaseLoginRepository _loginRespository = FirebaseLoginRepository();
 
-class FirebaseLoginProvider extends ChangeNotifier implements LoginProvider {
-  final LoginRespository _loginRespository = FirebaseLoginRepository();
+  ApplicationLoginState _applicationLoginState =
+      ApplicationLoginState.loggedOut;
+  ApplicationLoginState get applicationLoginState => _applicationLoginState;
 
-  @override
-  Future<void> signInWithEmailAndPassword(String email, String password) {
-    return _loginRespository.signInWithEmailAndPassword(email, password);
-  } 
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+    UserCredential? userCredential =
+        await _loginRespository.signInWithEmailAndPassword(email, password);
+    if (userCredential != null) {
+      print(userCredential.user?.email);
+      _applicationLoginState = ApplicationLoginState.loggedIn;
+    } else {
+      _applicationLoginState = ApplicationLoginState.loggedOut;
+    }
+    notifyListeners();
+  }
 }

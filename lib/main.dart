@@ -1,7 +1,5 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/core/providers/firebase_register_provider.dart';
-import 'package:diginote/core/providers/login_provider.dart';
-import 'package:diginote/core/providers/register_provider.dart';
 import 'package:diginote/ui/views/login_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -14,8 +12,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final LoginProvider loginProvider = FirebaseLoginProvider();
-  final RegisterProvider registerProvider = FirebaseRegisterProvider();
+  final FirebaseLoginProvider loginProvider = FirebaseLoginProvider();
+  final FirebaseRegisterProvider registerProvider = FirebaseRegisterProvider();
 
   runApp(MultiProvider(
     providers: [
@@ -36,7 +34,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.yellow,
       ),
-      home: const LoginView(),
+      home: Consumer<FirebaseLoginProvider>(
+        builder: (context, loginProvider, child) => LoginView(
+            applicationLoginState: loginProvider.applicationLoginState),
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
-import 'package:diginote/core/providers/register_provider.dart';
+import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
+import 'package:diginote/ui/shared/state_enums.dart';
 import 'package:diginote/ui/shared/text_styles.dart';
 import 'package:diginote/ui/views/login_view.dart';
 import 'package:diginote/ui/widgets/header_footer.dart';
@@ -58,7 +59,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 decoration: const InputDecoration(hintText: 'Password'),
                 validator: isEmptyValidator,
               ),
-              Consumer<RegisterProvider>(
+              Consumer<FirebaseRegisterProvider>(
                   builder: (context, registerProvider, child) {
                 return ElevatedButton(
                   onPressed: () => _register(registerProvider),
@@ -71,7 +72,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginView()),
+                    MaterialPageRoute(builder: (context) => const LoginView(applicationLoginState: ApplicationLoginState.loggedOut,)),
                   );
                 },
               )
@@ -82,7 +83,7 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
-  Future<void> _register(RegisterProvider registerProvider) async {
+  Future<void> _register(FirebaseRegisterProvider registerProvider) async {
     if (_formKey.currentState!.validate()) {
       await registerProvider.createUserWithEmailAndPassword(
           _emailController.text,
