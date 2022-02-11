@@ -7,7 +7,7 @@ class FirebaseRegisterProvider extends ChangeNotifier implements RegisterProvide
   final RegisterRepository _registerRepository = FirebaseRegisterRepository();
 
   @override
-  Future<void> createUserWithEmailAndPassword(String email, String password) {
-    return _registerRepository.createUserWithEmailAndPassword(email, password);
+  Future<void> createUserWithEmailAndPassword(String email, String password, String username) {
+    return _registerRepository.createUserWithEmailAndPassword(email, password, username);
   }
 }

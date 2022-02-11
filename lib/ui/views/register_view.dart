@@ -77,7 +77,7 @@ class _RegisterViewState extends State<RegisterView> {
   Future<void> _register(RegisterProvider registerProvider) async {
     if (_formKey.currentState!.validate()) {
       await registerProvider.createUserWithEmailAndPassword(
-          _emailController.text, _passwordController.text);
+          _emailController.text, _passwordController.text, _usernameController.text);
     }
   }
 }
