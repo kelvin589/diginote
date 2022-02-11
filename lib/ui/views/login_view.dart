@@ -1,4 +1,5 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/shared/state_enums.dart';
 import 'package:diginote/ui/shared/text_styles.dart';
@@ -9,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({Key? key, required this.applicationLoginState}) : super(key: key);
+  const LoginView({Key? key, required this.applicationLoginState})
+      : super(key: key);
 
   final ApplicationLoginState applicationLoginState;
 
@@ -34,7 +36,6 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-
   // Global key uniquely identifies the form + allows validation
   // Global key is the recommended way to access a form
   final _formKey = GlobalKey<FormState>();
@@ -66,7 +67,8 @@ class _LoginFormState extends State<LoginForm> {
                 decoration: const InputDecoration(hintText: 'Password'),
                 validator: isEmptyValidator,
               ),
-              Consumer<FirebaseLoginProvider>(builder: (context, loginProvider, child) {
+              Consumer<FirebaseLoginProvider>(
+                  builder: (context, loginProvider, child) {
                 return ElevatedButton(
                   onPressed: () => _login(loginProvider),
                   child: const Text('Login'),
@@ -93,7 +95,10 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _login(FirebaseLoginProvider loginProvider) async {
     if (_formKey.currentState!.validate()) {
       await loginProvider.signInWithEmailAndPassword(
-          _emailController.text, _passwordController.text);
+        _emailController.text,
+        _passwordController.text,
+        (exception) => DialogueHelper.showErrorDialogue(context, 'Login Error', exception),
+      );
       // ScaffoldMessenger.of(context).showSnackBar(
       //   const SnackBar(content: Text('Processing Data')),
       // );

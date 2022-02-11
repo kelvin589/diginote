@@ -10,11 +10,10 @@ class FirebaseLoginProvider extends ChangeNotifier {
       ApplicationLoginState.loggedOut;
   ApplicationLoginState get applicationLoginState => _applicationLoginState;
 
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
+  Future<void> signInWithEmailAndPassword(String email, String password, void Function(Exception exception) onError) async {
     UserCredential? userCredential =
-        await _loginRespository.signInWithEmailAndPassword(email, password);
+        await _loginRespository.signInWithEmailAndPassword(email, password, onError);
     if (userCredential != null) {
-      print(userCredential.user?.email);
       _applicationLoginState = ApplicationLoginState.loggedIn;
     } else {
       _applicationLoginState = ApplicationLoginState.loggedOut;
