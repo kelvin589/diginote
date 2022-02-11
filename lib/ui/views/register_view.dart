@@ -6,20 +6,28 @@ import 'package:diginote/ui/widgets/header_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RegisterView extends StatefulWidget {
+class RegisterView extends StatelessWidget {
   const RegisterView({Key? key}) : super(key: key);
 
   @override
-  _RegisterViewState createState() => _RegisterViewState();
+  Widget build(BuildContext context) {
+    return const RegisterForm();
+  }
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key? key}) : super(key: key);
+
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +58,8 @@ class _RegisterViewState extends State<RegisterView> {
                 decoration: const InputDecoration(hintText: 'Password'),
                 validator: isEmptyValidator,
               ),
-              Consumer<RegisterProvider>(builder: (context, registerProvider, child) {
+              Consumer<RegisterProvider>(
+                  builder: (context, registerProvider, child) {
                 return ElevatedButton(
                   onPressed: () => _register(registerProvider),
                   child: const Text('Register'),
@@ -62,8 +71,7 @@ class _RegisterViewState extends State<RegisterView> {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginView(title: 'Login')),
+                    MaterialPageRoute(builder: (context) => const LoginView()),
                   );
                 },
               )
@@ -77,7 +85,9 @@ class _RegisterViewState extends State<RegisterView> {
   Future<void> _register(RegisterProvider registerProvider) async {
     if (_formKey.currentState!.validate()) {
       await registerProvider.createUserWithEmailAndPassword(
-          _emailController.text, _passwordController.text, _usernameController.text);
+          _emailController.text,
+          _passwordController.text,
+          _usernameController.text);
     }
   }
 }

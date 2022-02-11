@@ -7,16 +7,23 @@ import 'package:diginote/ui/widgets/header_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class LoginView extends StatelessWidget {
+  const LoginView({Key? key}) : super(key: key);
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  Widget build(BuildContext context) {
+    return const LoginForm();
+  }
 }
 
-class _LoginViewState extends State<LoginView> {
+class LoginForm extends StatefulWidget {
+  const LoginForm({Key? key}) : super(key: key);
+
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
   // Global key uniquely identifies the form + allows validation
   // Global key is the recommended way to access a form
   final _formKey = GlobalKey<FormState>();

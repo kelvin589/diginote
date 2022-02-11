@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.yellow,
       ),
-      home: const LoginView(title: 'Flutter Demo Home Page'),
+      home: const LoginView(),
     );
   }
 }
