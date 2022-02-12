@@ -1,19 +1,18 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
-import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/shared/state_enums.dart';
 import 'package:diginote/ui/shared/text_styles.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/register_view.dart';
-import 'package:diginote/ui/views/screens_view.dart';
 import 'package:diginote/ui/widgets/header_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({Key? key, required this.applicationLoginState})
-      : super(key: key);
+  const LoginView({Key? key, required this.applicationLoginState}) : super(key: key);
+
+  static const String route = '/login';
 
   final ApplicationLoginState applicationLoginState;
 
@@ -79,17 +78,7 @@ class _LoginFormState extends State<LoginForm> {
               Footer(
                 footerText: "Don't have an account?",
                 buttonText: 'Register',
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RegisterView(
-                          applicationRegisterState:
-                              Provider.of<FirebaseRegisterProvider>(context)
-                                  .applicationRegisterState),
-                    ),
-                  );
-                },
+                onPressed: () => Navigator.pushReplacementNamed(context, RegisterView.route),
               )
             ],
           ),
