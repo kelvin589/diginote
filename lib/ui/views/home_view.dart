@@ -36,7 +36,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: Text(_titleText(_selectedIndex)),
       ),
       body: Center(
         child: _pages[_selectedIndex],
@@ -66,5 +66,18 @@ class _HomeNavigationState extends State<HomeNavigation> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  String _titleText(int index) {
+    switch (index) {
+      case 0:
+        return 'Screens';
+      case 1:
+        return 'Templates';
+      case 2:
+        return 'Settings';
+      default:
+        return 'Unknown Page';
+    }
   }
 }
