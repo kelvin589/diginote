@@ -1,4 +1,5 @@
 import 'package:diginote/core/providers/firebase_register_provider.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/shared/state_enums.dart';
 import 'package:diginote/ui/shared/text_styles.dart';
@@ -8,11 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RegisterView extends StatelessWidget {
-  const RegisterView({Key? key}) : super(key: key);
+  const RegisterView({Key? key, required this.applicationRegisterState}) : super(key: key);
+
+  final ApplicationRegisterState applicationRegisterState;
 
   @override
   Widget build(BuildContext context) {
-    return const RegisterForm();
+    switch (applicationRegisterState) {
+      case ApplicationRegisterState.registered:
+        return const Text("Registered");
+      case ApplicationRegisterState.registering:
+        return const RegisterForm();
+      default:
+        return const Text("Unknown error occured");
+    }
   }
 }
 
@@ -88,7 +98,9 @@ class _RegisterFormState extends State<RegisterForm> {
       await registerProvider.createUserWithEmailAndPassword(
           _emailController.text,
           _passwordController.text,
-          _usernameController.text);
+          _usernameController.text,
+          (exception) => DialogueHelper.showErrorDialogue(context, 'Registration Error', exception),
+      );
     }
   }
 }

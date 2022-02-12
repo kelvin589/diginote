@@ -1,4 +1,5 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
+import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/shared/state_enums.dart';
@@ -81,7 +82,11 @@ class _LoginFormState extends State<LoginForm> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const RegisterView()),
+                      builder: (context) => RegisterView(
+                          applicationRegisterState:
+                              Provider.of<FirebaseRegisterProvider>(context)
+                                  .applicationRegisterState),
+                    ),
                   );
                 },
               )
@@ -97,7 +102,8 @@ class _LoginFormState extends State<LoginForm> {
       await loginProvider.signInWithEmailAndPassword(
         _emailController.text,
         _passwordController.text,
-        (exception) => DialogueHelper.showErrorDialogue(context, 'Login Error', exception),
+        (exception) =>
+            DialogueHelper.showErrorDialogue(context, 'Login Error', exception),
       );
       // ScaffoldMessenger.of(context).showSnackBar(
       //   const SnackBar(content: Text('Processing Data')),
