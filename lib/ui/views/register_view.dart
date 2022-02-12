@@ -19,7 +19,8 @@ class RegisterView extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (applicationRegisterState) {
       case ApplicationRegisterState.registered:
-        return const Text("Registered");
+        Future.delayed(Duration.zero, () => DialogueHelper.showSuccessDialogue(context, 'Successful Registration', 'Successfully created an account. You can login.'));
+        return const RegisterForm();
       case ApplicationRegisterState.registering:
         return const RegisterForm();
       default:
