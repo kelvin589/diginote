@@ -11,13 +11,16 @@ import 'package:provider/provider.dart';
 class RegisterView extends StatelessWidget {
   const RegisterView({Key? key, required this.applicationRegisterState}) : super(key: key);
 
+  static const String route = '/register';
+
   final ApplicationRegisterState applicationRegisterState;
 
   @override
   Widget build(BuildContext context) {
     switch (applicationRegisterState) {
       case ApplicationRegisterState.registered:
-        return const Text("Registered");
+        Future.delayed(Duration.zero, () => DialogueHelper.showSuccessDialogue(context, 'Successful Registration', 'Successfully created an account. You can login.'));
+        return const RegisterForm();
       case ApplicationRegisterState.registering:
         return const RegisterForm();
       default:
@@ -79,12 +82,7 @@ class _RegisterFormState extends State<RegisterForm> {
               Footer(
                 footerText: "Already have an account?",
                 buttonText: 'Login',
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginView(applicationLoginState: ApplicationLoginState.loggedOut,)),
-                  );
-                },
+                onPressed: () => Navigator.pushReplacementNamed(context, LoginView.route),
               )
             ],
           ),

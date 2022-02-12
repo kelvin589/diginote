@@ -1,6 +1,8 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/core/providers/firebase_register_provider.dart';
+import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/login_view.dart';
+import 'package:diginote/ui/views/register_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -32,12 +34,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.yellow,
+        primarySwatch: Colors.purple,
       ),
-      home: Consumer<FirebaseLoginProvider>(
-        builder: (context, loginProvider, child) => LoginView(
-            applicationLoginState: loginProvider.applicationLoginState),
-      ),
+      initialRoute: LoginView.route,
+      routes: {
+        HomeView.route: (context) => const HomeView(),
+        LoginView.route: (_) => Consumer<FirebaseLoginProvider>(
+              builder: (context, loginProvider, child) => LoginView(
+                  applicationLoginState: loginProvider.applicationLoginState),
+            ),
+        RegisterView.route: (_) => RegisterView(
+            applicationRegisterState:
+                Provider.of<FirebaseRegisterProvider>(context)
+                    .applicationRegisterState),
+      },
     );
   }
 }
