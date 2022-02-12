@@ -17,20 +17,14 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -43,11 +37,31 @@ class DefaultFirebaseOptions {
     );
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDFFSSQqoEXfF-cupgEkdS7CR7w6Ysg4G8',
+    appId: '1:1043611456112:web:9f59073765e3c46d595ab5',
+    messagingSenderId: '1043611456112',
+    projectId: 'diginote-76a6e',
+    authDomain: 'diginote-76a6e.firebaseapp.com',
+    storageBucket: 'diginote-76a6e.appspot.com',
+    measurementId: 'G-KQLG0JE99C',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDbkC-Spz8TjPIalOxVZ3Rwi2jcHXAoaLU',
     appId: '1:1043611456112:android:2a5f1bf2df0093ff595ab5',
     messagingSenderId: '1043611456112',
     projectId: 'diginote-76a6e',
     storageBucket: 'diginote-76a6e.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyALqcxZ9F-m7-N3-9ajY3Bsuznym9IgwvA',
+    appId: '1:1043611456112:ios:cd24e369c5f0b97d595ab5',
+    messagingSenderId: '1043611456112',
+    projectId: 'diginote-76a6e',
+    storageBucket: 'diginote-76a6e.appspot.com',
+    iosClientId: '1043611456112-bg69cu05ltg93jl7lgasvs7kvqvq9enu.apps.googleusercontent.com',
+    iosBundleId: 'com.example.diginote',
   );
 }
