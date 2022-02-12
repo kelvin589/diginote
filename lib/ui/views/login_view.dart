@@ -4,6 +4,7 @@ import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/shared/state_enums.dart';
 import 'package:diginote/ui/shared/text_styles.dart';
+import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/register_view.dart';
 import 'package:diginote/ui/views/screens_view.dart';
 import 'package:diginote/ui/widgets/header_footer.dart';
@@ -20,7 +21,7 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (applicationLoginState) {
       case ApplicationLoginState.loggedIn:
-        return const Text("Logged in");
+        return const HomeView();
       case ApplicationLoginState.loggedOut:
         return const LoginForm();
       default:

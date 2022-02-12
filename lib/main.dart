@@ -1,5 +1,6 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/core/providers/firebase_register_provider.dart';
+import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/login_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -32,12 +33,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.yellow,
+        primarySwatch: Colors.purple,
       ),
-      home: Consumer<FirebaseLoginProvider>(
-        builder: (context, loginProvider, child) => LoginView(
-            applicationLoginState: loginProvider.applicationLoginState),
-      ),
+      // home: Consumer<FirebaseLoginProvider>(
+      //   builder: (context, loginProvider, child) => LoginView(
+      //       applicationLoginState: loginProvider.applicationLoginState),
+      // ),
+      home: const HomeView(),
     );
   }
 }
