@@ -36,7 +36,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      initialRoute: LoginView.route,
+      //initialRoute: LoginView.route,
+      initialRoute: HomeView.route,
       routes: {
         HomeView.route: (context) => const HomeView(),
         LoginView.route: (_) => Consumer<FirebaseLoginProvider>(
