@@ -1,3 +1,4 @@
+import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/views/screens_view.dart';
 import 'package:diginote/ui/views/settings_view.dart';
 import 'package:diginote/ui/views/templates_view.dart';
@@ -37,6 +38,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_titleText(_selectedIndex)),
+        actions: _appbarActions(_selectedIndex),
       ),
       body: Center(
         child: _pages[_selectedIndex],
@@ -78,6 +80,39 @@ class _HomeNavigationState extends State<HomeNavigation> {
         return 'Settings';
       default:
         return 'Unknown Page';
+    }
+  }
+
+  void _onTapped(BuildContext context, String message) {
+    DialogueHelper.showSuccessDialogue(context, 'Tapped', message);
+  }
+
+  List<Widget> _appbarActions(int index) {
+    switch (index) {
+      case 0:
+        return [
+          IconButton(
+            onPressed: () => _onTapped(context, 'Edit screen'), 
+            icon: IconHelper.editIcon,
+          ),
+          IconButton(
+            onPressed: () => _onTapped(context, 'Add screen'), 
+            icon: IconHelper.addIcon,
+          ),
+        ];
+      case 1:
+        return [
+          IconButton(
+            onPressed: () => _onTapped(context, 'Edit templates'), 
+            icon: IconHelper.editIcon,
+          ),
+          IconButton(
+            onPressed: () => _onTapped(context, 'Add templates'), 
+            icon: IconHelper.addIcon,
+          ),
+        ];
+      default:
+        return  [];
     }
   }
 }
