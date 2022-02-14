@@ -32,7 +32,7 @@ class ScreensView extends StatelessWidget {
               return Column(
                 children: <Widget>[
                   items[index],
-                  Provider.of<FirebaseScreensProvider>(context).isEditing ? _deleteScreenButton(context) : Container(),
+                  Provider.of<FirebaseScreensProvider>(context).isEditing ? _deleteScreenButton(context, screens.elementAt(index).screenToken) : Container(),
                   const Divider(),
                 ],
               );
@@ -61,13 +61,13 @@ class ScreensView extends StatelessWidget {
     return screenItems;
   }
 
-  Widget _deleteScreenButton(BuildContext context) {
+  Widget _deleteScreenButton(BuildContext context, String screenToken) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () => Provider.of<FirebaseScreensProvider>(context, listen: false).deleteScreen(), 
+          onPressed: () => Provider.of<FirebaseScreensProvider>(context, listen: false).deleteScreen(screenToken), 
           child: const Text("Delete"),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.red),

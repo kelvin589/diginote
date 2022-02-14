@@ -21,7 +21,7 @@ class FirebaseScreensProvider extends ChangeNotifier {
     return _screensRepository.getScreens();
   }
 
-  void deleteScreen() {
-    print('test');
+  void deleteScreen(String screenToken) {
+    return _screensRepository.deleteScreen(screenToken);
   }
 }

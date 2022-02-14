@@ -26,7 +26,8 @@ class FirebaseScreensRepository {
           toFirestore: (screenPairing, _) => screenPairing.toJson(),
         )
         .get()
-        .then((value) => _linkScreen(screenPairing, value.docs.map((e) => e.id).first))
+        .then((value) =>
+            _linkScreen(screenPairing, value.docs.map((e) => e.id).first))
         .catchError((onError) => print("Already paired or code wrong."));
 
     return false;
@@ -44,24 +45,39 @@ class FirebaseScreensRepository {
 
   void _updateScreenPaired(ScreenPairing screenPairing, String screenToken) {
     FirebaseFirestore.instance
-      .collection('pairingCodes')
-      .doc(screenToken)
-      .update({'paired': true, 'userID': userID, 'name': screenPairing.name, 'lastUpdated': screenPairing.lastUpdated, 'screenToken': screenToken})
-      .then((value) => print("Updated paired Boolean"))
-      .catchError((onError) => print("Couldn't update the paired Boolean"));
+        .collection('pairingCodes')
+        .doc(screenToken)
+        .update({
+          'paired': true,
+          'userID': userID,
+          'name': screenPairing.name,
+          'lastUpdated': screenPairing.lastUpdated,
+          'screenToken': screenToken
+        })
+        .then((value) => print("Updated paired Boolean"))
+        .catchError((onError) => print("Couldn't update the paired Boolean"));
   }
 
   Stream<Iterable<ScreenPairing>> getScreens() {
-      return FirebaseFirestore.instance
-      .collection('pairingCodes')
-      .where('userID', isEqualTo: userID)
-      .where('paired', isEqualTo: true)
-      .withConverter<ScreenPairing>(
-        fromFirestore: (snapshot, _) =>
-            ScreenPairing.fromJson(snapshot.data()!),
-        toFirestore: (screenPairing, _) => screenPairing.toJson(),
-      )
-      .snapshots()
-      .map((snapshot) => snapshot.docs.map((e) => e.data()));
+    return FirebaseFirestore.instance
+        .collection('pairingCodes')
+        .where('userID', isEqualTo: userID)
+        .where('paired', isEqualTo: true)
+        .withConverter<ScreenPairing>(
+          fromFirestore: (snapshot, _) =>
+              ScreenPairing.fromJson(snapshot.data()!),
+          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+        )
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((e) => e.data()));
+  }
+
+  void deleteScreen(String screenToken) {
+    FirebaseFirestore.instance
+        .collection('pairingCodes')
+        .doc(screenToken)
+        .delete()
+        .then((value) => print("Deleted screen"))
+        .catchError((onError) => print("Failed to delete error: $onError"));
   }
 }
