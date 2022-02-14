@@ -45,7 +45,6 @@ class ScreensView extends StatelessWidget {
   }
 
   List<Widget> _updateScreenItems(Iterable<ScreenPairing>? screens) {
-    final lastUpdated = DateTime.now();
     const batteryPercentage = 100;
     List<Widget> screenItems = [];
 
@@ -53,7 +52,7 @@ class ScreensView extends StatelessWidget {
       for (ScreenPairing screen in screens) {
         screenItems.add(ScreenItem(
             screenName: screen.name,
-            lastUpdated: lastUpdated,
+            lastUpdated: screen.lastUpdated,
             batteryPercentage: batteryPercentage));
       }
     }
