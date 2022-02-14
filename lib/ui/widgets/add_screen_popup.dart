@@ -64,7 +64,7 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
   }
 
   void _okPressed() {
-    ScreenPairing partialScreenPairing = ScreenPairing(pairingCode: _pairingCodeController.text, paired: false, name: _nameController.text, userID: "", lastUpdated: DateTime.now());
+    ScreenPairing partialScreenPairing = ScreenPairing(pairingCode: _pairingCodeController.text, paired: false, name: _nameController.text, userID: "", lastUpdated: DateTime.now(), screenToken: "");
     if (_formKey.currentState!.validate()) {
       Provider.of<FirebaseScreensProvider>(context, listen: false)
           .addScreen(partialScreenPairing);

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ScreenPairing {
-  ScreenPairing({required this.pairingCode, required this.paired, required this.name, required this.userID, required this.lastUpdated});
+  ScreenPairing({required this.pairingCode, required this.paired, required this.name, required this.userID, required this.lastUpdated, required this.screenToken});
 
   ScreenPairing.fromJson(Map<String, Object?> json)
       : this(
@@ -10,6 +10,7 @@ class ScreenPairing {
           name: json['name']! as String,
           userID: json['userID']! as String,
           lastUpdated: DateTime.parse((json['lastUpdated']! as Timestamp).toDate().toString()),
+          screenToken: json['screenToken']! as String,
         );
 
   final String pairingCode;
@@ -17,6 +18,7 @@ class ScreenPairing {
   final String name;
   final String userID;
   final DateTime lastUpdated;
+  final String screenToken;
 
   Map<String, Object?> toJson() {
     return {
@@ -25,6 +27,7 @@ class ScreenPairing {
       'name': name,
       'userID': userID,
       'lastUpdated': Timestamp.fromDate(lastUpdated),
+      'deviceToken': screenToken,
     };
   }
 }
