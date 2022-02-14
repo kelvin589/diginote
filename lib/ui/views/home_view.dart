@@ -93,27 +93,30 @@ class _HomeNavigationState extends State<HomeNavigation> {
       case 0:
         return [
           IconButton(
-            onPressed: () => _onTapped(context, 'Edit screen'), 
+            onPressed: () => _onTapped(context, 'Edit screen'),
             icon: IconHelper.editIcon,
           ),
           IconButton(
-            onPressed: () => showDialog(context: context, builder: (context) => const AddScreenPopup()), 
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => const AddScreenPopup(),
+            ),
             icon: IconHelper.addIcon,
           ),
         ];
       case 1:
         return [
           IconButton(
-            onPressed: () => _onTapped(context, 'Edit templates'), 
+            onPressed: () => _onTapped(context, 'Edit templates'),
             icon: IconHelper.editIcon,
           ),
           IconButton(
-            onPressed: () => _onTapped(context, 'Add templates'), 
+            onPressed: () => _onTapped(context, 'Add templates'),
             icon: IconHelper.addIcon,
           ),
         ];
       default:
-        return  [];
+        return [];
     }
   }
 }

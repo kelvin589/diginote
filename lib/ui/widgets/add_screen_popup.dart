@@ -1,5 +1,7 @@
+import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddScreenPopup extends StatefulWidget {
   const AddScreenPopup({Key? key}) : super(key: key);
@@ -56,7 +58,8 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
 
   void _okPressed() {
     if (_formKey.currentState!.validate()) {
-      print(_pairingCodeController.text);
+      Provider.of<FirebaseScreensProvider>(context, listen: false)
+          .addScreen(_pairingCodeController.text);
       Navigator.pop(context);
     }
   }
