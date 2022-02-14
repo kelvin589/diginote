@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 class FirebaseScreensProvider extends ChangeNotifier {
   final FirebaseScreensRepository _screensRepository = FirebaseScreensRepository();
 
-  bool addScreen(String pairingCode) {
-    return _screensRepository.addScreen(pairingCode);
+  bool addScreen(String name, String pairingCode) {
+    return _screensRepository.addScreen(name, pairingCode);
   }
 
   Stream<Iterable<ScreenPairing>> getScreens() {

@@ -52,7 +52,7 @@ class ScreensView extends StatelessWidget {
     if (screens != null) {
       for (ScreenPairing screen in screens) {
         screenItems.add(ScreenItem(
-            screenName: screen.pairingCode,
+            screenName: screen.name,
             lastUpdated: lastUpdated,
             batteryPercentage: batteryPercentage));
       }

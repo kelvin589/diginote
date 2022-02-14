@@ -13,6 +13,7 @@ class AddScreenPopup extends StatefulWidget {
 class _AddScreenPopupState extends State<AddScreenPopup> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _pairingCodeController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,12 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Enter the pairing code displayed on your screen:'),
+            const Text('Enter a name for your screen and the pairing code displayed on your screen:'),
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(hintText: 'Name'),
+              validator: isEmptyValidator,
+            ),
             TextFormField(
               controller: _pairingCodeController,
               decoration: const InputDecoration(hintText: 'Pairing Code'),
@@ -59,7 +65,7 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
   void _okPressed() {
     if (_formKey.currentState!.validate()) {
       Provider.of<FirebaseScreensProvider>(context, listen: false)
-          .addScreen(_pairingCodeController.text);
+          .addScreen(_nameController.text, _pairingCodeController.text);
       Navigator.pop(context);
     }
   }
