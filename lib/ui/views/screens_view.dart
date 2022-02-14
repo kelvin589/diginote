@@ -5,21 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ScreensView extends StatelessWidget {
-  const ScreensView({ Key? key }) : super(key: key);
+  const ScreensView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final lastUpdated = DateTime.now();
-    const batteryPercentage = 100;
-    
-    final items = <Widget>[
-      ScreenItem(screenName: 'First', lastUpdated: lastUpdated, batteryPercentage: batteryPercentage,),
-      ScreenItem(screenName: 'Second', lastUpdated: lastUpdated, batteryPercentage: batteryPercentage,),
-      ScreenItem(screenName: 'Third', lastUpdated: lastUpdated, batteryPercentage: batteryPercentage,),
-    ];
-
     return StreamBuilder<Iterable<ScreenPairing>>(
-      stream: Provider.of<FirebaseScreensProvider>(context, listen: false).getScreens(),
+      stream: Provider.of<FirebaseScreensProvider>(context, listen: false)
+          .getScreens(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasError) {
           return Text('Error ${(snapshot.error.toString())}');
@@ -31,25 +23,41 @@ class ScreensView extends StatelessWidget {
 
         Iterable<ScreenPairing>? screens = snapshot.data;
         if (screens != null) {
-          print(screens.length);
-          return Text('${screens.length}');
+          List<Widget> items = <Widget>[];
+          items = _updateScreenItems(screens);
+          return ListView.builder(
+            padding: const EdgeInsets.only(top: 8),
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: <Widget>[
+                  items[index],
+                  const Divider(),
+                ],
+              );
+            },
+          );
         } else {
-          return const Text('didnt work');
+          return const Text('Error occurred');
         }
       },
     );
+  }
 
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 8),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return Column(
-          children: <Widget>[
-            items[index],
-            const Divider(),
-          ],
-        );
-      },
-    );
+  List<Widget> _updateScreenItems(Iterable<ScreenPairing>? screens) {
+    final lastUpdated = DateTime.now();
+    const batteryPercentage = 100;
+    List<Widget> screenItems = [];
+
+    if (screens != null) {
+      for (ScreenPairing screen in screens) {
+        screenItems.add(ScreenItem(
+            screenName: screen.pairingCode,
+            lastUpdated: lastUpdated,
+            batteryPercentage: batteryPercentage));
+      }
+    }
+
+    return screenItems;
   }
 }
