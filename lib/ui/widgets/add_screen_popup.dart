@@ -1,3 +1,4 @@
+import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:flutter/material.dart';
@@ -63,9 +64,10 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
   }
 
   void _okPressed() {
+    ScreenPairing partialScreenPairing = ScreenPairing(pairingCode: _pairingCodeController.text, paired: false, name: _nameController.text, userID: "");
     if (_formKey.currentState!.validate()) {
       Provider.of<FirebaseScreensProvider>(context, listen: false)
-          .addScreen(_nameController.text, _pairingCodeController.text);
+          .addScreen(partialScreenPairing);
       Navigator.pop(context);
     }
   }

@@ -15,10 +15,10 @@ class FirebaseScreensRepository {
     });
   }
 
-  bool addScreen(String name, String pairingCode) {
+  bool addScreen(ScreenPairing screenPairing) {
     FirebaseFirestore.instance
         .collection('pairingCodes')
-        .where('pairingCode', isEqualTo: pairingCode)
+        .where('pairingCode', isEqualTo: screenPairing.pairingCode)
         .where('paired', isEqualTo: false)
         .withConverter<ScreenPairing>(
           fromFirestore: (snapshot, _) =>
@@ -26,27 +26,27 @@ class FirebaseScreensRepository {
           toFirestore: (screenPairing, _) => screenPairing.toJson(),
         )
         .get()
-        .then((value) => _linkScreen(name, value.docs.map((e) => e.id).first))
+        .then((value) => _linkScreen(screenPairing, value.docs.map((e) => e.id).first))
         .catchError((onError) => print("Already paired or code wrong."));
 
     return false;
   }
 
-  void _linkScreen(String name, String screenToken) {
+  void _linkScreen(ScreenPairing screenPairing, String screenToken) {
     var toAdd = [screenToken];
     FirebaseFirestore.instance
         .collection('users')
         .doc(userID)
         .set({"screens": FieldValue.arrayUnion(toAdd)}, SetOptions(merge: true))
-        .then((value) => _updateScreenPaired(name, screenToken))
+        .then((value) => _updateScreenPaired(screenPairing, screenToken))
         .catchError((onError) => print("Couldn't link the screen"));
   }
 
-  void _updateScreenPaired(String name, String screenToken) {
+  void _updateScreenPaired(ScreenPairing screenPairing, String screenToken) {
     FirebaseFirestore.instance
       .collection('pairingCodes')
       .doc(screenToken)
-      .update({'paired': true, 'userID': userID, 'name': name})
+      .update({'paired': true, 'userID': userID, 'name': screenPairing.name})
       .then((value) => print("Updated paired Boolean"))
       .catchError((onError) => print("Couldn't update the paired Boolean"));
   }
