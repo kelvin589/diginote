@@ -2,6 +2,7 @@ import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/views/screens_view.dart';
 import 'package:diginote/ui/views/settings_view.dart';
 import 'package:diginote/ui/views/templates_view.dart';
+import 'package:diginote/ui/widgets/add_screen_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 
@@ -96,7 +97,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
             icon: IconHelper.editIcon,
           ),
           IconButton(
-            onPressed: () => _onTapped(context, 'Add screen'), 
+            onPressed: () => showDialog(context: context, builder: (context) => const AddScreenPopup()), 
             icon: IconHelper.addIcon,
           ),
         ];
