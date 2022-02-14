@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 
 class FirebaseScreensRepository {
   String? userID;
@@ -48,5 +49,18 @@ class FirebaseScreensRepository {
       .update({'paired': true})
       .then((value) => print("Updated paired Boolean"))
       .catchError((onError) => print("Couldn't update the paired Boolean"));
+  }
+
+  Stream<Iterable<ScreenPairing>> getScreens() {
+      return FirebaseFirestore.instance
+      .collection('pairingCodes')
+      .where('userID', isEqualTo: userID)
+      .withConverter<ScreenPairing>(
+        fromFirestore: (snapshot, _) =>
+            ScreenPairing.fromJson(snapshot.data()!),
+        toFirestore: (screenPairing, _) => screenPairing.toJson(),
+      )
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((e) => e.data()));
   }
 }
