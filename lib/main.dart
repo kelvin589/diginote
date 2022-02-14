@@ -1,5 +1,6 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/core/providers/firebase_register_provider.dart';
+import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/login_view.dart';
 import 'package:diginote/ui/views/register_view.dart';
@@ -21,6 +22,7 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (context) => loginProvider),
       ChangeNotifierProvider(create: (context) => registerProvider),
+      ChangeNotifierProvider(create: (context) => FirebaseScreensProvider()),
     ],
     child: const MyApp(),
   ));
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.purple,
       ),
       initialRoute: LoginView.route,
+      //initialRoute: HomeView.route,
       routes: {
         HomeView.route: (context) => const HomeView(),
         LoginView.route: (_) => Consumer<FirebaseLoginProvider>(
