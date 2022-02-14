@@ -55,6 +55,7 @@ class FirebaseScreensRepository {
       return FirebaseFirestore.instance
       .collection('pairingCodes')
       .where('userID', isEqualTo: userID)
+      .where('paired', isEqualTo: true)
       .withConverter<ScreenPairing>(
         fromFirestore: (snapshot, _) =>
             ScreenPairing.fromJson(snapshot.data()!),
