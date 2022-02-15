@@ -73,11 +73,18 @@ class FirebaseScreensRepository {
   }
 
   void deleteScreen(String screenToken) {
+    var toRemove = [screenToken];
     FirebaseFirestore.instance
         .collection('pairingCodes')
         .doc(screenToken)
         .delete()
         .then((value) => print("Deleted screen"))
         .catchError((onError) => print("Failed to delete error: $onError"));
+    FirebaseFirestore.instance
+      .collection('users')
+      .doc(userID)
+      .update({"screens": FieldValue.arrayRemove(toRemove)})
+      .then((value) => print("Deleted screen"))
+      .catchError((onError) => print("Failed to delete error: $onError"));
   }
 }
