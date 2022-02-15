@@ -1,3 +1,4 @@
+import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/views/screens_view.dart';
 import 'package:diginote/ui/views/settings_view.dart';
@@ -5,6 +6,7 @@ import 'package:diginote/ui/views/templates_view.dart';
 import 'package:diginote/ui/widgets/add_screen_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -93,7 +95,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
       case 0:
         return [
           IconButton(
-            onPressed: () => _onTapped(context, 'Edit screen'),
+            onPressed: () => Provider.of<FirebaseScreensProvider>(context, listen: false).toggleScreensState(),
             icon: IconHelper.editIcon,
           ),
           IconButton(
