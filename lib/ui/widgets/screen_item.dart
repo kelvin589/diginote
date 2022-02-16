@@ -1,4 +1,3 @@
-import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -7,12 +6,16 @@ class ScreenItem extends StatelessWidget {
       {Key? key,
       required this.screenName,
       required this.lastUpdated,
-      required this.batteryPercentage})
+      required this.batteryPercentage,
+      required this.onSettingsTapped,
+      required this.onPreviewTapped})
       : super(key: key);
 
   final String screenName;
   final DateTime lastUpdated;
   final int batteryPercentage;
+  final Function() onSettingsTapped;
+  final Function() onPreviewTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -25,51 +28,31 @@ class ScreenItem extends StatelessWidget {
           Text('Battery Percentage: $batteryPercentage%'),
         ],
       ),
-      trailing: const _ActionButtons(),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          IconButton(
+            onPressed: onSettingsTapped,
+            icon: IconHelper.settingsIcon,
+            constraints: const BoxConstraints(),
+          ),
+          const SizedBox(width: 10),
+          IconButton(
+            onPressed: onPreviewTapped,
+            icon: IconHelper.previewIcon,
+            constraints: const BoxConstraints(),
+          ),
+        ],
+      ),
     );
   }
 
   String lastUpdatedString(DateTime lastUpdated) {
-    String day = lastUpdated.day.toString().padLeft(2,'0');
-    String month = lastUpdated.month.toString().padLeft(2,'0');
+    String day = lastUpdated.day.toString().padLeft(2, '0');
+    String month = lastUpdated.month.toString().padLeft(2, '0');
     int year = lastUpdated.year;
-    String hour = lastUpdated.hour.toString().padLeft(2,'0');
-    String minute = lastUpdated.minute.toString().padLeft(2,'0');
+    String hour = lastUpdated.hour.toString().padLeft(2, '0');
+    String minute = lastUpdated.minute.toString().padLeft(2, '0');
     return "$day/$month/$year - $hour:$minute";
-  }
-}
-
-class _ActionButtons extends StatelessWidget {
-  const _ActionButtons({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        settingsButton(context),
-        const SizedBox(width: 10),
-        previewButton(context),
-      ],
-    );
-  }
-
-  void _onTapped(BuildContext context, String message) {
-    DialogueHelper.showSuccessDialogue(context, 'Tapped', message);
-  }
-
-  Widget settingsButton(BuildContext context) {
-    return IconButton(
-      onPressed: () => _onTapped(context, 'Settings'), 
-      icon: IconHelper.settingsIcon,
-      constraints: const BoxConstraints(),
-    );
-  }
-  Widget previewButton(BuildContext context) {
-    return IconButton(
-      onPressed: () => _onTapped(context, 'Preview'), 
-      icon: IconHelper.previewIcon,
-      constraints: const BoxConstraints(),
-    );
   }
 }

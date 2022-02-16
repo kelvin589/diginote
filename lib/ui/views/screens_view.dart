@@ -1,5 +1,7 @@
 import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
+import 'package:diginote/ui/views/preview_view.dart';
 import 'package:diginote/ui/widgets/screen_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +26,7 @@ class ScreensView extends StatelessWidget {
         Iterable<ScreenPairing>? screens = snapshot.data;
         if (screens != null) {
           List<Widget> items = <Widget>[];
-          items = _updateScreenItems(screens);
+          items = _updateScreenItems(context, screens);
           return ListView.builder(
             padding: const EdgeInsets.only(top: 8),
             itemCount: items.length,
@@ -45,7 +47,7 @@ class ScreensView extends StatelessWidget {
     );
   }
 
-  List<Widget> _updateScreenItems(Iterable<ScreenPairing>? screens) {
+  List<Widget> _updateScreenItems(BuildContext context, Iterable<ScreenPairing>? screens) {
     const batteryPercentage = 100;
     List<Widget> screenItems = [];
 
@@ -54,7 +56,9 @@ class ScreensView extends StatelessWidget {
         screenItems.add(ScreenItem(
             screenName: screen.name,
             lastUpdated: screen.lastUpdated,
-            batteryPercentage: batteryPercentage));
+            batteryPercentage: batteryPercentage,
+            onPreviewTapped: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewView(screenToken: screen.screenToken)))},
+            onSettingsTapped: () => {DialogueHelper.showSuccessDialogue(context, 'Tapped', 'Settings Tapped')},));
       }
     }
 

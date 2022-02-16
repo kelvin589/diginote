@@ -1,4 +1,5 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
+import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/views/home_view.dart';
@@ -23,6 +24,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => loginProvider),
       ChangeNotifierProvider(create: (context) => registerProvider),
       ChangeNotifierProvider(create: (context) => FirebaseScreensProvider()),
+      ChangeNotifierProvider(create: (context) => FirebasePreviewProvider()),
     ],
     child: const MyApp(),
   ));
