@@ -27,7 +27,7 @@ class ScreenPairing {
       'name': name,
       'userID': userID,
       'lastUpdated': Timestamp.fromDate(lastUpdated),
-      'deviceToken': screenToken,
+      'screenToken': screenToken,
     };
   }
 }

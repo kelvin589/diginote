@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginote/core/models/messages_model.dart';
 
 class FirebasePreviewRepository {
-  void addMessage(String deviceToken) {}
+  void addMessage(String screenToken) {}
 
-  Stream<Iterable<Message>> getMessages(String deviceToken) {
+  Stream<Iterable<Message>> getMessages(String screenToken) {
     return FirebaseFirestore.instance
         .collection('messages')
-        .doc(deviceToken)
+        .doc(screenToken)
         .collection('message')
         .withConverter<Message>(
           fromFirestore: (snapshot, _) => Message.fromJson(snapshot.data()!),

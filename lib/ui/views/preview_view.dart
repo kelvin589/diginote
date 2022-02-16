@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PreviewView extends StatefulWidget {
-  const PreviewView({Key? key, required this.deviceToken}) : super(key: key);
+  const PreviewView({Key? key, required this.screenToken}) : super(key: key);
 
-  final String deviceToken;
+  final String screenToken;
 
   @override
   _PreviewViewState createState() => _PreviewViewState();
@@ -22,7 +22,7 @@ class _PreviewViewState extends State<PreviewView> {
       ),
       body: StreamBuilder<Iterable<Message>>(
         stream: Provider.of<FirebasePreviewProvider>(context, listen: false)
-            .getMessages(widget.deviceToken),
+            .getMessages(widget.screenToken),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error ${(snapshot.error.toString())}');
