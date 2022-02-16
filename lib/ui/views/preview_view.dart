@@ -1,5 +1,7 @@
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
+import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/widgets/preview_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +18,21 @@ class PreviewView extends StatefulWidget {
 class _PreviewViewState extends State<PreviewView> {
   @override
   Widget build(BuildContext context) {
+    List<Widget> actionItems = [
+      IconButton(
+        onPressed: () => DialogueHelper.showSuccessDialogue(context, 'Add Template', 'Show templates here'),
+        icon: IconHelper.templatesIcon,
+      ),
+      IconButton(
+        onPressed: () => DialogueHelper.showSuccessDialogue(context, 'Add Message', 'Show add message dialogue here'),
+        icon: IconHelper.addIcon,
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Preview'),
+        actions: actionItems,
       ),
       body: StreamBuilder<Iterable<Message>>(
         stream: Provider.of<FirebasePreviewProvider>(context, listen: false)
@@ -62,8 +76,8 @@ class _PreviewViewState extends State<PreviewView> {
 
     if (messages != null) {
       for (Message message in messages) {
-        messageItems
-            .add(PreviewListItem(header: message.header, message: message.message));
+        messageItems.add(
+            PreviewListItem(header: message.header, message: message.message));
       }
     }
 
