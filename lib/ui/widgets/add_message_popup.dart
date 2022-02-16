@@ -1,11 +1,14 @@
+import 'package:diginote/core/models/messages_model.dart';
+import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddMessagePopup extends StatefulWidget {
   const AddMessagePopup({Key? key, required this.screenToken}) : super(key: key);
 
   final String screenToken;
-  
+
   @override
   _AddMessagePopupState createState() => _AddMessagePopupState();
 }
@@ -63,7 +66,9 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   }
 
   void _okPressed() {
+    Message newMessage = Message(header: _headerController.text, message: _messageController.text);
     if (_formKey.currentState!.validate()) {
+      Provider.of<FirebasePreviewProvider>(context, listen: false).addMessage(widget.screenToken, newMessage);
       Navigator.pop(context);
     }
   }

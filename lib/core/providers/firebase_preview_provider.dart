@@ -8,4 +8,8 @@ class FirebasePreviewProvider extends ChangeNotifier {
   Stream<Iterable<Message>> getMessages(String screenToken) {
     return _previewRepository.getMessages(screenToken);
   }
+
+  void addMessage(String screenToken, Message message) {
+    _previewRepository.addMessage(screenToken, message);
+  }
 }
