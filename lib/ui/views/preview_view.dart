@@ -27,7 +27,7 @@ class _PreviewViewState extends State<PreviewView> {
       IconButton(
         onPressed: () => showDialog(
               context: context,
-              builder: (context) => const AddMessagePopup(),
+              builder: (context) => AddMessagePopup(screenToken: widget.screenToken,),
             ),
         icon: IconHelper.addIcon,
       ),

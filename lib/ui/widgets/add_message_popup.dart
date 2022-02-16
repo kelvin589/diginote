@@ -2,8 +2,10 @@ import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:flutter/material.dart';
 
 class AddMessagePopup extends StatefulWidget {
-  const AddMessagePopup({Key? key}) : super(key: key);
+  const AddMessagePopup({Key? key, required this.screenToken}) : super(key: key);
 
+  final String screenToken;
+  
   @override
   _AddMessagePopupState createState() => _AddMessagePopupState();
 }
