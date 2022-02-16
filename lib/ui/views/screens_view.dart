@@ -57,7 +57,7 @@ class ScreensView extends StatelessWidget {
             screenName: screen.name,
             lastUpdated: screen.lastUpdated,
             batteryPercentage: batteryPercentage,
-            onPreviewTapped: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => const PreviewView()))},
+            onPreviewTapped: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewView(deviceToken: screen.screenToken)))},
             onSettingsTapped: () => {DialogueHelper.showSuccessDialogue(context, 'Tapped', 'Settings Tapped')},));
       }
     }
