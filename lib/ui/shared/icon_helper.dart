@@ -18,4 +18,5 @@ class IconHelper {
   static Widget centreAlignIcon = const Icon(Icons.format_align_center_rounded);
   static Widget rightAlignIcon = const Icon(Icons.format_align_right_rounded);
   static Widget justifyAlignIcon = const Icon(Icons.format_align_justify_rounded);
+  static Widget colourPickerIcon = const Icon(Icons.color_lens_outlined);
 }

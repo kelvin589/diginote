@@ -2,6 +2,7 @@ import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
+import 'package:diginote/ui/widgets/colour_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -25,13 +26,19 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
 
   String fontFamily = "Roboto";
   double fontSize = 16.0;
+  Color messageBackgroundColour = Colors.yellow;
+  Color messageForegroundColour = Colors.black;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> formOptions = [
       TextFormField(
         controller: _headerController,
-        decoration: const InputDecoration(hintText: 'Header'),
+        decoration: InputDecoration(
+          hintText: 'Header',
+          fillColor: messageBackgroundColour,
+          filled: true,
+        ),
         validator: isEmptyValidator,
       ),
       TextFormField(
@@ -39,9 +46,14 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         minLines: 5,
         maxLines: 10,
         controller: _messageController,
-        decoration: const InputDecoration(hintText: 'Message'),
+        decoration: InputDecoration(
+          hintText: 'Message',
+          fillColor: messageBackgroundColour,
+          filled: true,
+          border: InputBorder.none,
+        ),
         validator: isEmptyValidator,
-        style: GoogleFonts.getFont(fontFamily, fontSize: fontSize),
+        style: GoogleFonts.getFont(fontFamily, fontSize: fontSize, color: messageForegroundColour),
       ),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,14 +82,38 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       ),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('Font Colour'),
+        children: [
+          const Text('Font Colour'),
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (BuildContext context) => ColourPicker(
+                onColourChanged: (newColour) {
+                  setState(() => messageForegroundColour = newColour);
+                },
+              ),
+            ),
+            icon: IconHelper.colourPickerIcon,
+            constraints: const BoxConstraints(),
+          ),
         ],
       ),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('Background Colour'),
+        children: [
+          const Text('Background Colour'),
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (BuildContext context) => ColourPicker(
+                onColourChanged: (newColour) {
+                  setState(() => messageBackgroundColour = newColour);
+                },
+              ),
+            ),
+            icon: IconHelper.colourPickerIcon,
+            constraints: const BoxConstraints(),
+          ),
         ],
       ),
       Column(
