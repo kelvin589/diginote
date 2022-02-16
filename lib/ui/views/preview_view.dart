@@ -2,6 +2,7 @@ import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
+import 'package:diginote/ui/widgets/add_message_popup.dart';
 import 'package:diginote/ui/widgets/preview_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,10 @@ class _PreviewViewState extends State<PreviewView> {
         icon: IconHelper.templatesIcon,
       ),
       IconButton(
-        onPressed: () => DialogueHelper.showSuccessDialogue(context, 'Add Message', 'Show add message dialogue here'),
+        onPressed: () => showDialog(
+              context: context,
+              builder: (context) => const AddMessagePopup(),
+            ),
         icon: IconHelper.addIcon,
       ),
     ];
