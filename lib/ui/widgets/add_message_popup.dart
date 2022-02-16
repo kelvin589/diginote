@@ -94,34 +94,43 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       ),
     ];
 
-    return AlertDialog(
-      title: const Text('Add Message'),
-      content: Form(
-        key: _formKey,
-        child: ListView.separated(
-          itemCount: formOptions.length,
-          separatorBuilder: (context, index) => const Divider(
-            color: Colors.transparent,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: AlertDialog(
+        title: const Text('Add Message'),
+        content: Form(
+          key: _formKey,
+          child: ListView.separated(
+            itemCount: formOptions.length,
+            separatorBuilder: (context, index) => const Divider(
+              color: Colors.transparent,
+            ),
+            itemBuilder: (context, index) => formOptions[index],
           ),
-          itemBuilder: (context, index) => formOptions[index],
         ),
+        actions: [
+          TextButton(
+            onPressed: _cancelPressed,
+            child: const Text('Cancel'),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all(Colors.black),
+            ),
+          ),
+          TextButton(
+            onPressed: _okPressed,
+            child: const Text('OK'),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all(Colors.black),
+            ),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: _cancelPressed,
-          child: const Text('Cancel'),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.black),
-          ),
-        ),
-        TextButton(
-          onPressed: _okPressed,
-          child: const Text('OK'),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.black),
-          ),
-        ),
-      ],
     );
   }
 
