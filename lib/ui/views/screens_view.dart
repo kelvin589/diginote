@@ -1,7 +1,7 @@
 import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
-import 'package:diginote/ui/views/preview_view.dart';
+import 'package:diginote/ui/views/preview_list_view.dart';
 import 'package:diginote/ui/widgets/screen_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +57,7 @@ class ScreensView extends StatelessWidget {
             screenName: screen.name,
             lastUpdated: screen.lastUpdated,
             batteryPercentage: batteryPercentage,
-            onPreviewTapped: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewView(screenToken: screen.screenToken)))},
+            onPreviewTapped: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewListView(screenToken: screen.screenToken)))},
             onSettingsTapped: () => {DialogueHelper.showSuccessDialogue(context, 'Tapped', 'Settings Tapped')},));
       }
     }

@@ -7,16 +7,16 @@ import 'package:diginote/ui/widgets/preview_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PreviewView extends StatefulWidget {
-  const PreviewView({Key? key, required this.screenToken}) : super(key: key);
+class PreviewListView extends StatefulWidget {
+  const PreviewListView({Key? key, required this.screenToken}) : super(key: key);
 
   final String screenToken;
 
   @override
-  _PreviewViewState createState() => _PreviewViewState();
+  _PreviewListViewState createState() => _PreviewListViewState();
 }
 
-class _PreviewViewState extends State<PreviewView> {
+class _PreviewListViewState extends State<PreviewListView> {
   @override
   Widget build(BuildContext context) {
     List<Widget> actionItems = [
