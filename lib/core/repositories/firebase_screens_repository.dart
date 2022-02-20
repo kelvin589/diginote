@@ -81,10 +81,10 @@ class FirebaseScreensRepository {
         .then((value) => print("Deleted screen"))
         .catchError((onError) => print("Failed to delete error: $onError"));
     FirebaseFirestore.instance
-      .collection('users')
-      .doc(userID)
-      .update({"screens": FieldValue.arrayRemove(toRemove)})
-      .then((value) => print("Deleted screen"))
-      .catchError((onError) => print("Failed to delete error: $onError"));
+        .collection('users')
+        .doc(userID)
+        .update({"screens": FieldValue.arrayRemove(toRemove)})
+        .then((value) => print("Deleted screen"))
+        .catchError((onError) => print("Failed to delete error: $onError"));
   }
 }
