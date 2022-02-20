@@ -4,13 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 
 class FirebaseScreensRepository {
-  String? userID;
+  String userID = "";
   FirebaseScreensRepository() {
+    print("ALERT: INITIALISED THE REPOSITORY");
     FirebaseAuth.instance.userChanges().listen((User? user) {
       if (user == null) {
-        print("logged out");
+        print("ALERT: USER LOGGED OUT ${user}");
       } else {
         userID = user.uid;
+        print("ALERT: USER LOGGED IN $userID");
       }
     });
   }
@@ -59,6 +61,7 @@ class FirebaseScreensRepository {
   }
 
   Stream<Iterable<ScreenPairing>> getScreens() {
+    print("ALERT: GETTING SCREENS FOR $userID");
     return FirebaseFirestore.instance
         .collection('pairingCodes')
         .where('userID', isEqualTo: userID)
