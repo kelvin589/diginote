@@ -21,28 +21,19 @@ class _PreviewItemState extends State<PreviewItem> {
     return Positioned(
       left: widget.message.x,
       top: widget.message.y,
-      child: Container(
-        color: Colors.red,
-        child: LongPressDraggable<Message>(
-          feedback: const Icon(Icons.note),
-          childWhenDragging: Container(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(widget.message.header),
-              Text(widget.message.message),
-            ],
-          ),
-          onDragEnd: (details) {
-            // Offset was not correct
-            // Code adapted from here.
-            // https://stackoverflow.com/questions/64114904/why-is-draggable-widget-not-being-placed-in-correct-position
-            RenderBox? renderBox = context.findRenderObject() as RenderBox;
-            if (renderBox != null) {
-              onDragEnd(renderBox.globalToLocal(details.offset));
-            }
-          },
-        ),
+      child: LongPressDraggable<Message>(
+        feedback: Material(child:MessageItem(message: widget.message)),
+        childWhenDragging: Container(),
+        child: MessageItem(message: widget.message),
+        onDragEnd: (details) {
+          // Offset was not correct
+          // Code adapted from here.
+          // https://stackoverflow.com/questions/64114904/why-is-draggable-widget-not-being-placed-in-correct-position
+          RenderBox? renderBox = context.findRenderObject() as RenderBox;
+          if (renderBox != null) {
+            onDragEnd(renderBox.globalToLocal(details.offset));
+          }
+        },
       ),
     );
   }
@@ -54,5 +45,25 @@ class _PreviewItemState extends State<PreviewItem> {
     });
     Provider.of<FirebasePreviewProvider>(context, listen: false)
         .updateMessageCoordinates(widget.screenToken, widget.message);
+  }
+}
+
+class MessageItem extends StatelessWidget {
+  const MessageItem({Key? key, required this.message}) : super(key: key);
+
+  final Message message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.red,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(message.header),
+          Text(message.message),
+        ],
+      ),
+    );
   }
 }
