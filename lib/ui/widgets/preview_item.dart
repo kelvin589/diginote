@@ -60,7 +60,7 @@ class MessageItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(message.header),
+          message.header!="" ? Text(message.header) : Container(),
           Text(message.message),
         ],
       ),
