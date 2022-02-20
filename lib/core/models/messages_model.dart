@@ -16,8 +16,8 @@ class Message {
 
   final String header;
   final String message;
-  final double x;
-  final double y;
+  double x;
+  double y;
 
   Map<String, Object?> toJson() {
     return {
