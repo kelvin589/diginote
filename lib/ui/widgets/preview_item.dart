@@ -22,7 +22,8 @@ class _PreviewItemState extends State<PreviewItem> {
       left: widget.message.x,
       top: widget.message.y,
       child: LongPressDraggable<Message>(
-        feedback: Material(child: MessageItem(message: widget.message)),
+        feedback: Material(
+            child: MessageItem(selected: true, message: widget.message)),
         childWhenDragging: Container(),
         child: MessageItem(message: widget.message),
         onDragEnd: (details) {
@@ -49,14 +50,19 @@ class _PreviewItemState extends State<PreviewItem> {
 }
 
 class MessageItem extends StatelessWidget {
-  const MessageItem({Key? key, required this.message}) : super(key: key);
+  const MessageItem({Key? key, required this.message, this.selected = false})
+      : super(key: key);
 
   final Message message;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        border: !selected ? const Border() : Border.all(color: Colors.black),
+      ),
       padding: const EdgeInsets.all(8.0),
       child: Center(
         child: Column(
