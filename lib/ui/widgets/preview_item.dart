@@ -22,7 +22,7 @@ class _PreviewItemState extends State<PreviewItem> {
       left: widget.message.x,
       top: widget.message.y,
       child: LongPressDraggable<Message>(
-        feedback: Material(child:MessageItem(message: widget.message)),
+        feedback: Material(child: MessageItem(message: widget.message)),
         childWhenDragging: Container(),
         child: MessageItem(message: widget.message),
         onDragEnd: (details) {
@@ -57,12 +57,20 @@ class MessageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.red,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          message.header!="" ? Text(message.header) : Container(),
-          Text(message.message),
-        ],
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            message.header != ""
+                ? Padding(
+                    child: Text(message.header),
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                  )
+                : Container(),
+            Text(message.message),
+          ],
+        ),
       ),
     );
   }
