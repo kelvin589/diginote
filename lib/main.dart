@@ -18,12 +18,13 @@ void main() async {
 
   final FirebaseLoginProvider loginProvider = FirebaseLoginProvider();
   final FirebaseRegisterProvider registerProvider = FirebaseRegisterProvider();
+  final FirebaseScreensProvider screensProvider = FirebaseScreensProvider();
 
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => loginProvider),
       ChangeNotifierProvider(create: (context) => registerProvider),
-      ChangeNotifierProvider(create: (context) => FirebaseScreensProvider()),
+      ChangeNotifierProvider(create: (context) => screensProvider),
       ChangeNotifierProvider(create: (context) => FirebasePreviewProvider()),
     ],
     child: const MyApp(),

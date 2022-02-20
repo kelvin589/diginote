@@ -10,4 +10,8 @@ class FirebaseLoginRepository {
       onError(exception);
     }
   }
+
+  Future<void> logout() async {
+    await _auth.signOut();
+  }
 }
