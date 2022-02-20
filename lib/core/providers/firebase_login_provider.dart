@@ -20,4 +20,8 @@ class FirebaseLoginProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> logout() async {
+    await _loginRespository.logout();
+  }
 }
