@@ -8,7 +8,11 @@ class FirebasePreviewRepository {
         .doc(screenToken)
         .collection('message')
         .withConverter<Message>(
-          fromFirestore: (snapshot, _) => Message.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) {
+            Map<String, dynamic> map = snapshot.data()!;
+            map['id'] = snapshot.id;
+            return Message.fromJson(map);
+            },
           toFirestore: (message, _) => message.toJson(),
         )
         .snapshots()
@@ -27,5 +31,16 @@ class FirebasePreviewRepository {
         .add(message)
         .then((value) => print("Added a new message."))
         .catchError((onError) => print("Unable to add message."));
+  }
+
+  void updateMessageCoordinates(String screenToken, Message message) {
+    FirebaseFirestore.instance
+        .collection('messages')
+        .doc(screenToken)
+        .collection('message')
+        .doc(message.id)
+        .update({"x": message.x, "y": message.y})
+        .then((value) => print("Updated coordinates of message."))
+        .catchError((onError) => print("Unable to update message coordinates. $onError"));
   }
 }

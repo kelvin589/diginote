@@ -177,7 +177,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   void _okPressed() {
     // TODO: Implement X/Y
     Message newMessage = Message(
-        header: _headerController.text, message: _messageController.text, x: 0, y: 0);
+        header: _headerController.text, message: _messageController.text, x: 0, y: 0, id: "");
     if (_formKey.currentState!.validate()) {
       Provider.of<FirebasePreviewProvider>(context, listen: false)
           .addMessage(widget.screenToken, newMessage);

@@ -12,4 +12,8 @@ class FirebasePreviewProvider extends ChangeNotifier {
   void addMessage(String screenToken, Message message) {
     _previewRepository.addMessage(screenToken, message);
   }
+
+  void updateMessageCoordinates(String screenToken, Message message) {
+    _previewRepository.updateMessageCoordinates(screenToken, message);
+  }
 }

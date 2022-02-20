@@ -1,10 +1,15 @@
 import 'package:diginote/core/models/messages_model.dart';
+import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PreviewItem extends StatefulWidget {
-  const PreviewItem({Key? key, required this.message}) : super(key: key);
+  const PreviewItem(
+      {Key? key, required this.message, required this.screenToken})
+      : super(key: key);
 
   final Message message;
+  final String screenToken;
 
   @override
   State<PreviewItem> createState() => _PreviewItemState();
@@ -18,7 +23,7 @@ class _PreviewItemState extends State<PreviewItem> {
       top: widget.message.y,
       child: Container(
         color: Colors.red,
-        child: Draggable<Message>(
+        child: LongPressDraggable<Message>(
           feedback: const Icon(Icons.note),
           childWhenDragging: Container(),
           child: Column(
@@ -47,5 +52,7 @@ class _PreviewItemState extends State<PreviewItem> {
       widget.message.x += offset.dx;
       widget.message.y += offset.dy;
     });
+    Provider.of<FirebasePreviewProvider>(context, listen: false)
+        .updateMessageCoordinates(widget.screenToken, widget.message);
   }
 }

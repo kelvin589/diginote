@@ -35,7 +35,7 @@ class _PreviewViewState extends State<PreviewView> {
         icon: IconHelper.addIcon,
       ),
     ];
-    
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -82,7 +82,7 @@ class _PreviewViewState extends State<PreviewView> {
 
     if (messages != null) {
       for (Message message in messages) {
-        messageItems.add(PreviewItem(message: message));
+        messageItems.add(PreviewItem(message: message, screenToken: widget.screenToken));
       }
     }
 
