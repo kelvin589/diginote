@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PreviewView extends StatefulWidget {
-  const PreviewView({Key? key, required this.screenToken}) : super(key: key);
+  const PreviewView({Key? key, required this.screenToken, required this.screenWidth, required this.screenHeight}) : super(key: key);
 
   final String screenToken;
+  final double screenWidth;
+  final double screenHeight;
 
   @override
   _PreviewViewState createState() => _PreviewViewState();

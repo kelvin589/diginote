@@ -68,7 +68,7 @@ class ScreensView extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) =>
                     // PreviewListView(screenToken: screen.screenToken),
-                    PreviewView(screenToken: screen.screenToken),
+                    PreviewView(screenToken: screen.screenToken, screenWidth: screen.width, screenHeight: screen.height),
               ),
             ),
           },
