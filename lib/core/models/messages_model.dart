@@ -10,8 +10,8 @@ class Message {
       : this(
           header: json['header']! as String,
           message: json['message']! as String,
-          x: json['x']! as double,
-          y: json['y']! as double,
+          x: (json['x']! as num).toDouble(),
+          y: (json['y']! as num).toDouble(),
         );
 
   final String header;
