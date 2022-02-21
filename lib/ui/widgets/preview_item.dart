@@ -35,8 +35,12 @@ class _PreviewItemState extends State<PreviewItem> {
       child: GestureDetector(
         onTap: toggleDisplayOptions,
         child: LongPressDraggable<Message>(
+          onDragStarted: () => setDisplayOptions(false),
           feedback: Material(
-              child: MessageItem(screenToken: widget.screenToken, selected: true, message: widget.message)),
+              child: MessageItem(
+                  screenToken: widget.screenToken,
+                  selected: true,
+                  message: widget.message)),
           childWhenDragging: Container(),
           child: MessageItem(
             screenToken: widget.screenToken,
@@ -72,6 +76,12 @@ class _PreviewItemState extends State<PreviewItem> {
       displayOptions = !displayOptions;
     });
   }
+
+  void setDisplayOptions(bool newValue) {
+    setState(() {
+      displayOptions = newValue;
+    });
+  }
 }
 
 class MessageItem extends StatelessWidget {
@@ -92,7 +102,9 @@ class MessageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        displayOptions ? _OptionsPanel(screenToken: screenToken, message: message) : Container(),
+        displayOptions
+            ? _OptionsPanel(screenToken: screenToken, message: message)
+            : Container(),
         Container(
           constraints: const BoxConstraints(
             minHeight: 100,
@@ -116,7 +128,11 @@ class MessageItem extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 16.0),
                       )
                     : Container(),
-                Expanded(child: AutoSizeText(message.message, minFontSize: 3,)),
+                Expanded(
+                    child: AutoSizeText(
+                  message.message,
+                  minFontSize: 3,
+                )),
               ],
             ),
           ),
@@ -127,7 +143,9 @@ class MessageItem extends StatelessWidget {
 }
 
 class _OptionsPanel extends StatelessWidget {
-  const _OptionsPanel({Key? key, required this.screenToken, required this.message}) : super(key: key);
+  const _OptionsPanel(
+      {Key? key, required this.screenToken, required this.message})
+      : super(key: key);
 
   final String screenToken;
   final Message message;
@@ -137,7 +155,9 @@ class _OptionsPanel extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          onPressed: () => Provider.of<FirebasePreviewProvider>(context, listen: false).deleteMessage(screenToken, message),
+          onPressed: () =>
+              Provider.of<FirebasePreviewProvider>(context, listen: false)
+                  .deleteMessage(screenToken, message),
           icon: IconHelper.deleteIcon,
           constraints: const BoxConstraints(),
         ),
