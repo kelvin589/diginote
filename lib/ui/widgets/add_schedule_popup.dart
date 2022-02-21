@@ -170,11 +170,14 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
     DateTime dateTimeNow = DateTime.now();
     TimeOfDay timeOfDayNow = TimeOfDay.now();
 
+    DateTime adjustedDateTimeNow = dateTimeNow.add(Duration(minutes: setMinutes));
+    TimeOfDay adjustedTimeOfDayNow = TimeOfDay.fromDateTime(adjustedDateTimeNow);
+
     setState(() {
       fromDate = dateTimeNow;
       fromTime = timeOfDayNow;
       toDate = dateTimeNow;
-      toTime = timeOfDayNow.replacing(minute: timeOfDayNow.minute + setMinutes);
+      toTime = adjustedTimeOfDayNow;
     });
   }
 
