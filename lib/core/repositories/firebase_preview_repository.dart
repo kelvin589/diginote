@@ -55,4 +55,16 @@ class FirebasePreviewRepository {
         .then((value) => print("Deleted message"))
         .catchError((onError) => print("Unable to delete message."));
   }
+
+  void updateMessageSchedule(
+      String screenToken, Message message, DateTime from, DateTime to) {
+    FirebaseFirestore.instance
+        .collection('messages')
+        .doc(screenToken)
+        .collection('message')
+        .doc(message.id)
+        .update({"from": from, "to": to})
+        .then((value) => print("Updated message scheduling"))
+        .catchError((onError) => print("Unable to update message scheduling."));
+  }
 }

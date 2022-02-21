@@ -1,9 +1,12 @@
 import 'package:diginote/core/models/messages_model.dart';
+import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AddSchedulePopup extends StatefulWidget {
-  const AddSchedulePopup({Key? key, required this.screenToken, required this.message})
+  const AddSchedulePopup(
+      {Key? key, required this.screenToken, required this.message})
       : super(key: key);
 
   final String screenToken;
@@ -91,14 +94,14 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
       ),
       actions: [
         TextButton(
-          onPressed: _okPressed,
+          onPressed: _cancelPressed,
           child: const Text('Cancel'),
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all(Colors.black),
           ),
         ),
         TextButton(
-          onPressed: _cancelPressed,
+          onPressed: _okPressed,
           child: const Text('OK'),
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all(Colors.black),
@@ -141,6 +144,12 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
   }
 
   void _okPressed() {
+    DateTime from = DateTime(fromDate.year, fromDate.month, fromDate.day, fromTime.hour, fromTime.minute);
+    DateTime to = DateTime(toDate.year, toDate.month, toDate.day, toTime.hour, toTime.minute);
+
+    Provider.of<FirebasePreviewProvider>(context, listen: false)
+        .updateMessageSchedule(widget.screenToken, widget.message, from, to);
+    
     Navigator.pop(context);
   }
 }
