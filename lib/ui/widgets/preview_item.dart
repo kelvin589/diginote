@@ -141,6 +141,7 @@ class MessageItem extends StatelessWidget {
             ),
           ),
         ),
+        _RemainingTimePanel(from: message.from, to: message.to),
       ],
     );
   }
@@ -166,19 +167,53 @@ class _OptionsPanel extends StatelessWidget {
           constraints: const BoxConstraints(),
         ),
         IconButton(
-          onPressed: () => {}, 
+          onPressed: () => {},
           icon: IconHelper.editIcon,
           constraints: const BoxConstraints(),
         ),
         IconButton(
           onPressed: () => showDialog(
             context: context,
-            builder: (context) => AddSchedulePopup(screenToken: screenToken, message: message,),
+            builder: (context) => AddSchedulePopup(
+              screenToken: screenToken,
+              message: message,
+            ),
           ),
           icon: IconHelper.scheduleIcon,
           constraints: const BoxConstraints(),
         ),
       ],
     );
+  }
+}
+
+class _RemainingTimePanel extends StatelessWidget {
+  const _RemainingTimePanel({Key? key, required this.from, required this.to})
+      : super(key: key);
+
+  final DateTime from;
+  final DateTime to;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(_scheduleText());
+  }
+
+  String _scheduleText() {
+    Duration difference = to.difference(DateTime.now());
+    if (difference.isNegative) {
+      return "No Schedule";
+    } else {
+      return _printDuration(difference);
+    }
+  }
+
+  // Code taken from here to represent duration as hours:minutes:seconds
+  //https://stackoverflow.com/questions/54775097/formatting-a-duration-like-hhmmss
+  String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 }
