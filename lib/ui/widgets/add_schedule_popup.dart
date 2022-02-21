@@ -74,8 +74,8 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
     final DateTime? date = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      firstDate: initialDate,
+      lastDate: initialDate.add(const Duration(days: 365)),
     );
     if (date != null && date != initialDate) {
       onSelected(date);
