@@ -41,7 +41,18 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
                   ),
                   child: _DateItem(date: fromDate),
                 ),
-                _TimeItem(time: fromTime),
+                GestureDetector(
+                  onTap: () => _showTimeSelector(
+                    context: context,
+                    initialTime: fromTime,
+                    onSelected: (time) => {
+                      setState(() {
+                        fromTime = time;
+                      })
+                    },
+                  ),
+                  child: _TimeItem(time: fromTime),
+                ),
               ],
             ),
             const Text("To"),
@@ -79,6 +90,19 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
     );
     if (date != null && date != initialDate) {
       onSelected(date);
+    }
+  }
+
+  void _showTimeSelector(
+      {required BuildContext context,
+      required TimeOfDay initialTime,
+      required Function(TimeOfDay) onSelected}) async {
+    final TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+    if (time != null && time != initialTime) {
+      onSelected(time);
     }
   }
 
