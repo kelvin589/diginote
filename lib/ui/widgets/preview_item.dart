@@ -173,7 +173,7 @@ class _OptionsPanel extends StatelessWidget {
         IconButton(
           onPressed: () => showDialog(
             context: context,
-            builder: (context) => AddSchedulePopup(screenToken: screenToken),
+            builder: (context) => AddSchedulePopup(screenToken: screenToken, message: message,),
           ),
           icon: IconHelper.scheduleIcon,
           constraints: const BoxConstraints(),

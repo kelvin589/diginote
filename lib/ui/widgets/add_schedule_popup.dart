@@ -1,11 +1,13 @@
+import 'package:diginote/core/models/messages_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddSchedulePopup extends StatefulWidget {
-  const AddSchedulePopup({Key? key, required this.screenToken})
+  const AddSchedulePopup({Key? key, required this.screenToken, required this.message})
       : super(key: key);
 
   final String screenToken;
+  final Message message;
 
   @override
   State<AddSchedulePopup> createState() => _AddSchedulePopupState();
