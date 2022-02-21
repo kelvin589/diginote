@@ -92,7 +92,7 @@ class MessageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        displayOptions ? _OptionsPanel(screenToken: screenToken, messageID: message.id) : Container(),
+        displayOptions ? _OptionsPanel(screenToken: screenToken, message: message) : Container(),
         Container(
           constraints: const BoxConstraints(
             minHeight: 100,
@@ -127,10 +127,10 @@ class MessageItem extends StatelessWidget {
 }
 
 class _OptionsPanel extends StatelessWidget {
-  const _OptionsPanel({Key? key, required this.screenToken, required this.messageID}) : super(key: key);
+  const _OptionsPanel({Key? key, required this.screenToken, required this.message}) : super(key: key);
 
   final String screenToken;
-  final String messageID;
+  final Message message;
 
   @override
   Widget build(BuildContext context) {
