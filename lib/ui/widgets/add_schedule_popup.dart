@@ -56,6 +56,34 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
               ],
             ),
             const Text("To"),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () => _showDateSelector(
+                    context: context,
+                    initialDate: toDate,
+                    onSelected: (date) => {
+                      setState(() {
+                        toDate = date;
+                      })
+                    },
+                  ),
+                  child: _DateItem(date: toDate),
+                ),
+                GestureDetector(
+                  onTap: () => _showTimeSelector(
+                    context: context,
+                    initialTime: toTime,
+                    onSelected: (time) => {
+                      setState(() {
+                        toTime = time;
+                      })
+                    },
+                  ),
+                  child: _TimeItem(time: toTime),
+                ),
+              ],
+            ),
           ],
         ),
       ),
