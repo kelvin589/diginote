@@ -36,9 +36,10 @@ class _PreviewItemState extends State<PreviewItem> {
         onTap: toggleDisplayOptions,
         child: LongPressDraggable<Message>(
           feedback: Material(
-              child: MessageItem(selected: true, message: widget.message)),
+              child: MessageItem(screenToken: widget.screenToken, selected: true, message: widget.message)),
           childWhenDragging: Container(),
           child: MessageItem(
+            screenToken: widget.screenToken,
             message: widget.message,
             displayOptions: displayOptions,
           ),
@@ -76,11 +77,13 @@ class _PreviewItemState extends State<PreviewItem> {
 class MessageItem extends StatelessWidget {
   const MessageItem(
       {Key? key,
+      required this.screenToken,
       required this.message,
       this.selected = false,
       this.displayOptions = false})
       : super(key: key);
 
+  final String screenToken;
   final Message message;
   final bool selected;
   final bool displayOptions;
@@ -89,7 +92,7 @@ class MessageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        displayOptions ? optionsPanel() : Container(),
+        displayOptions ? _OptionsPanel(screenToken: screenToken, messageID: message.id) : Container(),
         Container(
           constraints: const BoxConstraints(
             minHeight: 100,
@@ -121,8 +124,16 @@ class MessageItem extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget optionsPanel() {
+class _OptionsPanel extends StatelessWidget {
+  const _OptionsPanel({Key? key, required this.screenToken, required this.messageID}) : super(key: key);
+
+  final String screenToken;
+  final String messageID;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         IconButton(
