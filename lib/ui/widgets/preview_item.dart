@@ -5,22 +5,25 @@ import 'package:provider/provider.dart';
 
 class PreviewItem extends StatefulWidget {
   const PreviewItem(
-      {Key? key, required this.message, required this.screenToken})
+      {Key? key, required this.message, required this.screenToken, required this.scaleFactorX, required this.scaleFactorY})
       : super(key: key);
 
   final Message message;
   final String screenToken;
+  final double scaleFactorX;
+  final double scaleFactorY;
 
   @override
   State<PreviewItem> createState() => _PreviewItemState();
 }
 
 class _PreviewItemState extends State<PreviewItem> {
+  // Since positiioning message from top left, need to account for the size
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: widget.message.x,
-      top: widget.message.y,
+      left: widget.message.x / widget.scaleFactorX,
+      top: widget.message.y / widget.scaleFactorY,
       child: LongPressDraggable<Message>(
         feedback: Material(
             child: MessageItem(selected: true, message: widget.message)),
@@ -32,17 +35,17 @@ class _PreviewItemState extends State<PreviewItem> {
           // https://stackoverflow.com/questions/64114904/why-is-draggable-widget-not-being-placed-in-correct-position
           RenderBox? renderBox = context.findRenderObject() as RenderBox;
           if (renderBox != null) {
-            onDragEnd(renderBox.globalToLocal(details.offset));
+            onDragEnd(renderBox.globalToLocal(details.offset), widget.scaleFactorX, widget.scaleFactorY);
           }
         },
       ),
     );
   }
 
-  void onDragEnd(Offset offset) {
+  void onDragEnd(Offset offset, double scaleFactorX, double scaleFactorY) {
     setState(() {
-      widget.message.x += offset.dx;
-      widget.message.y += offset.dy;
+      widget.message.x += offset.dx * scaleFactorX;
+      widget.message.y += offset.dy * scaleFactorY;
     });
     Provider.of<FirebasePreviewProvider>(context, listen: false)
         .updateMessageCoordinates(widget.screenToken, widget.message);
