@@ -129,10 +129,13 @@ class MessageItem extends StatelessWidget {
                       )
                     : Container(),
                 Expanded(
+                  child: Center(
                     child: AutoSizeText(
-                  message.message,
-                  minFontSize: 3,
-                )),
+                      message.message,
+                      minFontSize: 3,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
