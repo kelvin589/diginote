@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Message {
   Message({
     required this.header,
@@ -5,6 +7,8 @@ class Message {
     required this.x,
     required this.y,
     required this.id,
+    required this.from,
+    required this.to,
   });
 
   Message.fromJson(Map<String, Object?> json)
@@ -14,6 +18,8 @@ class Message {
           x: (json['x']! as num).toDouble(),
           y: (json['y']! as num).toDouble(),
           id: json['id']! as String,
+          from: DateTime.parse((json['from']! as Timestamp).toDate().toString()),
+          to: DateTime.parse((json['to']! as Timestamp).toDate().toString()),
         );
 
   final String header;
@@ -21,6 +27,8 @@ class Message {
   double x;
   double y;
   String id;
+  DateTime from;
+  DateTime to;
 
   // Don't add id as field in firebase doc
   Map<String, Object?> toJson() {
@@ -29,6 +37,8 @@ class Message {
       'message': message,
       'x': x,
       'y': y,
+      'from': Timestamp.fromDate(from),
+      'to': Timestamp.fromDate(to),
     };
   }
 }
