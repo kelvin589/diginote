@@ -19,4 +19,7 @@ class IconHelper {
   static Widget rightAlignIcon = const Icon(Icons.format_align_right_rounded);
   static Widget justifyAlignIcon = const Icon(Icons.format_align_justify_rounded);
   static Widget colourPickerIcon = const Icon(Icons.color_lens_outlined);
+
+  static Widget deleteIcon = const Icon(Icons.delete_forever);
+  static Widget scheduleIcon = const Icon(Icons.access_time_rounded);
 }
