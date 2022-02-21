@@ -12,7 +12,7 @@ class FirebasePreviewRepository {
             Map<String, dynamic> map = snapshot.data()!;
             map['id'] = snapshot.id;
             return Message.fromJson(map);
-            },
+          },
           toFirestore: (message, _) => message.toJson(),
         )
         .snapshots()
@@ -41,6 +41,18 @@ class FirebasePreviewRepository {
         .doc(message.id)
         .update({"x": message.x, "y": message.y})
         .then((value) => print("Updated coordinates of message."))
-        .catchError((onError) => print("Unable to update message coordinates. $onError"));
+        .catchError((onError) =>
+            print("Unable to update message coordinates. $onError"));
+  }
+
+  void deleteMessage(String screenToken, Message message) {
+    FirebaseFirestore.instance
+        .collection('messages')
+        .doc(screenToken)
+        .collection('message')
+        .doc(message.id)
+        .delete()
+        .then((value) => print("Deleted message"))
+        .catchError((onError) => print("Unable to delete message."));
   }
 }

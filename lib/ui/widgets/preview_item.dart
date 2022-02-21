@@ -137,7 +137,7 @@ class _OptionsPanel extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          onPressed: () => {},
+          onPressed: () => Provider.of<FirebasePreviewProvider>(context, listen: false).deleteMessage(screenToken, message),
           icon: IconHelper.deleteIcon,
           constraints: const BoxConstraints(),
         ),
