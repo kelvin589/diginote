@@ -21,6 +21,7 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
   TimeOfDay fromTime = TimeOfDay.now();
   DateTime toDate = DateTime.now();
   TimeOfDay toTime = TimeOfDay.now();
+  bool scheduled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
                     fromTime = TimeOfDay.now();
                     toDate = DateTime.now();
                     toTime = TimeOfDay.now();
+                    scheduled = false;
                   }),
                   child: const _QuickItem(text: "None"),
                 ),
@@ -178,6 +180,7 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
       fromTime = timeOfDayNow;
       toDate = dateTimeNow;
       toTime = adjustedTimeOfDayNow;
+      scheduled = true;
     });
   }
 
@@ -190,9 +193,12 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
         fromTime.hour, fromTime.minute);
     DateTime to = DateTime(
         toDate.year, toDate.month, toDate.day, toTime.hour, toTime.minute);
+    if (from.isAtSameMomentAs(to) && from.isBefore(DateTime.now())) {
+      scheduled = false;
+    }
 
     Provider.of<FirebasePreviewProvider>(context, listen: false)
-        .updateMessageSchedule(widget.screenToken, widget.message, from, to);
+        .updateMessageSchedule(widget.screenToken, widget.message, from, to, scheduled);
 
     Navigator.pop(context);
   }

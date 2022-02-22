@@ -23,7 +23,7 @@ class FirebasePreviewProvider extends ChangeNotifier {
   }
 
   void updateMessageSchedule(
-      String screenToken, Message message, DateTime from, DateTime to) {
-    _previewRepository.updateMessageSchedule(screenToken, message, from, to);
+      String screenToken, Message message, DateTime from, DateTime to, bool scheduled) {
+    _previewRepository.updateMessageSchedule(screenToken, message, from, to, scheduled);
   }
 }
