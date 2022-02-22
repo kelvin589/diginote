@@ -141,7 +141,7 @@ class MessageItem extends StatelessWidget {
             ),
           ),
         ),
-        _RemainingTimePanel(from: message.from, to: message.to),
+        _RemainingTimePanel(message: message,),
       ],
     );
   }
@@ -188,11 +188,10 @@ class _OptionsPanel extends StatelessWidget {
 }
 
 class _RemainingTimePanel extends StatelessWidget {
-  const _RemainingTimePanel({Key? key, required this.from, required this.to})
+  const _RemainingTimePanel({Key? key, required this.message})
       : super(key: key);
 
-  final DateTime from;
-  final DateTime to;
+  final Message message;
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +199,7 @@ class _RemainingTimePanel extends StatelessWidget {
   }
 
   String _scheduleText() {
-    Duration difference = to.difference(DateTime.now());
+    Duration difference = message.to.difference(DateTime.now());
     if (difference.isNegative) {
       return "No Schedule";
     } else {
