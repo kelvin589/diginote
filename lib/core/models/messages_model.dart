@@ -9,6 +9,7 @@ class Message {
     required this.id,
     required this.from,
     required this.to,
+    required this.scheduled,
   });
 
   Message.fromJson(Map<String, Object?> json)
@@ -20,6 +21,7 @@ class Message {
           id: json['id']! as String,
           from: DateTime.parse((json['from']! as Timestamp).toDate().toString()),
           to: DateTime.parse((json['to']! as Timestamp).toDate().toString()),
+          scheduled: (json['scheduled'])! as bool,
         );
 
   final String header;
@@ -29,6 +31,7 @@ class Message {
   String id;
   DateTime from;
   DateTime to;
+  bool scheduled;
 
   // Don't add id as field in firebase doc
   Map<String, Object?> toJson() {
@@ -39,6 +42,7 @@ class Message {
       'y': y,
       'from': Timestamp.fromDate(from),
       'to': Timestamp.fromDate(to),
+      'scheduled': scheduled,
     };
   }
 }
