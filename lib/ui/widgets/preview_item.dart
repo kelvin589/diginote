@@ -141,7 +141,7 @@ class MessageItem extends StatelessWidget {
             ),
           ),
         ),
-        _RemainingTimePanel(message: message,),
+        _RemainingTimePanel(message: message),
       ],
     );
   }
@@ -198,13 +198,38 @@ class _RemainingTimePanel extends StatelessWidget {
     return Text(_scheduleText());
   }
 
+  // Three states:
+  //	1. From = to < now: no schedule
+  // 	2. From = to > now: scheduled in the future for indefinite
+  //  3. From > now && to > now: scheduled in the future until set time
   String _scheduleText() {
-    Duration difference = message.to.difference(DateTime.now());
-    if (difference.isNegative) {
+    DateTime now = DateTime.now();
+
+    if (!message.scheduled) {
       return "No Schedule";
-    } else {
-      return _printDuration(difference);
     }
+
+    // from == to
+    if (message.from.isAtSameMomentAs(message.to)) {
+      if (message.from.isAfter(now)) {
+        return "Scheduled";
+      } else {
+        return "Indefinite";
+      }
+    } else if (message.to.isAfter(message.from)) {
+      Duration difference = message.to.difference(now);
+      if (message.from.isAfter(now)) {
+        return "Scheduled";
+      }
+      if (!difference.isNegative) {
+        return _printDuration(difference);
+      } else if (difference.isNegative) {
+        // scheduled but schedule passed
+        return "To Delete";
+      }
+    }
+
+    return "Undefined";
   }
 
   // Code taken from here to represent duration as hours:minutes:seconds

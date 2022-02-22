@@ -195,6 +195,8 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
         toDate.year, toDate.month, toDate.day, toTime.hour, toTime.minute);
     if (from.isAtSameMomentAs(to) && from.isBefore(DateTime.now())) {
       scheduled = false;
+    } else {
+      scheduled = true;
     }
 
     Provider.of<FirebasePreviewProvider>(context, listen: false)
