@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
+import 'package:diginote/ui/widgets/add_schedule_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -140,6 +141,7 @@ class MessageItem extends StatelessWidget {
             ),
           ),
         ),
+        _RemainingTimePanel(message: message),
       ],
     );
   }
@@ -170,11 +172,72 @@ class _OptionsPanel extends StatelessWidget {
           constraints: const BoxConstraints(),
         ),
         IconButton(
-          onPressed: () => {},
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AddSchedulePopup(
+              screenToken: screenToken,
+              message: message,
+            ),
+          ),
           icon: IconHelper.scheduleIcon,
           constraints: const BoxConstraints(),
         ),
       ],
     );
+  }
+}
+
+class _RemainingTimePanel extends StatelessWidget {
+  const _RemainingTimePanel({Key? key, required this.message})
+      : super(key: key);
+
+  final Message message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(_scheduleText());
+  }
+
+  // Three states:
+  //	1. From = to < now: no schedule
+  // 	2. From = to > now: scheduled in the future for indefinite
+  //  3. From > now && to > now: scheduled in the future until set time
+  String _scheduleText() {
+    DateTime now = DateTime.now();
+
+    if (!message.scheduled) {
+      return "No Schedule";
+    }
+
+    // from == to
+    if (message.from.isAtSameMomentAs(message.to)) {
+      if (message.from.isAfter(now)) {
+        return "Scheduled";
+      } else {
+        return "Indefinite";
+      }
+    } else if (message.to.isAfter(message.from)) {
+      Duration difference = message.to.difference(now);
+      if (message.from.isAfter(now)) {
+        return "Scheduled";
+      }
+      if (!difference.isNegative) {
+        return _printDuration(difference);
+      } else if (difference.isNegative) {
+        // scheduled but schedule passed
+        return "To Delete";
+      }
+    }
+
+    return "Undefined";
+  }
+
+  // Code taken from here to represent duration as hours:minutes:seconds
+  //https://stackoverflow.com/questions/54775097/formatting-a-duration-like-hhmmss
+  String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 }
