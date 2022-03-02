@@ -1,7 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ScreenPairing {
-  ScreenPairing({required this.pairingCode, required this.paired, required this.name, required this.userID, required this.lastUpdated, required this.screenToken, required this.width, required this.height});
+  ScreenPairing(
+      {required this.pairingCode,
+      required this.paired,
+      required this.name,
+      required this.userID,
+      required this.lastUpdated,
+      required this.screenToken,
+      required this.width,
+      required this.height});
 
   ScreenPairing.fromJson(Map<String, Object?> json)
       : this(
@@ -9,7 +17,8 @@ class ScreenPairing {
           paired: json['paired']! as bool,
           name: json['name']! as String,
           userID: json['userID']! as String,
-          lastUpdated: DateTime.parse((json['lastUpdated']! as Timestamp).toDate().toString()),
+          lastUpdated: DateTime.parse(
+              (json['lastUpdated']! as Timestamp).toDate().toString()),
           screenToken: json['screenToken']! as String,
           width: (json['width']! as num).toDouble(),
           height: (json['height']! as num).toDouble(),
@@ -36,4 +45,19 @@ class ScreenPairing {
       'height': height,
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ScreenPairing &&
+        other.pairingCode == pairingCode &&
+        other.paired == paired &&
+        other.name == name &&
+        other.userID == userID &&
+        other.screenToken == screenToken &&
+        other.width == width &&
+        other.height == height;
+  }
+
+  @override
+  int get hashCode => Object.hash(pairingCode, paired, name, userID, screenToken, width, height);
 }
