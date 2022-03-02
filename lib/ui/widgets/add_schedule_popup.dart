@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,9 @@ class AddSchedulePopup extends StatefulWidget {
 }
 
 class _AddSchedulePopupState extends State<AddSchedulePopup> {
-  DateTime fromDate = DateTime.now();
+  DateTime fromDate = clock.now();
   TimeOfDay fromTime = TimeOfDay.now();
-  DateTime toDate = DateTime.now();
+  DateTime toDate = clock.now();
   TimeOfDay toTime = TimeOfDay.now();
   bool scheduled = false;
 
@@ -38,9 +39,9 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
               children: [
                 GestureDetector(
                   onTap: () => setState(() {
-                    fromDate = DateTime.now();
+                    fromDate = clock.now();
                     fromTime = TimeOfDay.now();
-                    toDate = DateTime.now();
+                    toDate = clock.now();
                     toTime = TimeOfDay.now();
                     scheduled = false;
                   }),
@@ -169,7 +170,7 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
   }
 
   void _setQuickOptions({required int setMinutes}) {
-    DateTime dateTimeNow = DateTime.now();
+    DateTime dateTimeNow = clock.now();
     TimeOfDay timeOfDayNow = TimeOfDay.now();
 
     DateTime adjustedDateTimeNow = dateTimeNow.add(Duration(minutes: setMinutes));
@@ -193,7 +194,7 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
         fromTime.hour, fromTime.minute);
     DateTime to = DateTime(
         toDate.year, toDate.month, toDate.day, toTime.hour, toTime.minute);
-    if (from.isAtSameMomentAs(to) && from.isBefore(DateTime.now())) {
+    if (from.isAtSameMomentAs(to) && from.isBefore(clock.now())) {
       scheduled = false;
     } else {
       scheduled = true;

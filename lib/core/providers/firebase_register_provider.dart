@@ -4,7 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseRegisterProvider extends ChangeNotifier {
-  final FirebaseRegisterRepository _registerRepository = FirebaseRegisterRepository();
+  final FirebaseRegisterRepository _registerRepository;
+
+  FirebaseRegisterProvider({required FirebaseAuth authInstance })
+    : _registerRepository = FirebaseRegisterRepository(authInstance: authInstance);
 
   ApplicationRegisterState _applicationRegisterState = ApplicationRegisterState.registering;
   ApplicationRegisterState get applicationRegisterState => _applicationRegisterState;

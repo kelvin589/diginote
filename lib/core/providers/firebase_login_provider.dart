@@ -4,7 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseLoginProvider extends ChangeNotifier {
-  final FirebaseLoginRepository _loginRespository = FirebaseLoginRepository();
+  final FirebaseLoginRepository _loginRespository;
+
+  FirebaseLoginProvider({required FirebaseAuth authInstance })
+    : _loginRespository = FirebaseLoginRepository(authInstance: authInstance);
 
   ApplicationLoginState _applicationLoginState =
       ApplicationLoginState.loggedOut;

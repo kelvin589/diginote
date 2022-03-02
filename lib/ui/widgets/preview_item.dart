@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
@@ -203,7 +204,7 @@ class _RemainingTimePanel extends StatelessWidget {
   // 	2. From = to > now: scheduled in the future for indefinite
   //  3. From > now && to > now: scheduled in the future until set time
   String _scheduleText() {
-    DateTime now = DateTime.now();
+    DateTime now = clock.now();
 
     if (!message.scheduled) {
       return "No Schedule";

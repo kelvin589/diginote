@@ -4,10 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 
 class FirebaseScreensRepository {
+  final FirebaseFirestore firestoreInstance;
+  final FirebaseAuth authInstance;
   String userID = "";
-  FirebaseScreensRepository() {
+  
+  FirebaseScreensRepository({required this.firestoreInstance, required this.authInstance}) {
     print("ALERT: INITIALISED THE REPOSITORY");
-    FirebaseAuth.instance.userChanges().listen((User? user) {
+    authInstance.userChanges().listen((User? user) {
       if (user == null) {
         print("ALERT: USER LOGGED OUT ${user}");
       } else {
@@ -18,7 +21,7 @@ class FirebaseScreensRepository {
   }
 
   bool addScreen(ScreenPairing screenPairing) {
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('pairingCodes')
         .where('pairingCode', isEqualTo: screenPairing.pairingCode)
         .where('paired', isEqualTo: false)
@@ -37,7 +40,7 @@ class FirebaseScreensRepository {
 
   void _linkScreen(ScreenPairing screenPairing, String screenToken) {
     var toAdd = [screenToken];
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('users')
         .doc(userID)
         .set({"screens": FieldValue.arrayUnion(toAdd)}, SetOptions(merge: true))
@@ -46,7 +49,7 @@ class FirebaseScreensRepository {
   }
 
   void _updateScreenPaired(ScreenPairing screenPairing, String screenToken) {
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('pairingCodes')
         .doc(screenToken)
         .update({
@@ -62,7 +65,7 @@ class FirebaseScreensRepository {
 
   Stream<Iterable<ScreenPairing>> getScreens() {
     print("ALERT: GETTING SCREENS FOR $userID");
-    return FirebaseFirestore.instance
+    return firestoreInstance
         .collection('pairingCodes')
         .where('userID', isEqualTo: userID)
         .where('paired', isEqualTo: true)
@@ -77,13 +80,13 @@ class FirebaseScreensRepository {
 
   void deleteScreen(String screenToken) {
     var toRemove = [screenToken];
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('pairingCodes')
         .doc(screenToken)
         .delete()
         .then((value) => print("Deleted screen"))
         .catchError((onError) => print("Failed to delete error: $onError"));
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('users')
         .doc(userID)
         .update({"screens": FieldValue.arrayRemove(toRemove)})

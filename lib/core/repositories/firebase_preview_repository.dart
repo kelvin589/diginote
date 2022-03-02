@@ -2,8 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginote/core/models/messages_model.dart';
 
 class FirebasePreviewRepository {
+  final FirebaseFirestore firestoreInstance;
+
+  FirebasePreviewRepository({required this.firestoreInstance});
+
   Stream<Iterable<Message>> getMessages(String screenToken) {
-    return FirebaseFirestore.instance
+    return firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
@@ -20,7 +24,7 @@ class FirebasePreviewRepository {
   }
 
   void addMessage(String screenToken, Message message) {
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
@@ -34,7 +38,7 @@ class FirebasePreviewRepository {
   }
 
   void updateMessageCoordinates(String screenToken, Message message) {
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
@@ -46,7 +50,7 @@ class FirebasePreviewRepository {
   }
 
   void deleteMessage(String screenToken, Message message) {
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
@@ -58,7 +62,7 @@ class FirebasePreviewRepository {
 
   void updateMessageSchedule(
       String screenToken, Message message, DateTime from, DateTime to, bool scheduled) {
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
