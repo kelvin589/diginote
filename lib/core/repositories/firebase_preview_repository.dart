@@ -23,13 +23,17 @@ class FirebasePreviewRepository {
         .map((snapshot) => snapshot.docs.map((e) => e.data()));
   }
 
-  void addMessage(String screenToken, Message message) {
-    firestoreInstance
+  Future<void> addMessage(String screenToken, Message message) async {
+    await firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
         .withConverter<Message>(
-          fromFirestore: (snapshot, _) => Message.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) {
+            Map<String, dynamic> map = snapshot.data()!;
+            map['id'] = snapshot.id;
+            return Message.fromJson(map);
+          },
           toFirestore: (screenPairing, _) => screenPairing.toJson(),
         )
         .add(message)
@@ -37,8 +41,9 @@ class FirebasePreviewRepository {
         .catchError((onError) => print("Unable to add message."));
   }
 
-  void updateMessageCoordinates(String screenToken, Message message) {
-    firestoreInstance
+  Future<void> updateMessageCoordinates(
+      String screenToken, Message message) async {
+    await firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
@@ -49,8 +54,8 @@ class FirebasePreviewRepository {
             print("Unable to update message coordinates. $onError"));
   }
 
-  void deleteMessage(String screenToken, Message message) {
-    firestoreInstance
+  Future<void> deleteMessage(String screenToken, Message message) async {
+    await firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
@@ -60,14 +65,14 @@ class FirebasePreviewRepository {
         .catchError((onError) => print("Unable to delete message."));
   }
 
-  void updateMessageSchedule(
-      String screenToken, Message message, DateTime from, DateTime to, bool scheduled) {
-    firestoreInstance
+  Future<void> updateMessageSchedule(String screenToken, Message message,
+      DateTime from, DateTime to, bool scheduled) async {
+    await firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
         .doc(message.id)
-        .update({"from": from, "to": to, "scheduled":scheduled})
+        .update({"from": from, "to": to, "scheduled": scheduled})
         .then((value) => print("Updated message scheduling"))
         .catchError((onError) => print("Unable to update message scheduling."));
   }
