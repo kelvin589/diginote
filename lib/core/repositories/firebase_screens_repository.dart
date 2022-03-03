@@ -20,8 +20,8 @@ class FirebaseScreensRepository {
     });
   }
 
-  bool addScreen(ScreenPairing screenPairing) {
-    firestoreInstance
+  Future<void> addScreen(ScreenPairing screenPairing) async {
+    await firestoreInstance
         .collection('pairingCodes')
         .where('pairingCode', isEqualTo: screenPairing.pairingCode)
         .where('paired', isEqualTo: false)
@@ -34,8 +34,6 @@ class FirebaseScreensRepository {
         .then((value) =>
             _linkScreen(screenPairing, value.docs.map((e) => e.id).first))
         .catchError((onError) => print("Already paired or code wrong."));
-
-    return false;
   }
 
   void _linkScreen(ScreenPairing screenPairing, String screenToken) {
@@ -78,15 +76,15 @@ class FirebaseScreensRepository {
         .map((snapshot) => snapshot.docs.map((e) => e.data()));
   }
 
-  void deleteScreen(String screenToken) {
+  Future<void> deleteScreen(String screenToken) async {
     var toRemove = [screenToken];
-    firestoreInstance
+    await firestoreInstance
         .collection('pairingCodes')
         .doc(screenToken)
         .delete()
         .then((value) => print("Deleted screen"))
         .catchError((onError) => print("Failed to delete error: $onError"));
-    firestoreInstance
+    await firestoreInstance
         .collection('users')
         .doc(userID)
         .update({"screens": FieldValue.arrayRemove(toRemove)})

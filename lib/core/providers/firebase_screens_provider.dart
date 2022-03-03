@@ -21,7 +21,7 @@ class FirebaseScreensProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool addScreen(ScreenPairing screenPairing) {
+  Future<void> addScreen(ScreenPairing screenPairing) {
     return _screensRepository.addScreen(screenPairing);
   }
 
@@ -29,7 +29,7 @@ class FirebaseScreensProvider extends ChangeNotifier {
     return _screensRepository.getScreens();
   }
 
-  void deleteScreen(String screenToken) {
-    return _screensRepository.deleteScreen(screenToken);
+  Future<void> deleteScreen(String screenToken) async {
+    await _screensRepository.deleteScreen(screenToken);
   }
 }
