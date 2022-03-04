@@ -17,7 +17,7 @@ void main() async {
   setUp(() {
     firestoreInstance = FakeFirebaseFirestore();
     previewProvider =
-        FirebasePreviewProvider(firestoreInstnace: firestoreInstance);
+        FirebasePreviewProvider(firestoreInstance: firestoreInstance);
   });
 
   Future<void> loadPreviewView(WidgetTester tester) async {

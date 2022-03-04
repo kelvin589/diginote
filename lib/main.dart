@@ -24,7 +24,7 @@ void main() async {
   final FirebaseLoginProvider loginProvider = FirebaseLoginProvider(authInstance: authInstance);
   final FirebaseRegisterProvider registerProvider = FirebaseRegisterProvider(authInstance: authInstance);
   final FirebaseScreensProvider screensProvider = FirebaseScreensProvider(authInstance: authInstance, firestoreInstance: firestoreInstance);
-  final FirebasePreviewProvider previewProvider = FirebasePreviewProvider(firestoreInstnace: firestoreInstance);
+  final FirebasePreviewProvider previewProvider = FirebasePreviewProvider(firestoreInstance: firestoreInstance);
 
   runApp(MultiProvider(
     providers: [

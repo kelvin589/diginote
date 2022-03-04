@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 class FirebasePreviewProvider extends ChangeNotifier {
   final FirebasePreviewRepository _previewRepository;
 
-  FirebasePreviewProvider({required FirebaseFirestore firestoreInstnace })
-    : _previewRepository = FirebasePreviewRepository(firestoreInstance: firestoreInstnace);
+  FirebasePreviewProvider({required FirebaseFirestore firestoreInstance })
+    : _previewRepository = FirebasePreviewRepository(firestoreInstance: firestoreInstance);
 
   Stream<Iterable<Message>> getMessages(String screenToken) {
     return _previewRepository.getMessages(screenToken);
