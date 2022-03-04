@@ -13,20 +13,20 @@ class FirebasePreviewProvider extends ChangeNotifier {
     return _previewRepository.getMessages(screenToken);
   }
 
-  void addMessage(String screenToken, Message message) {
-    _previewRepository.addMessage(screenToken, message);
+  Future<void> addMessage(String screenToken, Message message) async {
+    await _previewRepository.addMessage(screenToken, message);
   }
 
-  void updateMessageCoordinates(String screenToken, Message message) {
-    _previewRepository.updateMessageCoordinates(screenToken, message);
+  Future<void> updateMessageCoordinates(String screenToken, Message message) async {
+    await _previewRepository.updateMessageCoordinates(screenToken, message);
   }
 
-  void deleteMessage(String screenToken, Message message) {
-    _previewRepository.deleteMessage(screenToken, message);
+  Future<void> deleteMessage(String screenToken, Message message) async {
+    await _previewRepository.deleteMessage(screenToken, message);
   }
 
-  void updateMessageSchedule(
-      String screenToken, Message message, DateTime from, DateTime to, bool scheduled) {
-    _previewRepository.updateMessageSchedule(screenToken, message, from, to, scheduled);
+  Future<void> updateMessageSchedule(
+      String screenToken, Message message, DateTime from, DateTime to, bool scheduled) async {
+    await _previewRepository.updateMessageSchedule(screenToken, message, from, to, scheduled);
   }
 }
