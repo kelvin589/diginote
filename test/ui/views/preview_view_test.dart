@@ -2,6 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/views/preview_view.dart';
+import 'package:diginote/ui/widgets/preview_item.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -69,5 +70,22 @@ void main() async {
     expect(find.text("message1"), findsOneWidget);
     expect(find.text("message2"), findsOneWidget);
     expect(find.text("message3"), findsOneWidget);
+  });
+
+  testWidgets('Message can be deleted', (WidgetTester tester) async {
+    await loadPreviewView(tester);
+    await previewProvider.addMessage(
+        token, messageBodyIDOnly("message1", "messageID1"));
+    await tester.idle();
+    await tester.pump();
+
+    await tester.tap(find.byType(MessageItem));
+    await tester.pump();
+
+    expect(find.byIcon(Icons.delete_forever), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.delete_forever));
+    await tester.pump();
+
+    expect(find.byType(MessageItem), findsNothing);
   });
 }
