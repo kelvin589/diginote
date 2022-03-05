@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({Key? key, required this.applicationLoginState}) : super(key: key);
+  const LoginView({Key? key, required this.applicationLoginState})
+      : super(key: key);
 
   static const String route = '/login';
 
@@ -47,40 +48,48 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        minimum: const EdgeInsets.all(20),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              const Header(),
-              Container(
-                child: const Text('Login', style: headerStyle),
-                alignment: Alignment.topLeft,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height,
               ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(hintText: 'Email'),
-                validator: isEmptyValidator,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  const Header(),
+                  Container(
+                    child: const Text('Login', style: headerStyle),
+                    alignment: Alignment.topLeft,
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(hintText: 'Email'),
+                    validator: isEmptyValidator,
+                  ),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(hintText: 'Password'),
+                    validator: isEmptyValidator,
+                  ),
+                  Consumer<FirebaseLoginProvider>(
+                      builder: (context, loginProvider, child) {
+                    return ElevatedButton(
+                      onPressed: () => _login(loginProvider),
+                      child: const Text('Login'),
+                    );
+                  }),
+                  Footer(
+                    footerText: "Don't have an account?",
+                    buttonText: 'Register',
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, RegisterView.route),
+                  )
+                ],
               ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(hintText: 'Password'),
-                validator: isEmptyValidator,
-              ),
-              Consumer<FirebaseLoginProvider>(
-                  builder: (context, loginProvider, child) {
-                return ElevatedButton(
-                  onPressed: () => _login(loginProvider),
-                  child: const Text('Login'),
-                );
-              }),
-              Footer(
-                footerText: "Don't have an account?",
-                buttonText: 'Register',
-                onPressed: () => Navigator.pushReplacementNamed(context, RegisterView.route),
-              )
-            ],
+            ),
           ),
         ),
       ),

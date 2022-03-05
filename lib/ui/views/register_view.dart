@@ -46,45 +46,52 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        minimum: const EdgeInsets.all(20),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              const Header(),
-              Container(
-                child: const Text('Register', style: headerStyle),
-                alignment: Alignment.topLeft,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height,
+                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  const Header(),
+                  Container(
+                    child: const Text('Register', style: headerStyle),
+                    alignment: Alignment.topLeft,
+                  ),
+                  TextFormField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(hintText: 'Username'),
+                    validator: isEmptyValidator,
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(hintText: 'Email'),
+                    validator: isEmptyValidator,
+                  ),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(hintText: 'Password'),
+                    validator: isEmptyValidator,
+                  ),
+                  Consumer<FirebaseRegisterProvider>(
+                      builder: (context, registerProvider, child) {
+                    return ElevatedButton(
+                      onPressed: () => _register(registerProvider),
+                      child: const Text('Register'),
+                    );
+                  }),
+                  Footer(
+                    footerText: "Already have an account?",
+                    buttonText: 'Login',
+                    onPressed: () => Navigator.pushReplacementNamed(context, LoginView.route),
+                  )
+                ],
               ),
-              TextFormField(
-                controller: _usernameController,
-                decoration: const InputDecoration(hintText: 'Username'),
-                validator: isEmptyValidator,
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(hintText: 'Email'),
-                validator: isEmptyValidator,
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(hintText: 'Password'),
-                validator: isEmptyValidator,
-              ),
-              Consumer<FirebaseRegisterProvider>(
-                  builder: (context, registerProvider, child) {
-                return ElevatedButton(
-                  onPressed: () => _register(registerProvider),
-                  child: const Text('Register'),
-                );
-              }),
-              Footer(
-                footerText: "Already have an account?",
-                buttonText: 'Login',
-                onPressed: () => Navigator.pushReplacementNamed(context, LoginView.route),
-              )
-            ],
+            ),
           ),
         ),
       ),

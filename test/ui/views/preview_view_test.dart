@@ -27,7 +27,7 @@ void main() async {
         home: ChangeNotifierProvider<FirebasePreviewProvider>(
           create: (_) => previewProvider,
           child: const PreviewView(
-              screenToken: token, screenWidth: width, screenHeight: height),
+              screenToken: token, screenWidth: width, screenHeight: height, screenName: "Test",),
         ),
       ),
     );
