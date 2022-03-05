@@ -88,4 +88,47 @@ void main() async {
 
     expect(find.byType(MessageItem), findsNothing);
   });
+
+  testWidgets(
+      'Message can be dragged to a new location and is updated in firestore',
+      (WidgetTester tester) async {
+    await loadPreviewView(tester);
+    await previewProvider.addMessage(
+        token, messageBodyIDOnly("message1", "messageID1", x: 0, y: 0));
+
+    await tester.idle();
+    await tester.pump();
+
+    final Offset initialLocation = tester.getCenter(find.byType(PreviewItem));
+    final TestGesture gesture = await tester.startGesture(initialLocation);
+    await tester.pump();
+
+    await tester.pump(const Duration(seconds: 20));
+
+    const finalLocation = Offset(50, 50);
+    await gesture.moveBy(finalLocation);
+    await tester.pump();
+
+    await gesture.up();
+    await tester.pump();
+
+    final snapshot = await firestoreInstance
+        .collection('messages')
+        .doc(token)
+        .collection('message')
+        .withConverter<Message>(
+          fromFirestore: (snapshot, _) {
+            Map<String, dynamic> map = snapshot.data()!;
+            map['id'] = snapshot.id;
+            return Message.fromJson(map);
+          },
+          toFirestore: (message, _) => message.toJson(),
+        )
+        .get();
+    expect(snapshot.docs.isEmpty, false);
+    final message = snapshot.docs.first.data();
+    
+    expect(message.x, isNot(0));
+    expect(message.y, isNot(0));
+  });
 }
