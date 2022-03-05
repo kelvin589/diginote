@@ -32,21 +32,11 @@ class FirebaseScreensRepository {
         )
         .get()
         .then((value) =>
-            _linkScreen(screenPairing, value.docs.map((e) => e.id).first))
+            _updateScreenPairing(screenPairing, value.docs.map((e) => e.id).first))
         .catchError((onError) => print("Already paired or code wrong."));
   }
 
-  Future<void> _linkScreen(ScreenPairing screenPairing, String screenToken) async {
-    var toAdd = [screenToken];
-    await firestoreInstance
-        .collection('users')
-        .doc(userID)
-        .set({"screens": FieldValue.arrayUnion(toAdd)}, SetOptions(merge: true))
-        .then((value) => _updateScreenPaired(screenPairing, screenToken))
-        .catchError((onError) => print("Couldn't link the screen"));
-  }
-
-  Future<void> _updateScreenPaired(ScreenPairing screenPairing, String screenToken) async {
+  Future<void> _updateScreenPairing(ScreenPairing screenPairing, String screenToken) async {
     await firestoreInstance
         .collection('pairingCodes')
         .doc(screenToken)
@@ -77,17 +67,10 @@ class FirebaseScreensRepository {
   }
 
   Future<void> deleteScreen(String screenToken) async {
-    var toRemove = [screenToken];
     await firestoreInstance
         .collection('pairingCodes')
         .doc(screenToken)
         .delete()
-        .then((value) => print("Deleted screen"))
-        .catchError((onError) => print("Failed to delete error: $onError"));
-    await firestoreInstance
-        .collection('users')
-        .doc(userID)
-        .update({"screens": FieldValue.arrayRemove(toRemove)})
         .then((value) => print("Deleted screen"))
         .catchError((onError) => print("Failed to delete error: $onError"));
   }
