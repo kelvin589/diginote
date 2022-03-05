@@ -45,7 +45,8 @@ class FirebaseScreensRepository {
           'userID': userID,
           'name': screenPairing.name,
           'lastUpdated': screenPairing.lastUpdated,
-          'screenToken': screenToken
+          'screenToken': screenToken,
+          'pairingCode': ""
         })
         .then((value) => print("Updated paired Boolean"))
         .catchError((onError) => print("Couldn't update the paired Boolean"));
