@@ -131,7 +131,9 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
           ),
         ),
         TextButton(
-          onPressed: _okPressed,
+          onPressed: () async {
+            await _okPressed();
+          },
           child: const Text('OK'),
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all(Colors.black),
@@ -173,8 +175,10 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
     DateTime dateTimeNow = clock.now();
     TimeOfDay timeOfDayNow = TimeOfDay.now();
 
-    DateTime adjustedDateTimeNow = dateTimeNow.add(Duration(minutes: setMinutes));
-    TimeOfDay adjustedTimeOfDayNow = TimeOfDay.fromDateTime(adjustedDateTimeNow);
+    DateTime adjustedDateTimeNow =
+        dateTimeNow.add(Duration(minutes: setMinutes));
+    TimeOfDay adjustedTimeOfDayNow =
+        TimeOfDay.fromDateTime(adjustedDateTimeNow);
 
     setState(() {
       fromDate = dateTimeNow;
@@ -189,7 +193,7 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
     Navigator.pop(context);
   }
 
-  void _okPressed() {
+  Future<void> _okPressed() async {
     DateTime from = DateTime(fromDate.year, fromDate.month, fromDate.day,
         fromTime.hour, fromTime.minute);
     DateTime to = DateTime(
@@ -200,8 +204,9 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
       scheduled = true;
     }
 
-    Provider.of<FirebasePreviewProvider>(context, listen: false)
-        .updateMessageSchedule(widget.screenToken, widget.message, from, to, scheduled);
+    await Provider.of<FirebasePreviewProvider>(context, listen: false)
+        .updateMessageSchedule(
+            widget.screenToken, widget.message, from, to, scheduled);
 
     Navigator.pop(context);
   }

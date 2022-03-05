@@ -36,9 +36,9 @@ class FirebaseScreensRepository {
         .catchError((onError) => print("Already paired or code wrong."));
   }
 
-  void _linkScreen(ScreenPairing screenPairing, String screenToken) {
+  Future<void> _linkScreen(ScreenPairing screenPairing, String screenToken) async {
     var toAdd = [screenToken];
-    firestoreInstance
+    await firestoreInstance
         .collection('users')
         .doc(userID)
         .set({"screens": FieldValue.arrayUnion(toAdd)}, SetOptions(merge: true))
@@ -46,8 +46,8 @@ class FirebaseScreensRepository {
         .catchError((onError) => print("Couldn't link the screen"));
   }
 
-  void _updateScreenPaired(ScreenPairing screenPairing, String screenToken) {
-    firestoreInstance
+  Future<void> _updateScreenPaired(ScreenPairing screenPairing, String screenToken) async {
+    await firestoreInstance
         .collection('pairingCodes')
         .doc(screenToken)
         .update({

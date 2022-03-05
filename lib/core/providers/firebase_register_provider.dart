@@ -12,7 +12,7 @@ class FirebaseRegisterProvider extends ChangeNotifier {
   ApplicationRegisterState _applicationRegisterState = ApplicationRegisterState.registering;
   ApplicationRegisterState get applicationRegisterState => _applicationRegisterState;
 
-  Future<void> createUserWithEmailAndPassword(String email, String password, String username, void Function(Exception exception) onError) async {
+  Future<UserCredential?> createUserWithEmailAndPassword(String email, String password, String username, void Function(Exception exception) onError) async {
     UserCredential? userCredential =
         await _registerRepository.createUserWithEmailAndPassword(email, password, username, onError);
     if (userCredential != null) {
@@ -21,5 +21,6 @@ class FirebaseRegisterProvider extends ChangeNotifier {
       _applicationRegisterState = ApplicationRegisterState.registering;
     }
     notifyListeners();
+    return userCredential;
   }
 }

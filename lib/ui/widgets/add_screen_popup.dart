@@ -28,7 +28,8 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Name your screen and enter the pairing code displayed:'),
+            const Text(
+                'Name your screen and enter the pairing code displayed:'),
             TextFormField(
               controller: _nameController,
               decoration: const InputDecoration(hintText: 'Name'),
@@ -51,7 +52,9 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
           ),
         ),
         TextButton(
-          onPressed: _okPressed,
+          onPressed: () async {
+            await _okPressed();
+          },
           child: const Text('OK'),
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all(Colors.black),
@@ -65,10 +68,19 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
     Navigator.pop(context);
   }
 
-  void _okPressed() {
-    ScreenPairing partialScreenPairing = ScreenPairing(pairingCode: _pairingCodeController.text, paired: false, name: _nameController.text, userID: "", lastUpdated: clock.now(), screenToken: "", width: 0, height: 0,);
+  Future<void> _okPressed() async {
+    ScreenPairing partialScreenPairing = ScreenPairing(
+      pairingCode: _pairingCodeController.text,
+      paired: false,
+      name: _nameController.text,
+      userID: "",
+      lastUpdated: clock.now(),
+      screenToken: "",
+      width: 0,
+      height: 0,
+    );
     if (_formKey.currentState!.validate()) {
-      Provider.of<FirebaseScreensProvider>(context, listen: false)
+      await Provider.of<FirebaseScreensProvider>(context, listen: false)
           .addScreen(partialScreenPairing);
       Navigator.pop(context);
     }

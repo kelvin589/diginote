@@ -49,13 +49,13 @@ class _PreviewItemState extends State<PreviewItem> {
             message: widget.message,
             displayOptions: displayOptions,
           ),
-          onDragEnd: (details) {
+          onDragEnd: (details) async {
             // Offset was not correct
             // Code adapted from here.
             // https://stackoverflow.com/questions/64114904/why-is-draggable-widget-not-being-placed-in-correct-position
             RenderBox? renderBox = context.findRenderObject() as RenderBox;
             if (renderBox != null) {
-              onDragEnd(renderBox.globalToLocal(details.offset),
+              await onDragEnd(renderBox.globalToLocal(details.offset),
                   widget.scaleFactorX, widget.scaleFactorY);
             }
           },
@@ -64,12 +64,13 @@ class _PreviewItemState extends State<PreviewItem> {
     );
   }
 
-  void onDragEnd(Offset offset, double scaleFactorX, double scaleFactorY) {
+  Future<void> onDragEnd(
+      Offset offset, double scaleFactorX, double scaleFactorY) async {
     setState(() {
       widget.message.x += offset.dx * scaleFactorX;
       widget.message.y += offset.dy * scaleFactorY;
     });
-    Provider.of<FirebasePreviewProvider>(context, listen: false)
+    await Provider.of<FirebasePreviewProvider>(context, listen: false)
         .updateMessageCoordinates(widget.screenToken, widget.message);
   }
 
@@ -161,9 +162,10 @@ class _OptionsPanel extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          onPressed: () =>
-              Provider.of<FirebasePreviewProvider>(context, listen: false)
-                  .deleteMessage(screenToken, message),
+          onPressed: () async {
+            await Provider.of<FirebasePreviewProvider>(context, listen: false)
+                .deleteMessage(screenToken, message);
+          },
           icon: IconHelper.deleteIcon,
           constraints: const BoxConstraints(),
         ),

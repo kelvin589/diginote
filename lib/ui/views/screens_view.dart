@@ -68,7 +68,11 @@ class ScreensView extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) =>
                     // PreviewListView(screenToken: screen.screenToken),
-                    PreviewView(screenToken: screen.screenToken, screenWidth: screen.width, screenHeight: screen.height, screenName: screen.name),
+                    PreviewView(
+                        screenToken: screen.screenToken,
+                        screenWidth: screen.width,
+                        screenHeight: screen.height,
+                        screenName: screen.name),
               ),
             ),
           },
@@ -89,9 +93,10 @@ class ScreensView extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () =>
-              Provider.of<FirebaseScreensProvider>(context, listen: false)
-                  .deleteScreen(screenToken),
+          onPressed: () async {
+            await Provider.of<FirebaseScreensProvider>(context, listen: false)
+                .deleteScreen(screenToken);
+          },
           child: const Text("Delete"),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.red),

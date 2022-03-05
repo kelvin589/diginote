@@ -54,7 +54,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
           border: InputBorder.none,
         ),
         validator: isEmptyValidator,
-        style: GoogleFonts.getFont(fontFamily, fontSize: fontSize, color: messageForegroundColour),
+        style: GoogleFonts.getFont(fontFamily,
+            fontSize: fontSize, color: messageForegroundColour),
       ),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +161,9 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
             ),
           ),
           TextButton(
-            onPressed: _okPressed,
+            onPressed: () async {
+              await _okPressed();
+            },
             child: const Text('OK'),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(Colors.black),
@@ -175,12 +178,19 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
     Navigator.pop(context);
   }
 
-  void _okPressed() {
+  Future<void> _okPressed() async {
     // TODO: Implement X/Y
     Message newMessage = Message(
-        header: _headerController.text, message: _messageController.text, x: 0, y: 0, id: "", from: clock.now(), to: clock.now(), scheduled: false);
+        header: _headerController.text,
+        message: _messageController.text,
+        x: 0,
+        y: 0,
+        id: "",
+        from: clock.now(),
+        to: clock.now(),
+        scheduled: false);
     if (_formKey.currentState!.validate()) {
-      Provider.of<FirebasePreviewProvider>(context, listen: false)
+      await Provider.of<FirebasePreviewProvider>(context, listen: false)
           .addMessage(widget.screenToken, newMessage);
       Navigator.pop(context);
     }

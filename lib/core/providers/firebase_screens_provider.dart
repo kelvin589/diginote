@@ -21,8 +21,8 @@ class FirebaseScreensProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addScreen(ScreenPairing screenPairing) {
-    return _screensRepository.addScreen(screenPairing);
+  Future<void> addScreen(ScreenPairing screenPairing) async {
+    await _screensRepository.addScreen(screenPairing);
   }
 
   Stream<Iterable<ScreenPairing>> getScreens() {
