@@ -9,6 +9,18 @@ class FirebaseLoginProvider extends ChangeNotifier {
   FirebaseLoginProvider({required FirebaseAuth authInstance })
     : _loginRespository = FirebaseLoginRepository(authInstance: authInstance);
 
+  void listen(FirebaseAuth authInstance) {
+    authInstance.userChanges().listen((User? user) {
+      if (user == null) {
+        _applicationLoginState = ApplicationLoginState.loggedOut;
+        notifyListeners();
+      } else {
+        _applicationLoginState = ApplicationLoginState.loggedIn;
+        notifyListeners();
+      }
+    });
+  }
+
   ApplicationLoginState _applicationLoginState =
       ApplicationLoginState.loggedOut;
   ApplicationLoginState get applicationLoginState => _applicationLoginState;

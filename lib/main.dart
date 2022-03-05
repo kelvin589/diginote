@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
@@ -25,6 +27,7 @@ void main() async {
   final FirebaseRegisterProvider registerProvider = FirebaseRegisterProvider(authInstance: authInstance);
   final FirebaseScreensProvider screensProvider = FirebaseScreensProvider(authInstance: authInstance, firestoreInstance: firestoreInstance);
   final FirebasePreviewProvider previewProvider = FirebasePreviewProvider(firestoreInstance: firestoreInstance);
+  loginProvider.listen(authInstance);
 
   runApp(MultiProvider(
     providers: [
