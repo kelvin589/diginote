@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
@@ -177,7 +178,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   void _okPressed() {
     // TODO: Implement X/Y
     Message newMessage = Message(
-        header: _headerController.text, message: _messageController.text, x: 0, y: 0, id: "", from: DateTime.now(), to: DateTime.now(), scheduled: false);
+        header: _headerController.text, message: _messageController.text, x: 0, y: 0, id: "", from: clock.now(), to: clock.now(), scheduled: false);
     if (_formKey.currentState!.validate()) {
       Provider.of<FirebasePreviewProvider>(context, listen: false)
           .addMessage(widget.screenToken, newMessage);

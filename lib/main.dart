@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/providers/firebase_register_provider.dart';
@@ -5,6 +6,7 @@ import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/login_view.dart';
 import 'package:diginote/ui/views/register_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +18,20 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final FirebaseLoginProvider loginProvider = FirebaseLoginProvider();
-  final FirebaseRegisterProvider registerProvider = FirebaseRegisterProvider();
-  final FirebaseScreensProvider screensProvider = FirebaseScreensProvider();
+  FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+  FirebaseAuth authInstance = FirebaseAuth.instance;
+
+  final FirebaseLoginProvider loginProvider = FirebaseLoginProvider(authInstance: authInstance);
+  final FirebaseRegisterProvider registerProvider = FirebaseRegisterProvider(authInstance: authInstance);
+  final FirebaseScreensProvider screensProvider = FirebaseScreensProvider(authInstance: authInstance, firestoreInstance: firestoreInstance);
+  final FirebasePreviewProvider previewProvider = FirebasePreviewProvider(firestoreInstance: firestoreInstance);
 
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => loginProvider),
       ChangeNotifierProvider(create: (context) => registerProvider),
       ChangeNotifierProvider(create: (context) => screensProvider),
-      ChangeNotifierProvider(create: (context) => FirebasePreviewProvider()),
+      ChangeNotifierProvider(create: (context) => previewProvider),
     ],
     child: const MyApp(),
   ));
