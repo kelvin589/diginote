@@ -12,12 +12,14 @@ class PreviewView extends StatefulWidget {
       {Key? key,
       required this.screenToken,
       required this.screenWidth,
-      required this.screenHeight})
+      required this.screenHeight,
+      required this.screenName})
       : super(key: key);
 
   final String screenToken;
   final double screenWidth;
   final double screenHeight;
+  final String screenName;
 
   @override
   _PreviewViewState createState() => _PreviewViewState();
@@ -58,7 +60,7 @@ class _PreviewViewState extends State<PreviewView> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('ScreenName'),
+          title: Text(widget.screenName),
           actions: actionItems,
         ),
         body: Center(
