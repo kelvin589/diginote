@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
 class IconHelper {
-  static Widget screensIcon = const Icon(Icons.tablet);
-  static Widget templatesIcon = const Icon(Icons.note_outlined);
-  static Widget settingsIcon = const Icon(Icons.settings_outlined);
-  static Widget previewIcon = const Icon(Icons.remove_red_eye_outlined);
-  static Widget addIcon = const Icon(Icons.add_box_outlined);
-  static Widget editIcon = const Icon(Icons.mode_edit_outlined);
+  static Icon screensIcon = const Icon(Icons.tablet);
+  static Icon templatesIcon = const Icon(Icons.note_outlined);
+  static Icon settingsIcon = const Icon(Icons.settings_outlined);
+  static Icon previewIcon = const Icon(Icons.remove_red_eye_outlined);
+  static Icon addIcon = const Icon(Icons.add_box_outlined);
+  static Icon editIcon = const Icon(Icons.mode_edit_outlined);
 
-  static Widget boldIcon = const Icon(Icons.format_bold_rounded);
-  static Widget italicIcon = const Icon(Icons.format_italic_rounded);
-  static Widget strikethroughIcon = const Icon(Icons.format_strikethrough_rounded);
-  static Widget underlineIcon = const Icon(Icons.format_underline_rounded);
-  static Widget listIcon = const Icon(Icons.list_rounded);
-  static Widget numberedListIcon = const Icon(Icons.format_list_numbered_rounded);
-  static Widget leftAlignIcon = const Icon(Icons.format_align_left_rounded);
-  static Widget centreAlignIcon = const Icon(Icons.format_align_center_rounded);
-  static Widget rightAlignIcon = const Icon(Icons.format_align_right_rounded);
-  static Widget justifyAlignIcon = const Icon(Icons.format_align_justify_rounded);
-  static Widget colourPickerIcon = const Icon(Icons.color_lens_outlined);
+  static Icon boldIcon = const Icon(Icons.format_bold_rounded);
+  static Icon italicIcon = const Icon(Icons.format_italic_rounded);
+  static Icon strikethroughIcon = const Icon(Icons.format_strikethrough_rounded);
+  static Icon underlineIcon = const Icon(Icons.format_underline_rounded);
+  static Icon listIcon = const Icon(Icons.list_rounded);
+  static Icon numberedListIcon = const Icon(Icons.format_list_numbered_rounded);
+  static Icon leftAlignIcon = const Icon(Icons.format_align_left_rounded);
+  static Icon centreAlignIcon = const Icon(Icons.format_align_center_rounded);
+  static Icon rightAlignIcon = const Icon(Icons.format_align_right_rounded);
+  static Icon justifyAlignIcon = const Icon(Icons.format_align_justify_rounded);
+  static Icon colourPickerIcon = const Icon(Icons.color_lens_outlined);
 
-  static Widget deleteIcon = const Icon(Icons.delete_forever);
-  static Widget scheduleIcon = const Icon(Icons.access_time_rounded);
+  static Icon deleteIcon = const Icon(Icons.delete_forever);
+  static Icon scheduleIcon = const Icon(Icons.access_time_rounded);
 }

@@ -2,6 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/widgets/screen_item.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -40,7 +41,7 @@ void main() async {
         ),
       ),
     );
-    await tester.tap(find.byIcon(Icons.tablet));
+    await tester.tap(find.byIcon(IconHelper.screensIcon.icon!));
     await tester.pumpAndSettle();
   }
 
@@ -99,7 +100,7 @@ void main() async {
     await tester.pump();
 
     expect(find.byType(ScreenItem), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.mode_edit_outlined));
+    await tester.tap(find.byIcon(IconHelper.editIcon.icon!));
     await tester.pump();
 
     expect(find.text("Delete"), findsOneWidget);

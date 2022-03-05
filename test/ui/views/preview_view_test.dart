@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/views/preview_view.dart';
 import 'package:diginote/ui/widgets/preview_item.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -82,8 +83,8 @@ void main() async {
     await tester.tap(find.byType(MessageItem));
     await tester.pump();
 
-    expect(find.byIcon(Icons.delete_forever), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.delete_forever));
+    expect(find.byIcon(IconHelper.deleteIcon.icon!), findsOneWidget);
+    await tester.tap(find.byIcon(IconHelper.deleteIcon.icon!));
     await tester.pump();
 
     expect(find.byType(MessageItem), findsNothing);
