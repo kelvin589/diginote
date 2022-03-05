@@ -20,6 +20,7 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      contentPadding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
       title: const Text('Add Screen'),
       content: Form(
         key: _formKey,
@@ -27,7 +28,7 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Enter a name for your screen and the pairing code displayed on your screen:'),
+            const Text('Name your screen and enter the pairing code displayed:'),
             TextFormField(
               controller: _nameController,
               decoration: const InputDecoration(hintText: 'Name'),
