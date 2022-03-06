@@ -1,5 +1,6 @@
 import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:diginote/ui/views/preview_view.dart';
 import 'package:diginote/ui/widgets/screen_item.dart';
 import 'package:diginote/ui/widgets/screen_settings_popup.dart';
@@ -72,11 +73,14 @@ class ScreensView extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PreviewView(
-          screenToken: screen.screenToken,
-          screenWidth: screen.width,
-          screenHeight: screen.height,
-          screenName: screen.name,
+        builder: (context) => ChangeNotifierProvider<TimerProvider>(
+          create: (context) => TimerProvider(duration: const Duration(seconds: 1)),
+          child: PreviewView(
+            screenToken: screen.screenToken,
+            screenWidth: screen.width,
+            screenHeight: screen.height,
+            screenName: screen.name,
+          ),
         ),
       ),
     );

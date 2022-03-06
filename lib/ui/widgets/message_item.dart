@@ -41,6 +41,7 @@ class _MessageItemState extends State<MessageItem> {
               selected: true,
               message: widget.message,
               onDelete: onDelete,
+              showTimer: false,
             ),
           ),
           childWhenDragging: Container(),

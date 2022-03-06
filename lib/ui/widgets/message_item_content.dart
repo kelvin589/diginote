@@ -2,7 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
+import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'add_schedule_popup.dart';
 
@@ -15,7 +17,8 @@ class MessageItemContent extends StatelessWidget {
       this.displayOptions = false,
       required this.onDelete,
       this.width = 100,
-      this.height = 100})
+      this.height = 100,
+      this.showTimer = true})
       : super(key: key);
 
   final String screenToken;
@@ -25,6 +28,7 @@ class MessageItemContent extends StatelessWidget {
   final Future<void> Function() onDelete;
   final double width;
   final double height;
+  final bool showTimer;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +73,7 @@ class MessageItemContent extends StatelessWidget {
             ),
           ),
         ),
-        _RemainingTimePanel(message: message),
+        showTimer ? _RemainingTimePanel(message: message) : Container(),
       ],
     );
   }
@@ -127,7 +131,11 @@ class _RemainingTimePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(_scheduleText());
+    return Consumer<TimerProvider>(
+      builder: (context, value, child) {
+        return Text(_scheduleText());
+      },
+    );
   }
 
   // Three states:
