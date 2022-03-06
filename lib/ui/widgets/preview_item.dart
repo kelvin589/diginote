@@ -39,15 +39,19 @@ class _PreviewItemState extends State<PreviewItem> {
         child: LongPressDraggable<Message>(
           onDragStarted: () => setDisplayOptions(false),
           feedback: Material(
-              child: MessageItem(
-                  screenToken: widget.screenToken,
-                  selected: true,
-                  message: widget.message)),
+            child: MessageItem(
+              screenToken: widget.screenToken,
+              selected: true,
+              message: widget.message,
+              onDelete: onDelete,
+            ),
+          ),
           childWhenDragging: Container(),
           child: MessageItem(
             screenToken: widget.screenToken,
             message: widget.message,
             displayOptions: displayOptions,
+            onDelete: onDelete,
           ),
           onDragEnd: (details) async {
             // Offset was not correct
@@ -74,6 +78,12 @@ class _PreviewItemState extends State<PreviewItem> {
         .updateMessageCoordinates(widget.screenToken, widget.message);
   }
 
+  Future<void> onDelete() async {
+    setDisplayOptions(false);
+    await Provider.of<FirebasePreviewProvider>(context, listen: false)
+        .deleteMessage(widget.screenToken, widget.message);
+  }
+
   void toggleDisplayOptions() {
     setState(() {
       displayOptions = !displayOptions;
@@ -93,20 +103,23 @@ class MessageItem extends StatelessWidget {
       required this.screenToken,
       required this.message,
       this.selected = false,
-      this.displayOptions = false})
+      this.displayOptions = false,
+      required this.onDelete})
       : super(key: key);
 
   final String screenToken;
   final Message message;
   final bool selected;
   final bool displayOptions;
+  final Future<void> Function() onDelete;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         displayOptions
-            ? _OptionsPanel(screenToken: screenToken, message: message)
+            ? _OptionsPanel(
+                screenToken: screenToken, message: message, onDelete: onDelete)
             : Container(),
         Container(
           constraints: const BoxConstraints(
@@ -151,11 +164,15 @@ class MessageItem extends StatelessWidget {
 
 class _OptionsPanel extends StatelessWidget {
   const _OptionsPanel(
-      {Key? key, required this.screenToken, required this.message})
+      {Key? key,
+      required this.screenToken,
+      required this.message,
+      required this.onDelete})
       : super(key: key);
 
   final String screenToken;
   final Message message;
+  final Future<void> Function() onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -163,8 +180,7 @@ class _OptionsPanel extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () async {
-            await Provider.of<FirebasePreviewProvider>(context, listen: false)
-                .deleteMessage(screenToken, message);
+            await onDelete();
           },
           icon: IconHelper.deleteIcon,
           constraints: const BoxConstraints(),
