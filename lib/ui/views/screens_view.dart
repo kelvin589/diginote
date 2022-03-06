@@ -19,7 +19,7 @@ class ScreensView extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Waiting');
+          return const CircularProgressIndicator();
         }
 
         Iterable<ScreenPairing>? screens = snapshot.data;
