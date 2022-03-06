@@ -114,14 +114,11 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
 
   Future<void> _okPressed() async {
     DateTime from = DateTime(fromDate.year, fromDate.month, fromDate.day,
-        fromTime.hour, fromTime.minute);
+        fromTime.hour, fromTime.minute, fromDate.second);
     DateTime to = DateTime(
-        toDate.year, toDate.month, toDate.day, toTime.hour, toTime.minute);
-    if (from.isAtSameMomentAs(to) && from.isBefore(clock.now())) {
-      scheduled = false;
-    } else {
-      scheduled = true;
-    }
+        toDate.year, toDate.month, toDate.day, toTime.hour, toTime.minute, toDate.second);
+    
+    scheduled = !(from.isAtSameMomentAs(to) && from.isBefore(clock.now()));
 
     await Provider.of<FirebasePreviewProvider>(context, listen: false)
         .updateMessageSchedule(
