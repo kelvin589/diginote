@@ -1,8 +1,8 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/ui/widgets/date_time_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AddSchedulePopup extends StatefulWidget {
@@ -35,89 +35,36 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text("Quick Options"),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => setState(() {
-                    fromDate = clock.now();
-                    fromTime = TimeOfDay.now();
-                    toDate = clock.now();
-                    toTime = TimeOfDay.now();
-                    scheduled = false;
-                  }),
-                  child: const _QuickItem(text: "None"),
-                ),
-                GestureDetector(
-                  onTap: () => _setQuickOptions(setMinutes: 5),
-                  child: const _QuickItem(text: "5 Min"),
-                ),
-                GestureDetector(
-                  onTap: () => _setQuickOptions(setMinutes: 10),
-                  child: const _QuickItem(text: "10 Min"),
-                ),
-                GestureDetector(
-                  onTap: () => _setQuickOptions(setMinutes: 15),
-                  child: const _QuickItem(text: "15 Min"),
-                ),
-              ],
-            ),
+            _QuickOptions(onOptionTapped: _setQuickOptions),
             const Text("From"),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => _showDateSelector(
-                    context: context,
-                    initialDate: fromDate,
-                    onSelected: (date) => {
-                      setState(() {
-                        fromDate = date;
-                      })
-                    },
-                  ),
-                  child: _DateItem(date: fromDate),
-                ),
-                GestureDetector(
-                  onTap: () => _showTimeSelector(
-                    context: context,
-                    initialTime: fromTime,
-                    onSelected: (time) => {
-                      setState(() {
-                        fromTime = time;
-                      })
-                    },
-                  ),
-                  child: _TimeItem(time: fromTime),
-                ),
-              ],
+            DateTimeSelector(
+              date: fromDate,
+              time: fromTime,
+              onDateSelected: (date) => {
+                setState(() {
+                  fromDate = date;
+                })
+              },
+              onTimeSelected: (time) => {
+                setState(() {
+                  fromTime = time;
+                })
+              },
             ),
             const Text("To"),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => _showDateSelector(
-                    context: context,
-                    initialDate: toDate,
-                    onSelected: (date) => {
-                      setState(() {
-                        toDate = date;
-                      })
-                    },
-                  ),
-                  child: _DateItem(date: toDate),
-                ),
-                GestureDetector(
-                  onTap: () => _showTimeSelector(
-                    context: context,
-                    initialTime: toTime,
-                    onSelected: (time) => {
-                      setState(() {
-                        toTime = time;
-                      })
-                    },
-                  ),
-                  child: _TimeItem(time: toTime),
-                ),
-              ],
+            DateTimeSelector(
+              date: toDate,
+              time: toTime,
+              onDateSelected: (date) => {
+                setState(() {
+                  toDate = date;
+                })
+              },
+              onTimeSelected: (time) => {
+                setState(() {
+                  toTime = time;
+                })
+              },
             ),
           ],
         ),
@@ -141,34 +88,6 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
         ),
       ],
     );
-  }
-
-  void _showDateSelector(
-      {required BuildContext context,
-      required DateTime initialDate,
-      required Function(DateTime) onSelected}) async {
-    final DateTime? date = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: initialDate,
-      lastDate: initialDate.add(const Duration(days: 365)),
-    );
-    if (date != null && date != initialDate) {
-      onSelected(date);
-    }
-  }
-
-  void _showTimeSelector(
-      {required BuildContext context,
-      required TimeOfDay initialTime,
-      required Function(TimeOfDay) onSelected}) async {
-    final TimeOfDay? time = await showTimePicker(
-      context: context,
-      initialTime: initialTime,
-    );
-    if (time != null && time != initialTime) {
-      onSelected(time);
-    }
   }
 
   void _setQuickOptions({required int setMinutes}) {
@@ -212,47 +131,33 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
   }
 }
 
-class _DateItem extends StatelessWidget {
-  const _DateItem({Key? key, required this.date}) : super(key: key);
+class _QuickOptions extends StatelessWidget {
+  const _QuickOptions({Key? key, required this.onOptionTapped})
+      : super(key: key);
 
-  static DateFormat dateFormat = DateFormat("d MMM y");
-  final DateTime date;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-      child: Container(
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
-        child: Text(
-          dateFormat.format(date),
-        ),
-      ),
-    );
-  }
-}
-
-class _TimeItem extends StatelessWidget {
-  const _TimeItem({Key? key, required this.time}) : super(key: key);
-
-  final TimeOfDay time;
+  final void Function({required int setMinutes}) onOptionTapped;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-      child: Container(
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () => onOptionTapped(setMinutes: 0),
+          child: const _QuickItem(text: "None"),
         ),
-        child: Text(
-          time.format(context),
+        GestureDetector(
+          onTap: () => onOptionTapped(setMinutes: 5),
+          child: const _QuickItem(text: "5 Min"),
         ),
-      ),
+        GestureDetector(
+          onTap: () => onOptionTapped(setMinutes: 10),
+          child: const _QuickItem(text: "10 Min"),
+        ),
+        GestureDetector(
+          onTap: () => onOptionTapped(setMinutes: 15),
+          child: const _QuickItem(text: "15 Min"),
+        ),
+      ],
     );
   }
 }
