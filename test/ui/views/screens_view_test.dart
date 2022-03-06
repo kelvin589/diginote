@@ -92,7 +92,7 @@ void main() async {
     expect(find.text("Screen2"), findsOneWidget);
   });
 
-  testWidgets("Edit button shows delete button and screen can be deleted", (WidgetTester tester) async {
+  testWidgets("Screen can be deleted from its setting menu", (WidgetTester tester) async {
     await loadScreensView(tester);
     
     await addPairedScreen(name: "Screen1", userID: user.uid, token: "Screen1");
@@ -100,11 +100,11 @@ void main() async {
     await tester.pump();
 
     expect(find.byType(ScreenItem), findsOneWidget);
-    await tester.tap(find.byIcon(IconHelper.editIcon.icon!));
+    await tester.tap(find.byIcon(IconHelper.settingsIcon.icon!).first);
     await tester.pump();
 
-    expect(find.text("Delete"), findsOneWidget);
-    await tester.tap(find.text("Delete"));
+    expect(find.text("Delete Screen"), findsOneWidget);
+    await tester.tap(find.text("Delete Screen"));
     await tester.idle();
     await tester.pump();
 
