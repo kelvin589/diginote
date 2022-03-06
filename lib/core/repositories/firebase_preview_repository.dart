@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginote/core/models/messages_model.dart';
 
@@ -39,6 +40,7 @@ class FirebasePreviewRepository {
         .add(message)
         .then((value) => print("Added a new message."))
         .catchError((onError) => print("Unable to add message."));
+    await updateLastUpdatedToNow(screenToken);
   }
 
   Future<void> updateMessageCoordinates(
@@ -52,6 +54,7 @@ class FirebasePreviewRepository {
         .then((value) => print("Updated coordinates of message."))
         .catchError((onError) =>
             print("Unable to update message coordinates. $onError"));
+    await updateLastUpdatedToNow(screenToken);
   }
 
   Future<void> deleteMessage(String screenToken, Message message) async {
@@ -63,6 +66,7 @@ class FirebasePreviewRepository {
         .delete()
         .then((value) => print("Deleted message"))
         .catchError((onError) => print("Unable to delete message."));
+    await updateLastUpdatedToNow(screenToken);
   }
 
   Future<void> updateMessageSchedule(String screenToken, Message message,
@@ -75,5 +79,17 @@ class FirebasePreviewRepository {
         .update({"from": from, "to": to, "scheduled": scheduled})
         .then((value) => print("Updated message scheduling"))
         .catchError((onError) => print("Unable to update message scheduling."));
+    await updateLastUpdatedToNow(screenToken);
+  }
+
+  Future<void> updateLastUpdatedToNow(String screenToken) async {
+    await firestoreInstance
+        .collection('pairingCodes')
+        .doc(screenToken)
+        .update({
+          'lastUpdated': clock.now(),
+        })
+        .then((value) => print("Updated last updated"))
+        .catchError((onError) => print("Couldn't update last updated"));
   }
 }
