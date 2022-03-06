@@ -95,10 +95,6 @@ class _HomeNavigationState extends State<HomeNavigation> {
       case 0:
         return [
           IconButton(
-            onPressed: () => Provider.of<FirebaseScreensProvider>(context, listen: false).toggleScreensState(),
-            icon: IconHelper.editIcon,
-          ),
-          IconButton(
             onPressed: () => showDialog(
               context: context,
               builder: (context) => const AddScreenPopup(),

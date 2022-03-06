@@ -13,14 +13,6 @@ class FirebaseScreensProvider extends ChangeNotifier {
       : _screensRepository = FirebaseScreensRepository(
             firestoreInstance: firestoreInstance, authInstance: authInstance);
 
-  bool _isEditing = false;
-  bool get isEditing => _isEditing;
-
-  void toggleScreensState() {
-    _isEditing = !_isEditing;
-    notifyListeners();
-  }
-
   Future<void> addScreen(ScreenPairing screenPairing) async {
     await _screensRepository.addScreen(screenPairing);
   }

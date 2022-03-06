@@ -35,10 +35,6 @@ class ScreensView extends StatelessWidget {
               return Column(
                 children: <Widget>[
                   items[index],
-                  Provider.of<FirebaseScreensProvider>(context).isEditing
-                      ? _deleteScreenButton(
-                          context, screens.elementAt(index).screenToken)
-                      : Container(),
                   const Divider(),
                 ],
               );
@@ -76,15 +72,30 @@ class ScreensView extends StatelessWidget {
               ),
             ),
           },
-          onSettingsTapped: () => {
-            DialogueHelper.showSuccessDialogue(
-                context, 'Tapped', 'Settings Tapped'),
-          },
+          onSettingsTapped: () => _showScreenSettingsPopup(context, screen.screenToken),
         ));
       }
     }
 
     return screenItems;
+  }
+
+  void _showScreenSettingsPopup(BuildContext context, String screenToken) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text("Settings"),
+        content: _deleteScreenButton(context, screenToken),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.green)),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _deleteScreenButton(BuildContext context, String screenToken) {
@@ -97,7 +108,7 @@ class ScreensView extends StatelessWidget {
             await Provider.of<FirebaseScreensProvider>(context, listen: false)
                 .deleteScreen(screenToken);
           },
-          child: const Text("Delete"),
+          child: const Text("Delete Screen"),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.red),
           ),
