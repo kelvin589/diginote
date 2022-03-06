@@ -1,14 +1,14 @@
-import 'package:diginote/core/models/screen_pairing_model.dart';
+import 'package:diginote/core/models/screen_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class ScreenPairingMatcher implements Matcher {
+class ScreenMatcher implements Matcher {
   final Map<String, dynamic>? _data;
 
-  ScreenPairingMatcher(this._data);
+  ScreenMatcher(this._data);
 
   @override
   Description describe(Description description) {
-    return StringDescription("Matches a screenPairing");
+    return StringDescription("Matches a screen");
   }
 
   @override
@@ -19,7 +19,7 @@ class ScreenPairingMatcher implements Matcher {
 
   @override
   bool matches(item, Map matchState) {
-    final screenPairing = item as ScreenPairing;
-    return equals(screenPairing.toJson()).matches(_data, matchState);
+    final screen = item as Screen;
+    return equals(screen.toJson()).matches(_data, matchState);
   }
 }

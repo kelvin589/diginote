@@ -1,5 +1,5 @@
 import 'package:clock/clock.dart';
-import 'package:diginote/core/models/screen_pairing_model.dart';
+import 'package:diginote/core/models/screen_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
@@ -54,7 +54,7 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
   }
 
   Future<void> _okPressed() async {
-    ScreenPairing partialScreenPairing = ScreenPairing(
+    Screen partialScreen = Screen(
       pairingCode: _pairingCodeController.text,
       paired: false,
       name: _nameController.text,
@@ -66,7 +66,7 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
     );
     if (_formKey.currentState!.validate()) {
       await Provider.of<FirebaseScreensProvider>(context, listen: false)
-          .addScreen(partialScreenPairing);
+          .addScreen(partialScreen);
       Navigator.pop(context);
     }
   }

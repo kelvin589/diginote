@@ -1,5 +1,5 @@
 import 'package:clock/clock.dart';
-import 'package:diginote/core/models/screen_pairing_model.dart';
+import 'package:diginote/core/models/screen_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
@@ -47,7 +47,7 @@ void main() async {
 
   Future<void> addPairedScreen(
       {required String name, required String userID, required String token}) async {
-    final toAdd = ScreenPairing(
+    final toAdd = Screen(
         pairingCode: "pairingCode",
         paired: true,
         name: name,
@@ -57,12 +57,12 @@ void main() async {
         width: 100,
         height: 100);
     await firestoreInstance
-        .collection('pairingCodes')
+        .collection('screens')
         .doc(token)
-        .withConverter<ScreenPairing>(
+        .withConverter<Screen>(
           fromFirestore: (snapshot, _) =>
-              ScreenPairing.fromJson(snapshot.data()!),
-          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+              Screen.fromJson(snapshot.data()!),
+          toFirestore: (screen, _) => screen.toJson(),
         )
         .set(toAdd);
   }

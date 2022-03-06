@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:diginote/core/models/screen_pairing_model.dart';
+import 'package:diginote/core/models/screen_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 
@@ -20,31 +20,31 @@ class FirebaseScreensRepository {
     });
   }
 
-  Future<void> addScreen(ScreenPairing screenPairing) async {
+  Future<void> addScreen(Screen screen) async {
     await firestoreInstance
-        .collection('pairingCodes')
-        .where('pairingCode', isEqualTo: screenPairing.pairingCode)
+        .collection('screens')
+        .where('pairingCode', isEqualTo: screen.pairingCode)
         .where('paired', isEqualTo: false)
-        .withConverter<ScreenPairing>(
+        .withConverter<Screen>(
           fromFirestore: (snapshot, _) =>
-              ScreenPairing.fromJson(snapshot.data()!),
-          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+              Screen.fromJson(snapshot.data()!),
+          toFirestore: (screen, _) => screen.toJson(),
         )
         .get()
         .then((value) =>
-            _updateScreenPairing(screenPairing, value.docs.map((e) => e.id).first))
+            _updatescreen(screen, value.docs.map((e) => e.id).first))
         .catchError((onError) => print("Already paired or code wrong."));
   }
 
-  Future<void> _updateScreenPairing(ScreenPairing screenPairing, String screenToken) async {
+  Future<void> _updatescreen(Screen screen, String screenToken) async {
     await firestoreInstance
-        .collection('pairingCodes')
+        .collection('screens')
         .doc(screenToken)
         .update({
           'paired': true,
           'userID': userID,
-          'name': screenPairing.name,
-          'lastUpdated': screenPairing.lastUpdated,
+          'name': screen.name,
+          'lastUpdated': screen.lastUpdated,
           'screenToken': screenToken,
           'pairingCode': ""
         })
@@ -52,16 +52,16 @@ class FirebaseScreensRepository {
         .catchError((onError) => print("Couldn't update the paired Boolean"));
   }
 
-  Stream<Iterable<ScreenPairing>> getScreens() {
+  Stream<Iterable<Screen>> getScreens() {
     print("ALERT: GETTING SCREENS FOR $userID");
     return firestoreInstance
-        .collection('pairingCodes')
+        .collection('screens')
         .where('userID', isEqualTo: userID)
         .where('paired', isEqualTo: true)
-        .withConverter<ScreenPairing>(
+        .withConverter<Screen>(
           fromFirestore: (snapshot, _) =>
-              ScreenPairing.fromJson(snapshot.data()!),
-          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+              Screen.fromJson(snapshot.data()!),
+          toFirestore: (screen, _) => screen.toJson(),
         )
         .snapshots()
         .map((snapshot) => snapshot.docs.map((e) => e.data()));
@@ -69,7 +69,7 @@ class FirebaseScreensRepository {
 
   Future<void> deleteScreen(String screenToken) async {
     await firestoreInstance
-        .collection('pairingCodes')
+        .collection('screens')
         .doc(screenToken)
         .delete()
         .then((value) => print("Deleted screen"))

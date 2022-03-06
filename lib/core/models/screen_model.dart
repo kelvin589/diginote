@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ScreenPairing {
-  ScreenPairing(
+class Screen {
+  Screen(
       {required this.pairingCode,
       required this.paired,
       required this.name,
@@ -11,7 +11,7 @@ class ScreenPairing {
       required this.width,
       required this.height});
 
-  ScreenPairing.fromJson(Map<String, Object?> json)
+  Screen.fromJson(Map<String, Object?> json)
       : this(
           pairingCode: json['pairingCode']! as String,
           paired: json['paired']! as bool,
@@ -48,7 +48,7 @@ class ScreenPairing {
 
   @override
   bool operator ==(Object other) {
-    return other is ScreenPairing &&
+    return other is Screen &&
         other.pairingCode == pairingCode &&
         other.paired == paired &&
         other.name == name &&

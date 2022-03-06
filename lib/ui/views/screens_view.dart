@@ -1,4 +1,4 @@
-import 'package:diginote/core/models/screen_pairing_model.dart';
+import 'package:diginote/core/models/screen_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:diginote/ui/views/preview_view.dart';
@@ -12,7 +12,7 @@ class ScreensView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Iterable<ScreenPairing>>(
+    return StreamBuilder<Iterable<Screen>>(
       stream: Provider.of<FirebaseScreensProvider>(context, listen: false)
           .getScreens(),
       builder: (BuildContext context, snapshot) {
@@ -24,7 +24,7 @@ class ScreensView extends StatelessWidget {
           return const CircularProgressIndicator();
         }
 
-        Iterable<ScreenPairing>? screens = snapshot.data;
+        Iterable<Screen>? screens = snapshot.data;
         if (screens != null) {
           List<Widget> items = <Widget>[];
           items = _updateScreenItems(context, screens);
@@ -48,7 +48,7 @@ class ScreensView extends StatelessWidget {
   }
 
   List<Widget> _updateScreenItems(
-      BuildContext context, Iterable<ScreenPairing>? screens) {
+      BuildContext context, Iterable<Screen>? screens) {
     // TODO: Add battery percentage
     const batteryPercentage = 100;
 
@@ -69,7 +69,7 @@ class ScreensView extends StatelessWidget {
     return [];
   }
 
-  void _showPreview(BuildContext context, ScreenPairing screen) {
+  void _showPreview(BuildContext context, Screen screen) {
     Navigator.push(
       context,
       MaterialPageRoute(

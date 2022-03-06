@@ -1,6 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
-import 'package:diginote/core/models/screen_pairing_model.dart';
+import 'package:diginote/core/models/screen_model.dart';
 import 'package:diginote/core/repositories/firebase_preview_repository.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,7 +18,7 @@ void main() async {
         FirebasePreviewRepository(firestoreInstance: firestoreInstance);
 
     // Assuming that screen is already paired
-    final screenPairing = ScreenPairing(
+    final screen = Screen(
         pairingCode: "ABC123",
         paired: true,
         name: "",
@@ -28,14 +28,14 @@ void main() async {
         width: 100,
         height: 100);
     await firestoreInstance
-        .collection('pairingCodes')
-        .doc(screenPairing.screenToken)
-        .withConverter<ScreenPairing>(
+        .collection('screens')
+        .doc(screen.screenToken)
+        .withConverter<Screen>(
           fromFirestore: (snapshot, _) =>
-              ScreenPairing.fromJson(snapshot.data()!),
-          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+              Screen.fromJson(snapshot.data()!),
+          toFirestore: (screen, _) => screen.toJson(),
         )
-        .set(screenPairing);
+        .set(screen);
   });
 
   Message messageBodyIDOnly(String message, String id,

@@ -35,7 +35,7 @@ class FirebasePreviewRepository {
             map['id'] = snapshot.id;
             return Message.fromJson(map);
           },
-          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+          toFirestore: (screen, _) => screen.toJson(),
         )
         .add(message)
         .then((value) => print("Added a new message."))
@@ -84,7 +84,7 @@ class FirebasePreviewRepository {
 
   Future<void> updateLastUpdatedToNow(String screenToken) async {
     await firestoreInstance
-        .collection('pairingCodes')
+        .collection('screens')
         .doc(screenToken)
         .update({
           'lastUpdated': clock.now(),
