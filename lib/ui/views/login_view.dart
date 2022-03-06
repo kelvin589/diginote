@@ -2,7 +2,7 @@ import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/shared/state_enums.dart';
-import 'package:diginote/ui/shared/text_styles.dart';
+import 'package:diginote/ui/shared/styling_constants.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/register_view.dart';
 import 'package:diginote/ui/widgets/header_footer.dart';
@@ -51,7 +51,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: contentHorizontalPadding,
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height,
@@ -77,15 +77,19 @@ class _LoginFormState extends State<LoginForm> {
                   Consumer<FirebaseLoginProvider>(
                       builder: (context, loginProvider, child) {
                     return ElevatedButton(
-                      onPressed: () => _login(loginProvider),
+                      onPressed: () async {
+                        await _login(loginProvider);
+                      },
                       child: const Text('Login'),
                     );
                   }),
                   Footer(
                     footerText: "Don't have an account?",
                     buttonText: 'Register',
-                    onPressed: () => Navigator.pushReplacementNamed(
-                        context, RegisterView.route),
+                    onPressed: () async {
+                      await Navigator.pushReplacementNamed(
+                          context, RegisterView.route);
+                    },
                   )
                 ],
               ),
@@ -104,19 +108,6 @@ class _LoginFormState extends State<LoginForm> {
         (exception) =>
             DialogueHelper.showErrorDialogue(context, 'Login Error', exception),
       );
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(content: Text('Processing Data')),
-      // );
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const ScreensView()),
-      // );
     }
   }
 }
-
-      // floatingActionButton: const FloatingActionButton(
-      //   onPressed: null,
-      //   tooltip: 'Test',
-      //   child: Icon(Icons.ac_unit),
-      // ),

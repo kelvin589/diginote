@@ -38,4 +38,28 @@ class DialogueHelper {
       ),
     );
   }
+
+  static Widget cancelButton(BuildContext context) {
+    return TextButton(
+      onPressed: () => Navigator.pop(context),
+      child: const Text('Cancel'),
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.black),
+      ),
+    );
+  }
+
+  static Widget okButton(Future<void> Function()? okPressed) {
+    return TextButton(
+      onPressed: okPressed == null
+          ? null
+          : () async {
+              await okPressed();
+            },
+      child: const Text('OK'),
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.black),
+      ),
+    );
+  }
 }

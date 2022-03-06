@@ -3,7 +3,7 @@ import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/widgets/add_message_popup.dart';
-import 'package:diginote/ui/widgets/preview_item.dart';
+import 'package:diginote/ui/widgets/message_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,9 +36,6 @@ class _PreviewViewState extends State<PreviewView> {
     // Scaling from screen to device
     final scaleFactorX = widget.screenWidth / deviceWidth;
     final scaleFactorY = widget.screenHeight / deviceHeight;
-    // Scaling container width and height
-    final containerWidth = deviceSize.width;
-    final containerHeight = deviceSize.height;
 
     List<Widget> actionItems = [
       IconButton(
@@ -65,29 +62,29 @@ class _PreviewViewState extends State<PreviewView> {
         ),
         body: Center(
           child: Container(
-            width: containerWidth,
-            height: containerHeight,
+            width: deviceSize.width,
+            height: deviceSize.height,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
             ),
             child: StreamBuilder<Iterable<Message>>(
-              stream: Provider.of<FirebasePreviewProvider>(context, listen: false)
-                  .getMessages(widget.screenToken),
+              stream:
+                  Provider.of<FirebasePreviewProvider>(context, listen: false)
+                      .getMessages(widget.screenToken),
               builder: (BuildContext context, snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error ${(snapshot.error.toString())}');
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text('Waiting');
+                  return const CircularProgressIndicator();
                 }
 
                 Iterable<Message>? screens = snapshot.data;
                 if (screens != null) {
-                  List<Widget> items = <Widget>[];
-                  items = _updateScreenItems(context, screens, scaleFactorX, scaleFactorY);
                   return Stack(
-                    children: items,
+                    children: _updateScreenItems(
+                      context, screens, scaleFactorX, scaleFactorY),
                   );
                 } else {
                   return const Text('Error occurred');
@@ -100,17 +97,17 @@ class _PreviewViewState extends State<PreviewView> {
     );
   }
 
-  List<Widget> _updateScreenItems(
-      BuildContext context, Iterable<Message>? messages, double scaleFactorX, double scaleFactorY) {
-    List<Widget> messageItems = [];
-
+  List<Widget> _updateScreenItems(BuildContext context,
+      Iterable<Message>? messages, double scaleFactorX, double scaleFactorY) {
     if (messages != null) {
-      for (Message message in messages) {
-        messageItems.add(
-            PreviewItem(message: message, screenToken: widget.screenToken, scaleFactorX: scaleFactorX, scaleFactorY: scaleFactorY));
-      }
+      return messages
+          .map((message) => MessageItem(
+              message: message,
+              screenToken: widget.screenToken,
+              scaleFactorX: scaleFactorX,
+              scaleFactorY: scaleFactorY))
+          .toList();
     }
-
-    return messageItems;
+    return [];
   }
 }

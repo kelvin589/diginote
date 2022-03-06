@@ -1,8 +1,11 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/ui/shared/icon_helper.dart';
+import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:diginote/ui/views/preview_view.dart';
-import 'package:diginote/ui/widgets/preview_item.dart';
+import 'package:diginote/ui/widgets/message_item_content.dart';
+import 'package:diginote/ui/widgets/message_item.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,12 +14,14 @@ import 'package:provider/provider.dart';
 void main() async {
   late FakeFirebaseFirestore firestoreInstance;
   late FirebasePreviewProvider previewProvider;
+  late TimerProvider timer;
   const token = "screenToken";
   const width = 500.0;
   const height = 500.0;
 
   setUp(() {
     firestoreInstance = FakeFirebaseFirestore();
+    timer = TimerProvider(duration: const Duration(seconds: 1));
     previewProvider =
         FirebasePreviewProvider(firestoreInstance: firestoreInstance);
   });
@@ -24,10 +29,18 @@ void main() async {
   Future<void> loadPreviewView(WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        home: ChangeNotifierProvider<FirebasePreviewProvider>(
-          create: (_) => previewProvider,
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<FirebasePreviewProvider>(
+                create: (context) => previewProvider),
+            ChangeNotifierProvider<TimerProvider>(create: (context) => timer),
+          ],
           child: const PreviewView(
-              screenToken: token, screenWidth: width, screenHeight: height, screenName: "Test",),
+            screenToken: token,
+            screenWidth: width,
+            screenHeight: height,
+            screenName: "Test",
+          ),
         ),
       ),
     );
@@ -79,14 +92,14 @@ void main() async {
     await tester.idle();
     await tester.pump();
 
-    await tester.tap(find.byType(MessageItem));
+    await tester.tap(find.byType(MessageItemContent));
     await tester.pump();
 
-    expect(find.byIcon(Icons.delete_forever), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.delete_forever));
+    expect(find.byIcon(IconHelper.deleteIcon.icon!), findsOneWidget);
+    await tester.tap(find.byIcon(IconHelper.deleteIcon.icon!));
     await tester.pump();
 
-    expect(find.byType(MessageItem), findsNothing);
+    expect(find.byType(MessageItemContent), findsNothing);
   });
 
   testWidgets(
@@ -99,7 +112,7 @@ void main() async {
     await tester.idle();
     await tester.pump();
 
-    final Offset initialLocation = tester.getCenter(find.byType(PreviewItem));
+    final Offset initialLocation = tester.getCenter(find.byType(MessageItem));
     final TestGesture gesture = await tester.startGesture(initialLocation);
     await tester.pump();
 
@@ -127,7 +140,7 @@ void main() async {
         .get();
     expect(snapshot.docs.isEmpty, false);
     final message = snapshot.docs.first.data();
-    
+
     expect(message.x, isNot(0));
     expect(message.y, isNot(0));
   });

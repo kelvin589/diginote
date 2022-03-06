@@ -32,22 +32,12 @@ class FirebaseScreensRepository {
         )
         .get()
         .then((value) =>
-            _linkScreen(screenPairing, value.docs.map((e) => e.id).first))
+            _updateScreenPairing(screenPairing, value.docs.map((e) => e.id).first))
         .catchError((onError) => print("Already paired or code wrong."));
   }
 
-  void _linkScreen(ScreenPairing screenPairing, String screenToken) {
-    var toAdd = [screenToken];
-    firestoreInstance
-        .collection('users')
-        .doc(userID)
-        .set({"screens": FieldValue.arrayUnion(toAdd)}, SetOptions(merge: true))
-        .then((value) => _updateScreenPaired(screenPairing, screenToken))
-        .catchError((onError) => print("Couldn't link the screen"));
-  }
-
-  void _updateScreenPaired(ScreenPairing screenPairing, String screenToken) {
-    firestoreInstance
+  Future<void> _updateScreenPairing(ScreenPairing screenPairing, String screenToken) async {
+    await firestoreInstance
         .collection('pairingCodes')
         .doc(screenToken)
         .update({
@@ -55,7 +45,8 @@ class FirebaseScreensRepository {
           'userID': userID,
           'name': screenPairing.name,
           'lastUpdated': screenPairing.lastUpdated,
-          'screenToken': screenToken
+          'screenToken': screenToken,
+          'pairingCode': ""
         })
         .then((value) => print("Updated paired Boolean"))
         .catchError((onError) => print("Couldn't update the paired Boolean"));
@@ -77,17 +68,10 @@ class FirebaseScreensRepository {
   }
 
   Future<void> deleteScreen(String screenToken) async {
-    var toRemove = [screenToken];
     await firestoreInstance
         .collection('pairingCodes')
         .doc(screenToken)
         .delete()
-        .then((value) => print("Deleted screen"))
-        .catchError((onError) => print("Failed to delete error: $onError"));
-    await firestoreInstance
-        .collection('users')
-        .doc(userID)
-        .update({"screens": FieldValue.arrayRemove(toRemove)})
         .then((value) => print("Deleted screen"))
         .catchError((onError) => print("Failed to delete error: $onError"));
   }

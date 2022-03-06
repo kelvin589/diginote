@@ -1,9 +1,9 @@
 import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
-import 'package:diginote/ui/shared/dialogue_helper.dart';
-import 'package:diginote/ui/views/preview_list_view.dart';
+import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:diginote/ui/views/preview_view.dart';
 import 'package:diginote/ui/widgets/screen_item.dart';
+import 'package:diginote/ui/widgets/screen_settings_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +21,7 @@ class ScreensView extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Waiting');
+          return const CircularProgressIndicator();
         }
 
         Iterable<ScreenPairing>? screens = snapshot.data;
@@ -35,10 +35,6 @@ class ScreensView extends StatelessWidget {
               return Column(
                 children: <Widget>[
                   items[index],
-                  Provider.of<FirebaseScreensProvider>(context).isEditing
-                      ? _deleteScreenButton(
-                          context, screens.elementAt(index).screenToken)
-                      : Container(),
                   const Divider(),
                 ],
               );
@@ -53,51 +49,57 @@ class ScreensView extends StatelessWidget {
 
   List<Widget> _updateScreenItems(
       BuildContext context, Iterable<ScreenPairing>? screens) {
+    // TODO: Add battery percentage
     const batteryPercentage = 100;
-    List<Widget> screenItems = [];
 
     if (screens != null) {
-      for (ScreenPairing screen in screens) {
-        screenItems.add(ScreenItem(
-          screenName: screen.name,
-          lastUpdated: screen.lastUpdated,
-          batteryPercentage: batteryPercentage,
-          onPreviewTapped: () => {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    // PreviewListView(screenToken: screen.screenToken),
-                    PreviewView(screenToken: screen.screenToken, screenWidth: screen.width, screenHeight: screen.height, screenName: screen.name),
-              ),
+      return screens
+          .map(
+            (screen) => ScreenItem(
+              screenName: screen.name,
+              lastUpdated: screen.lastUpdated,
+              batteryPercentage: batteryPercentage,
+              onPreviewTapped: () => _showPreview(context, screen),
+              onSettingsTapped: () =>
+                  _showScreenSettings(context, screen.screenToken),
             ),
-          },
-          onSettingsTapped: () => {
-            DialogueHelper.showSuccessDialogue(
-                context, 'Tapped', 'Settings Tapped'),
-          },
-        ));
-      }
+          )
+          .toList();
     }
-
-    return screenItems;
+    return [];
   }
 
-  Widget _deleteScreenButton(BuildContext context, String screenToken) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () =>
-              Provider.of<FirebaseScreensProvider>(context, listen: false)
-                  .deleteScreen(screenToken),
-          child: const Text("Delete"),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.red),
+  void _showPreview(BuildContext context, ScreenPairing screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider<TimerProvider>(
+          create: (context) => TimerProvider(duration: const Duration(seconds: 1)),
+          child: PreviewView(
+            screenToken: screen.screenToken,
+            screenWidth: screen.width,
+            screenHeight: screen.height,
+            screenName: screen.name,
           ),
         ),
       ),
     );
+  }
+
+  void _showScreenSettings(BuildContext context, String screenToken) {
+    showDialog(
+      context: context,
+      builder: (context) => ScreenSettingsPopup(
+        screenToken: screenToken,
+        onDelete: () async {
+          await _onDelete(context, screenToken);
+        },
+      ),
+    );
+  }
+
+  Future<void> _onDelete(BuildContext context, String screenToken) async {
+    await Provider.of<FirebaseScreensProvider>(context, listen: false)
+        .deleteScreen(screenToken);
   }
 }

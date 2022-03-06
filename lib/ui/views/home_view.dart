@@ -1,12 +1,8 @@
-import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
-import 'package:diginote/ui/views/screens_view.dart';
-import 'package:diginote/ui/views/settings_view.dart';
-import 'package:diginote/ui/views/templates_view.dart';
+import 'package:diginote/ui/shared/navigation_page_enum.dart';
 import 'package:diginote/ui/widgets/add_screen_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
-import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -27,41 +23,34 @@ class HomeNavigation extends StatefulWidget {
 }
 
 class _HomeNavigationState extends State<HomeNavigation> {
-  // Currently selected page index
-  int _selectedIndex = 0;
-  // A list of pages to display
-  static const List<Widget> _pages = <Widget>[
-    ScreensView(),
-    TemplatesView(),
-    SettingsView(),
-  ];
+  NavigationPage _selectedPage = NavigationPage.screens;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titleText(_selectedIndex)),
-        actions: _appbarActions(_selectedIndex),
+        title: Text(_selectedPage.titleText),
+        actions: _appbarActions(_selectedPage),
       ),
       body: Center(
-        child: _pages[_selectedIndex],
+        child: _selectedPage.widget,
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: IconHelper.screensIcon,
-            label: 'Screens',
+            label: NavigationPage.screens.label,
           ),
           BottomNavigationBarItem(
             icon: IconHelper.templatesIcon,
-            label: 'Templates',
+            label: NavigationPage.templates.label,
           ),
           BottomNavigationBarItem(
             icon: IconHelper.settingsIcon,
-            label: 'Settings',
+            label: NavigationPage.settings.label,
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: _selectedPage.index,
         onTap: _onItemTapped,
       ),
     );
@@ -69,35 +58,18 @@ class _HomeNavigationState extends State<HomeNavigation> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _selectedPage = NavigationPage.values[index];
     });
-  }
-
-  String _titleText(int index) {
-    switch (index) {
-      case 0:
-        return 'Screens';
-      case 1:
-        return 'Templates';
-      case 2:
-        return 'Settings';
-      default:
-        return 'Unknown Page';
-    }
   }
 
   void _onTapped(BuildContext context, String message) {
     DialogueHelper.showSuccessDialogue(context, 'Tapped', message);
   }
 
-  List<Widget> _appbarActions(int index) {
-    switch (index) {
-      case 0:
+  List<Widget> _appbarActions(NavigationPage page) {
+    switch (page) {
+      case NavigationPage.screens:
         return [
-          IconButton(
-            onPressed: () => Provider.of<FirebaseScreensProvider>(context, listen: false).toggleScreensState(),
-            icon: IconHelper.editIcon,
-          ),
           IconButton(
             onPressed: () => showDialog(
               context: context,
@@ -106,7 +78,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
             icon: IconHelper.addIcon,
           ),
         ];
-      case 1:
+      case NavigationPage.templates:
         return [
           IconButton(
             onPressed: () => _onTapped(context, 'Edit templates'),

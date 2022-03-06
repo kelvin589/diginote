@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,8 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Name your screen and enter the pairing code displayed:'),
+            const Text(
+                'Name your screen and enter the pairing code displayed:'),
             TextFormField(
               controller: _nameController,
               decoration: const InputDecoration(hintText: 'Name'),
@@ -43,32 +45,27 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: _cancelPressed,
-          child: const Text('Cancel'),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.black),
-          ),
-        ),
-        TextButton(
-          onPressed: _okPressed,
-          child: const Text('OK'),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.black),
-          ),
-        ),
+        DialogueHelper.cancelButton(context),
+        DialogueHelper.okButton(() async {
+          await _okPressed();
+        }),
       ],
     );
   }
 
-  void _cancelPressed() {
-    Navigator.pop(context);
-  }
-
-  void _okPressed() {
-    ScreenPairing partialScreenPairing = ScreenPairing(pairingCode: _pairingCodeController.text, paired: false, name: _nameController.text, userID: "", lastUpdated: clock.now(), screenToken: "", width: 0, height: 0,);
+  Future<void> _okPressed() async {
+    ScreenPairing partialScreenPairing = ScreenPairing(
+      pairingCode: _pairingCodeController.text,
+      paired: false,
+      name: _nameController.text,
+      userID: "",
+      lastUpdated: clock.now(),
+      screenToken: "",
+      width: 0,
+      height: 0,
+    );
     if (_formKey.currentState!.validate()) {
-      Provider.of<FirebaseScreensProvider>(context, listen: false)
+      await Provider.of<FirebaseScreensProvider>(context, listen: false)
           .addScreen(partialScreenPairing);
       Navigator.pop(context);
     }
