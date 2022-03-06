@@ -2,14 +2,15 @@ import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/shared/state_enums.dart';
-import 'package:diginote/ui/shared/text_styles.dart';
+import 'package:diginote/ui/shared/styling_constants.dart';
 import 'package:diginote/ui/views/login_view.dart';
 import 'package:diginote/ui/widgets/header_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RegisterView extends StatelessWidget {
-  const RegisterView({Key? key, required this.applicationRegisterState}) : super(key: key);
+  const RegisterView({Key? key, required this.applicationRegisterState})
+      : super(key: key);
 
   static const String route = '/register';
 
@@ -19,7 +20,12 @@ class RegisterView extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (applicationRegisterState) {
       case ApplicationRegisterState.registered:
-        Future.delayed(Duration.zero, () => DialogueHelper.showSuccessDialogue(context, 'Successful Registration', 'Successfully created an account. You can login.'));
+        Future.delayed(
+            Duration.zero,
+            () => DialogueHelper.showSuccessDialogue(
+                context,
+                'Successful Registration',
+                'Successfully created an account. You can login.'));
         return const RegisterForm();
       case ApplicationRegisterState.registering:
         return const RegisterForm();
@@ -49,11 +55,11 @@ class _RegisterFormState extends State<RegisterForm> {
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: contentHorizontalPadding,
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height,
-                ),
+                maxHeight: MediaQuery.of(context).size.height,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -80,14 +86,18 @@ class _RegisterFormState extends State<RegisterForm> {
                   Consumer<FirebaseRegisterProvider>(
                       builder: (context, registerProvider, child) {
                     return ElevatedButton(
-                      onPressed: () => _register(registerProvider),
+                      onPressed: () async {
+                        await _register(registerProvider);
+                      },
                       child: const Text('Register'),
                     );
                   }),
                   Footer(
                     footerText: "Already have an account?",
                     buttonText: 'Login',
-                    onPressed: () => Navigator.pushReplacementNamed(context, LoginView.route),
+                    onPressed: () async {
+                      Navigator.pushReplacementNamed(context, LoginView.route);
+                    },
                   )
                 ],
               ),
@@ -101,10 +111,11 @@ class _RegisterFormState extends State<RegisterForm> {
   Future<void> _register(FirebaseRegisterProvider registerProvider) async {
     if (_formKey.currentState!.validate()) {
       await registerProvider.createUserWithEmailAndPassword(
-          _emailController.text,
-          _passwordController.text,
-          _usernameController.text,
-          (exception) => DialogueHelper.showErrorDialogue(context, 'Registration Error', exception),
+        _emailController.text,
+        _passwordController.text,
+        _usernameController.text,
+        (exception) => DialogueHelper.showErrorDialogue(
+            context, 'Registration Error', exception),
       );
     }
   }
