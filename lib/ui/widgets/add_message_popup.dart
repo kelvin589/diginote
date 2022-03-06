@@ -144,12 +144,15 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         title: const Text('Add Message'),
         content: Form(
           key: _formKey,
-          child: ListView.separated(
-            itemCount: formOptions.length,
-            separatorBuilder: (context, index) => const Divider(
-              color: Colors.transparent,
+          child: SizedBox(
+            width: double.maxFinite,
+            child: ListView.separated(
+              itemCount: formOptions.length,
+              separatorBuilder: (context, index) => const Divider(
+                color: Colors.transparent,
+              ),
+              itemBuilder: (context, index) => formOptions[index],
             ),
-            itemBuilder: (context, index) => formOptions[index],
           ),
         ),
         actions: [
