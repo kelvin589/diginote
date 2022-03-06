@@ -30,6 +30,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   Color messageBackgroundColour = Colors.yellow;
   Color messageForegroundColour = Colors.black;
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     List<Widget> formOptions = [
@@ -164,7 +166,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
             ),
           ),
           TextButton(
-            onPressed: () async {
+            onPressed: isLoading ? null : () async {
               await _okPressed();
             },
             child: const Text('OK'),
@@ -193,6 +195,9 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         to: clock.now(),
         scheduled: false);
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
       await Provider.of<FirebasePreviewProvider>(context, listen: false)
           .addMessage(widget.screenToken, newMessage);
       Navigator.pop(context);
