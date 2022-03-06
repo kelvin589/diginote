@@ -1,110 +1,21 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
-import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
-import 'package:diginote/ui/widgets/add_schedule_popup.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class PreviewItem extends StatefulWidget {
-  const PreviewItem(
-      {Key? key,
-      required this.message,
-      required this.screenToken,
-      required this.scaleFactorX,
-      required this.scaleFactorY})
-      : super(key: key);
+import 'add_schedule_popup.dart';
 
-  final Message message;
-  final String screenToken;
-  final double scaleFactorX;
-  final double scaleFactorY;
-
-  @override
-  State<PreviewItem> createState() => _PreviewItemState();
-}
-
-class _PreviewItemState extends State<PreviewItem> {
-  bool displayOptions = false;
-
-  // Since positiioning message from top left, need to account for the size
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: widget.message.x / widget.scaleFactorX,
-      top: widget.message.y / widget.scaleFactorY,
-      child: GestureDetector(
-        onTap: toggleDisplayOptions,
-        child: LongPressDraggable<Message>(
-          onDragStarted: () => setDisplayOptions(false),
-          feedback: Material(
-            child: MessageItem(
-              screenToken: widget.screenToken,
-              selected: true,
-              message: widget.message,
-              onDelete: onDelete,
-            ),
-          ),
-          childWhenDragging: Container(),
-          child: MessageItem(
-            screenToken: widget.screenToken,
-            message: widget.message,
-            displayOptions: displayOptions,
-            onDelete: onDelete,
-          ),
-          onDragEnd: (details) async {
-            // Offset was not correct
-            // Code adapted from here.
-            // https://stackoverflow.com/questions/64114904/why-is-draggable-widget-not-being-placed-in-correct-position
-            RenderBox? renderBox = context.findRenderObject() as RenderBox;
-            if (renderBox != null) {
-              await onDragEnd(renderBox.globalToLocal(details.offset),
-                  widget.scaleFactorX, widget.scaleFactorY);
-            }
-          },
-        ),
-      ),
-    );
-  }
-
-  Future<void> onDragEnd(
-      Offset offset, double scaleFactorX, double scaleFactorY) async {
-    setState(() {
-      widget.message.x += offset.dx * scaleFactorX;
-      widget.message.y += offset.dy * scaleFactorY;
-    });
-    await Provider.of<FirebasePreviewProvider>(context, listen: false)
-        .updateMessageCoordinates(widget.screenToken, widget.message);
-  }
-
-  Future<void> onDelete() async {
-    setDisplayOptions(false);
-    await Provider.of<FirebasePreviewProvider>(context, listen: false)
-        .deleteMessage(widget.screenToken, widget.message);
-  }
-
-  void toggleDisplayOptions() {
-    setState(() {
-      displayOptions = !displayOptions;
-    });
-  }
-
-  void setDisplayOptions(bool newValue) {
-    setState(() {
-      displayOptions = newValue;
-    });
-  }
-}
-
-class MessageItem extends StatelessWidget {
-  const MessageItem(
+class MessageItemContent extends StatelessWidget {
+  const MessageItemContent(
       {Key? key,
       required this.screenToken,
       required this.message,
       this.selected = false,
       this.displayOptions = false,
-      required this.onDelete})
+      required this.onDelete,
+      this.width = 100,
+      this.height = 100})
       : super(key: key);
 
   final String screenToken;
@@ -112,6 +23,8 @@ class MessageItem extends StatelessWidget {
   final bool selected;
   final bool displayOptions;
   final Future<void> Function() onDelete;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -122,11 +35,11 @@ class MessageItem extends StatelessWidget {
                 screenToken: screenToken, message: message, onDelete: onDelete)
             : Container(),
         Container(
-          constraints: const BoxConstraints(
-            minHeight: 100,
-            minWidth: 100,
-            maxHeight: 100,
-            maxWidth: 100,
+          constraints: BoxConstraints(
+            minHeight: height,
+            minWidth: width,
+            maxHeight: height,
+            maxWidth: width,
           ),
           decoration: BoxDecoration(
             color: Colors.red,

@@ -3,7 +3,7 @@ import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/widgets/add_message_popup.dart';
-import 'package:diginote/ui/widgets/preview_item.dart';
+import 'package:diginote/ui/widgets/message_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -101,7 +101,7 @@ class _PreviewViewState extends State<PreviewView> {
       Iterable<Message>? messages, double scaleFactorX, double scaleFactorY) {
     if (messages != null) {
       return messages
-          .map((message) => PreviewItem(
+          .map((message) => MessageItem(
               message: message,
               screenToken: widget.screenToken,
               scaleFactorX: scaleFactorX,

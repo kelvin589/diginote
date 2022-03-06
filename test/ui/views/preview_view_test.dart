@@ -3,7 +3,8 @@ import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/views/preview_view.dart';
-import 'package:diginote/ui/widgets/preview_item.dart';
+import 'package:diginote/ui/widgets/message_item_content.dart';
+import 'package:diginote/ui/widgets/message_item.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -80,14 +81,14 @@ void main() async {
     await tester.idle();
     await tester.pump();
 
-    await tester.tap(find.byType(MessageItem));
+    await tester.tap(find.byType(MessageItemContent));
     await tester.pump();
 
     expect(find.byIcon(IconHelper.deleteIcon.icon!), findsOneWidget);
     await tester.tap(find.byIcon(IconHelper.deleteIcon.icon!));
     await tester.pump();
 
-    expect(find.byType(MessageItem), findsNothing);
+    expect(find.byType(MessageItemContent), findsNothing);
   });
 
   testWidgets(
@@ -100,7 +101,7 @@ void main() async {
     await tester.idle();
     await tester.pump();
 
-    final Offset initialLocation = tester.getCenter(find.byType(PreviewItem));
+    final Offset initialLocation = tester.getCenter(find.byType(MessageItem));
     final TestGesture gesture = await tester.startGesture(initialLocation);
     await tester.pump();
 
