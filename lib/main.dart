@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
