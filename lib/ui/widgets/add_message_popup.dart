@@ -35,103 +35,30 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   @override
   Widget build(BuildContext context) {
     List<Widget> formOptions = [
-      TextFormField(
-        controller: _headerController,
-        decoration: InputDecoration(
-          hintText: 'Header',
-          fillColor: messageBackgroundColour,
-          filled: true,
-        ),
-        validator: isEmptyValidator,
+      _HeaderInput(
+        headerController: _headerController,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        backgroundColour: messageBackgroundColour,
+        foregroundColour: messageForegroundColour,
       ),
-      TextFormField(
-        keyboardType: TextInputType.multiline,
-        minLines: 5,
-        maxLines: 10,
-        controller: _messageController,
-        decoration: InputDecoration(
-          hintText: 'Message',
-          fillColor: messageBackgroundColour,
-          filled: true,
-          border: InputBorder.none,
-        ),
-        validator: isEmptyValidator,
-        style: GoogleFonts.getFont(fontFamily,
-            fontSize: fontSize, color: messageForegroundColour),
+      _MessageInput(
+        messageController: _messageController,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        backgroundColour: messageBackgroundColour,
+        foregroundColour: messageForegroundColour,
       ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Typeface'),
-          typeface,
-        ],
+      const _TypefaceSelector(),
+      _FontSelector(
+          onFontFamilyChanged: onFontFamilyChanged,
+          onFontSizeChanged: onFontSizeChanged),
+      _ForegroundColour(onColourChanged: onForegroundColourChanged),
+      _BackgroundColour(
+        onColourChanged: onBackgroundColourChanged,
       ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Font'),
-          FontPicker(
-            onFontFamilyChanged: (fontFamily) {
-              setState(() {
-                this.fontFamily = fontFamily;
-              });
-            },
-            onFontSizeChanged: (fontSize) {
-              setState(() {
-                this.fontSize = fontSize;
-              });
-            },
-          ),
-        ],
-      ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Font Colour'),
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (BuildContext context) => ColourPicker(
-                onColourChanged: (newColour) {
-                  setState(() => messageForegroundColour = newColour);
-                },
-              ),
-            ),
-            icon: IconHelper.colourPickerIcon,
-            constraints: const BoxConstraints(),
-          ),
-        ],
-      ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Background Colour'),
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (BuildContext context) => ColourPicker(
-                onColourChanged: (newColour) {
-                  setState(() => messageBackgroundColour = newColour);
-                },
-              ),
-            ),
-            icon: IconHelper.colourPickerIcon,
-            constraints: const BoxConstraints(),
-          ),
-        ],
-      ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('Listing'),
-        ],
-      ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('Text Alignment'),
-        ],
-      ),
+      const _ListingSelector(),
+      const _TextAlignmentSelector(),
     ];
 
     return GestureDetector(
@@ -166,9 +93,11 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
             ),
           ),
           TextButton(
-            onPressed: isLoading ? null : () async {
-              await _okPressed();
-            },
+            onPressed: isLoading
+                ? null
+                : () async {
+                    await _okPressed();
+                  },
             child: const Text('OK'),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(Colors.black),
@@ -177,6 +106,26 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         ],
       ),
     );
+  }
+
+  void onFontFamilyChanged(String fontFamily) {
+    setState(() {
+      this.fontFamily = fontFamily;
+    });
+  }
+
+  void onFontSizeChanged(double fontSize) {
+    setState(() {
+      this.fontSize = fontSize;
+    });
+  }
+
+  void onForegroundColourChanged(Color newColour) {
+    setState(() => messageForegroundColour = newColour);
+  }
+
+  void onBackgroundColourChanged(Color newColour) {
+    setState(() => messageBackgroundColour = newColour);
   }
 
   void _cancelPressed() {
@@ -203,29 +152,222 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       Navigator.pop(context);
     }
   }
+}
 
-  Widget typeface = Row(
-    children: [
-      IconButton(
-        onPressed: () => {},
-        icon: IconHelper.boldIcon,
-        constraints: const BoxConstraints(),
+class _HeaderInput extends StatelessWidget {
+  const _HeaderInput(
+      {Key? key,
+      required this.headerController,
+      required this.fontFamily,
+      required this.fontSize,
+      required this.backgroundColour,
+      required this.foregroundColour})
+      : super(key: key);
+
+  final TextEditingController headerController;
+  final String fontFamily;
+  final double fontSize;
+  final Color backgroundColour;
+  final Color foregroundColour;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: headerController,
+      decoration: InputDecoration(
+        hintText: 'Header',
+        fillColor: backgroundColour,
+        filled: true,
       ),
-      IconButton(
-        onPressed: () => {},
-        icon: IconHelper.italicIcon,
-        constraints: const BoxConstraints(),
+      validator: isEmptyValidator,
+      style: GoogleFonts.getFont(fontFamily,
+          fontSize: fontSize, color: foregroundColour),
+    );
+  }
+}
+
+class _MessageInput extends StatelessWidget {
+  const _MessageInput(
+      {Key? key,
+      required this.messageController,
+      required this.fontFamily,
+      required this.fontSize,
+      required this.backgroundColour,
+      required this.foregroundColour})
+      : super(key: key);
+
+  final TextEditingController messageController;
+  final String fontFamily;
+  final double fontSize;
+  final Color backgroundColour;
+  final Color foregroundColour;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      keyboardType: TextInputType.multiline,
+      minLines: 5,
+      maxLines: 10,
+      controller: messageController,
+      decoration: InputDecoration(
+        hintText: 'Message',
+        fillColor: backgroundColour,
+        filled: true,
+        border: InputBorder.none,
       ),
-      IconButton(
-        onPressed: () => {},
-        icon: IconHelper.strikethroughIcon,
-        constraints: const BoxConstraints(),
-      ),
-      IconButton(
-        onPressed: () => {},
-        icon: IconHelper.underlineIcon,
-        constraints: const BoxConstraints(),
-      ),
-    ],
-  );
+      validator: isEmptyValidator,
+      style: GoogleFonts.getFont(fontFamily,
+          fontSize: fontSize, color: foregroundColour),
+    );
+  }
+}
+
+// TODO: Implement type face selector
+class _TypefaceSelector extends StatelessWidget {
+  const _TypefaceSelector({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget typeface = Row(
+      children: [
+        IconButton(
+          onPressed: () => {},
+          icon: IconHelper.boldIcon,
+          constraints: const BoxConstraints(),
+        ),
+        IconButton(
+          onPressed: () => {},
+          icon: IconHelper.italicIcon,
+          constraints: const BoxConstraints(),
+        ),
+        IconButton(
+          onPressed: () => {},
+          icon: IconHelper.strikethroughIcon,
+          constraints: const BoxConstraints(),
+        ),
+        IconButton(
+          onPressed: () => {},
+          icon: IconHelper.underlineIcon,
+          constraints: const BoxConstraints(),
+        ),
+      ],
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Typeface'),
+        typeface,
+      ],
+    );
+  }
+}
+
+class _FontSelector extends StatelessWidget {
+  const _FontSelector(
+      {Key? key,
+      required this.onFontFamilyChanged,
+      required this.onFontSizeChanged})
+      : super(key: key);
+
+  final void Function(String) onFontFamilyChanged;
+  final void Function(double) onFontSizeChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Font'),
+        FontPicker(
+          onFontFamilyChanged: onFontFamilyChanged,
+          onFontSizeChanged: onFontSizeChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _ForegroundColour extends StatelessWidget {
+  const _ForegroundColour({Key? key, required this.onColourChanged})
+      : super(key: key);
+
+  final void Function(Color) onColourChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Font Colour'),
+        IconButton(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (BuildContext context) => ColourPicker(
+              onColourChanged: onColourChanged,
+            ),
+          ),
+          icon: IconHelper.colourPickerIcon,
+          constraints: const BoxConstraints(),
+        ),
+      ],
+    );
+  }
+}
+
+class _BackgroundColour extends StatelessWidget {
+  const _BackgroundColour({Key? key, required this.onColourChanged})
+      : super(key: key);
+
+  final void Function(Color) onColourChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Background Colour'),
+        IconButton(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (BuildContext context) => ColourPicker(
+              onColourChanged: onColourChanged,
+            ),
+          ),
+          icon: IconHelper.colourPickerIcon,
+          constraints: const BoxConstraints(),
+        ),
+      ],
+    );
+  }
+}
+
+// TODO: Implement listing selector
+class _ListingSelector extends StatelessWidget {
+  const _ListingSelector({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Text('Listing'),
+      ],
+    );
+  }
+}
+
+// TODO: Implement text alignemnt selector
+class _TextAlignmentSelector extends StatelessWidget {
+  const _TextAlignmentSelector({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Text('Text Alignment'),
+      ],
+    );
+  }
 }
