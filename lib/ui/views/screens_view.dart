@@ -1,7 +1,5 @@
 import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
-import 'package:diginote/ui/shared/dialogue_helper.dart';
-import 'package:diginote/ui/views/preview_list_view.dart';
 import 'package:diginote/ui/views/preview_view.dart';
 import 'package:diginote/ui/widgets/screen_item.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +61,6 @@ class ScreensView extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    // PreviewListView(screenToken: screen.screenToken),
                     PreviewView(
                         screenToken: screen.screenToken,
                         screenWidth: screen.width,

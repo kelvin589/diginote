@@ -1,5 +1,3 @@
-import 'package:diginote/ui/views/home_view.dart';
-import 'package:diginote/ui/views/preview_view.dart';
 import 'package:diginote/ui/views/screens_view.dart';
 import 'package:diginote/ui/views/settings_view.dart';
 import 'package:diginote/ui/views/templates_view.dart';
