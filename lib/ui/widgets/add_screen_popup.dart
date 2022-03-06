@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/screen_pairing_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,28 +45,12 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: _cancelPressed,
-          child: const Text('Cancel'),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.black),
-          ),
-        ),
-        TextButton(
-          onPressed: () async {
-            await _okPressed();
-          },
-          child: const Text('OK'),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.black),
-          ),
-        ),
+        DialogueHelper.cancelButton(context),
+        DialogueHelper.okButton(() async {
+          await _okPressed();
+        }),
       ],
     );
-  }
-
-  void _cancelPressed() {
-    Navigator.pop(context);
   }
 
   Future<void> _okPressed() async {

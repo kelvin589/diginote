@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/widgets/date_time_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -70,22 +71,10 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: _cancelPressed,
-          child: const Text('Cancel'),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.black),
-          ),
-        ),
-        TextButton(
-          onPressed: () async {
-            await _okPressed();
-          },
-          child: const Text('OK'),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.black),
-          ),
-        ),
+        DialogueHelper.cancelButton(context),
+        DialogueHelper.okButton(() async {
+          await _okPressed();
+        }),
       ],
     );
   }
@@ -108,16 +97,12 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
     });
   }
 
-  void _cancelPressed() {
-    Navigator.pop(context);
-  }
-
   Future<void> _okPressed() async {
     DateTime from = DateTime(fromDate.year, fromDate.month, fromDate.day,
         fromTime.hour, fromTime.minute, fromDate.second);
-    DateTime to = DateTime(
-        toDate.year, toDate.month, toDate.day, toTime.hour, toTime.minute, toDate.second);
-    
+    DateTime to = DateTime(toDate.year, toDate.month, toDate.day, toTime.hour,
+        toTime.minute, toDate.second);
+
     scheduled = !(from.isAtSameMomentAs(to) && from.isBefore(clock.now()));
 
     await Provider.of<FirebasePreviewProvider>(context, listen: false)

@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:diginote/ui/widgets/colour_picker.dart';
@@ -85,24 +86,12 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: _cancelPressed,
-            child: const Text('Cancel'),
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(Colors.black),
-            ),
-          ),
-          TextButton(
-            onPressed: isLoading
-                ? null
-                : () async {
-                    await _okPressed();
-                  },
-            child: const Text('OK'),
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(Colors.black),
-            ),
-          ),
+          DialogueHelper.cancelButton(context),
+          DialogueHelper.okButton(isLoading
+              ? null
+              : () async {
+                  await _okPressed();
+                }),
         ],
       ),
     );
@@ -126,10 +115,6 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
 
   void onBackgroundColourChanged(Color newColour) {
     setState(() => messageBackgroundColour = newColour);
-  }
-
-  void _cancelPressed() {
-    Navigator.pop(context);
   }
 
   Future<void> _okPressed() async {

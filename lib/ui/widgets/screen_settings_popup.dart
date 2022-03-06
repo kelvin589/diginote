@@ -1,3 +1,4 @@
+import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:flutter/material.dart';
 
 class ScreenSettingsPopup extends StatelessWidget {
@@ -10,16 +11,17 @@ class ScreenSettingsPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> _okPressed() async {
+      Navigator.pop(context);
+    }
+
     return AlertDialog(
       title: const Text("Settings"),
       content: _DeleteScreenButton(onDelete: onDelete),
       actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('OK'),
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(Colors.green)),
-        ),
+        DialogueHelper.okButton(() async {
+          await _okPressed();
+        }),
       ],
     );
   }
