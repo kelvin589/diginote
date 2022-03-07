@@ -13,8 +13,8 @@ class FirebaseScreensProvider extends ChangeNotifier {
       : _screensRepository = FirebaseScreensRepository(
             firestoreInstance: firestoreInstance, authInstance: authInstance);
 
-  Future<void> addScreen(Screen screen) async {
-    await _screensRepository.addScreen(screen);
+  Future<void> addScreen({required Screen screen, required void Function() onSuccess, required Future<void> Function() onError}) async {
+    await _screensRepository.addScreen(screen, onSuccess, onError);
   }
 
   Stream<Iterable<Screen>> getScreens() {

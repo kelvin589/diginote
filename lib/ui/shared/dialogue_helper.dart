@@ -20,9 +20,9 @@ class DialogueHelper {
     );
   }
 
-  static void showSuccessDialogue(
-      BuildContext context, String title, String message) {
-    showDialog(
+  static Future<void> showSuccessDialogue (
+      BuildContext context, String title, String message) async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text(title),

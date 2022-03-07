@@ -7,8 +7,9 @@ class FirebaseScreensRepository {
   final FirebaseFirestore firestoreInstance;
   final FirebaseAuth authInstance;
   String userID = "";
-  
-  FirebaseScreensRepository({required this.firestoreInstance, required this.authInstance}) {
+
+  FirebaseScreensRepository(
+      {required this.firestoreInstance, required this.authInstance}) {
     print("ALERT: INITIALISED THE REPOSITORY");
     authInstance.userChanges().listen((User? user) {
       if (user == null) {
@@ -20,7 +21,8 @@ class FirebaseScreensRepository {
     });
   }
 
-  Future<void> addScreen(Screen screen) async {
+  Future<void> addScreen(Screen screen, void Function() onSuccess,
+      Future<void> Function() onError) async {
     await firestoreInstance
         .collection('screens')
         .where('pairingCode', isEqualTo: screen.pairingCode)
@@ -31,8 +33,11 @@ class FirebaseScreensRepository {
         )
         .get()
         .then(
-            (value) => _updatescreen(screen, value.docs.map((e) => e.id).first))
-        .catchError((onError) => print("Already paired or code wrong."));
+      (value) {
+        _updatescreen(screen, value.docs.map((e) => e.id).first);
+        onSuccess();
+      },
+    ).catchError((_) async => await onError());
   }
 
   Future<void> _updatescreen(Screen screen, String screenToken) async {

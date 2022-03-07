@@ -66,8 +66,12 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
     );
     if (_formKey.currentState!.validate()) {
       await Provider.of<FirebaseScreensProvider>(context, listen: false)
-          .addScreen(partialScreen);
-      Navigator.pop(context);
+          .addScreen(
+        screen: partialScreen,
+        onSuccess: () => Navigator.pop(context),
+        onError: () => DialogueHelper.showSuccessDialogue(context,
+            "Unable to add screen", "Already paired or the code wrong."),
+      );
     }
   }
 }
