@@ -39,6 +39,37 @@ class DialogueHelper {
     );
   }
 
+  static void showDestructiveDialogue(
+      {required BuildContext context,
+      required String title,
+      required String message,
+      required Future<void> Function() onConfirm}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.black)),
+          ),
+          TextButton(
+            onPressed: () async {
+              await onConfirm();
+              Navigator.pop(context);
+            },
+            child: const Text("Delete"),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
   static Widget cancelButton(BuildContext context) {
     return TextButton(
       onPressed: () => Navigator.pop(context),
