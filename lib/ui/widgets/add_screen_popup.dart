@@ -34,12 +34,14 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
             TextFormField(
               controller: _nameController,
               decoration: const InputDecoration(hintText: 'Name'),
-              validator: Validator.isEmpty,
+              validator: Validator.isValidScreenName,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
             TextFormField(
               controller: _pairingCodeController,
               decoration: const InputDecoration(hintText: 'Pairing Code'),
-              validator: Validator.isEmpty,
+              validator: Validator.isValidPairingCodeFormat,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ],
         ),

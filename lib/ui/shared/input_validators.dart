@@ -42,6 +42,20 @@ class Validator {
     }
     return value.isValidUsername ? null : "Not a valid username";
   }
+
+  static String? isValidScreenName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Field cannot be empty";
+    }
+    return value.isValidUsername ? null : "Not a valid screen name";
+  }
+
+  static String? isValidPairingCodeFormat(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Field cannot be empty";
+    }
+    return value.isValidPairingCodeFormat ? null : "The format is incorrect";
+  }
 }
 
 extension StringValidators on String {
@@ -95,6 +109,14 @@ extension StringValidators on String {
     // https://stackoverflow.com/questions/49757486/how-to-use-regex-in-dart
     final nameRegExp = RegExp(r'^[a-zA-Z0-9]+$');
     return nameRegExp.hasMatch(this) && isOfMinimumLength(6);
+  }
+
+  // Valid pairing code contains uppercase letters and digits, with a length of 6
+  bool get isValidPairingCodeFormat {
+    // Regex taken from:
+    // https://stackoverflow.com/questions/49757486/how-to-use-regex-in-dart
+    final nameRegExp = RegExp(r'^[A-Z0-9]+$');
+    return nameRegExp.hasMatch(this) && length==6;
   }
 
   bool isOfMinimumLength(int length) {
