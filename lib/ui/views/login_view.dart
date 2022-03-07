@@ -67,12 +67,15 @@ class _LoginFormState extends State<LoginForm> {
                   TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(hintText: 'Email'),
-                    validator: isEmptyValidator,
+                    validator: Validator.isValidEmail,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
                   TextFormField(
                     controller: _passwordController,
                     decoration: const InputDecoration(hintText: 'Password'),
-                    validator: isEmptyValidator,
+                    validator: Validator.isValidPassword,
+                    obscureText: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
                   Consumer<FirebaseLoginProvider>(
                       builder: (context, loginProvider, child) {

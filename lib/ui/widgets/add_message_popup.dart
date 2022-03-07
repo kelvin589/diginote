@@ -164,7 +164,7 @@ class _HeaderInput extends StatelessWidget {
         fillColor: backgroundColour,
         filled: true,
       ),
-      validator: isEmptyValidator,
+      validator: Validator.isEmpty,
       style: GoogleFonts.getFont(fontFamily,
           fontSize: fontSize, color: foregroundColour),
     );
@@ -200,7 +200,7 @@ class _MessageInput extends StatelessWidget {
         filled: true,
         border: InputBorder.none,
       ),
-      validator: isEmptyValidator,
+      validator: Validator.isEmpty,
       style: GoogleFonts.getFont(fontFamily,
           fontSize: fontSize, color: foregroundColour),
     );
