@@ -108,6 +108,10 @@ void main() async {
     await tester.idle();
     await tester.pump();
 
+    expect(find.text("Delete"), findsOneWidget);
+    await tester.tap(find.text("Delete"));
+    await tester.pump();
+
     expect(find.byType(ScreenItem), findsNothing);
   });
 }
