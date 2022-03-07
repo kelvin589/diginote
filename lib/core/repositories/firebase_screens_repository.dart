@@ -26,13 +26,12 @@ class FirebaseScreensRepository {
         .where('pairingCode', isEqualTo: screen.pairingCode)
         .where('paired', isEqualTo: false)
         .withConverter<Screen>(
-          fromFirestore: (snapshot, _) =>
-              Screen.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) => Screen.fromJson(snapshot.data()!),
           toFirestore: (screen, _) => screen.toJson(),
         )
         .get()
-        .then((value) =>
-            _updatescreen(screen, value.docs.map((e) => e.id).first))
+        .then(
+            (value) => _updatescreen(screen, value.docs.map((e) => e.id).first))
         .catchError((onError) => print("Already paired or code wrong."));
   }
 
@@ -59,8 +58,7 @@ class FirebaseScreensRepository {
         .where('userID', isEqualTo: userID)
         .where('paired', isEqualTo: true)
         .withConverter<Screen>(
-          fromFirestore: (snapshot, _) =>
-              Screen.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) => Screen.fromJson(snapshot.data()!),
           toFirestore: (screen, _) => screen.toJson(),
         )
         .snapshots()
@@ -74,5 +72,18 @@ class FirebaseScreensRepository {
         .delete()
         .then((value) => print("Deleted screen"))
         .catchError((onError) => print("Failed to delete error: $onError"));
+    // Currently no method to delete all docs in a collection
+    await firestoreInstance
+        .collection('messages')
+        .doc(screenToken)
+        .collection('message')
+        .get()
+        .then(
+      (snapshots) {
+        for (DocumentSnapshot snapshot in snapshots.docs) {
+          snapshot.reference.delete();
+        }
+      },
+    ).catchError((onError) => print("Failed to delete error: $onError"));
   }
 }
