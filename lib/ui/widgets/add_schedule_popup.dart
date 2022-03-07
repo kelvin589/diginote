@@ -24,6 +24,7 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
   DateTime toDate = clock.now();
   TimeOfDay toTime = TimeOfDay.now();
   bool scheduled = false;
+  String? showErrorText = null;
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +45,13 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
               onDateSelected: (date) => {
                 setState(() {
                   fromDate = date;
+                  showErrorText = null;
                 })
               },
               onTimeSelected: (time) => {
                 setState(() {
                   fromTime = time;
+                  showErrorText = null;
                 })
               },
             ),
@@ -59,14 +62,20 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
               onDateSelected: (date) => {
                 setState(() {
                   toDate = date;
+                  showErrorText = null;
                 })
               },
               onTimeSelected: (time) => {
                 setState(() {
                   toTime = time;
+                  showErrorText = null;
                 })
               },
             ),
+            showErrorText != null
+                ? Text(showErrorText!,
+                    style: TextStyle(color: Colors.red.shade300))
+                : Container(),
           ],
         ),
       ),
@@ -94,14 +103,22 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
       toDate = dateTimeNow;
       toTime = adjustedTimeOfDayNow;
       scheduled = true;
+      showErrorText = null;
     });
   }
 
   Future<void> _okPressed() async {
     DateTime from = DateTime(fromDate.year, fromDate.month, fromDate.day,
-        fromTime.hour, fromTime.minute, fromDate.second);
+        fromTime.hour, fromTime.minute, clock.now().second);
     DateTime to = DateTime(toDate.year, toDate.month, toDate.day, toTime.hour,
-        toTime.minute, toDate.second);
+        toTime.minute, clock.now().second);
+
+    if (!from.isBefore(to) && !from.isAtSameMomentAs(to)) {
+      setState(() {
+        showErrorText = "From must be before TO";
+      });
+      return;
+    }
 
     scheduled = !(from.isAtSameMomentAs(to) && from.isBefore(clock.now()));
 
