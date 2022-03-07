@@ -29,11 +29,9 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-                'Name your screen and enter the pairing code displayed:'),
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(hintText: 'Name'),
+              decoration: const InputDecoration(hintText: 'Screen Name'),
               validator: Validator.isValidScreenName,
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
