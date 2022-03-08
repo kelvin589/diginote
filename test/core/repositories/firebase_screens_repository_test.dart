@@ -72,7 +72,7 @@ void main() async {
         height: 100);
     addPairedScreen(screen);
 
-    await screensRepository.addScreen(screen);
+    await screensRepository.addScreen(screen, () => {}, () async => {});
     final pairedScreen = await getScreen(screenToken);
 
     // Screen considered paired if 'paired' is true and 'userID' is this user
