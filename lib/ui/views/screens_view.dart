@@ -60,8 +60,11 @@ class ScreensView extends StatelessWidget {
               lastUpdated: screen.lastUpdated,
               batteryPercentage: batteryPercentage,
               onPreviewTapped: () => _showPreview(context, screen),
-              onSettingsTapped: () =>
-                  _showScreenSettings(context, screen.screenToken),
+              onSettingsTapped: () => _showScreenSettings(
+                context: context,
+                screenToken: screen.screenToken,
+                screenName: screen.name,
+              ),
             ),
           )
           .toList();
@@ -74,7 +77,8 @@ class ScreensView extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => ChangeNotifierProvider<TimerProvider>(
-          create: (context) => TimerProvider(duration: const Duration(seconds: 1)),
+          create: (context) =>
+              TimerProvider(duration: const Duration(seconds: 1)),
           child: PreviewView(
             screenToken: screen.screenToken,
             screenWidth: screen.width,
@@ -86,11 +90,15 @@ class ScreensView extends StatelessWidget {
     );
   }
 
-  void _showScreenSettings(BuildContext context, String screenToken) {
+  void _showScreenSettings(
+      {required BuildContext context,
+      required String screenToken,
+      required String screenName}) {
     showDialog(
       context: context,
       builder: (context) => ScreenSettingsPopup(
         screenToken: screenToken,
+        screenName: screenName,
         onDelete: () async {
           await _onDelete(context, screenToken);
         },

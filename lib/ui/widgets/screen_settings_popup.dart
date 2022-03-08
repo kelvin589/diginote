@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 
 class ScreenSettingsPopup extends StatelessWidget {
   const ScreenSettingsPopup(
-      {Key? key, required this.screenToken, required this.onDelete})
+      {Key? key,
+      required this.screenToken,
+      required this.screenName,
+      required this.onDelete})
       : super(key: key);
 
   final String screenToken;
+  final String screenName;
   final Future<void> Function() onDelete;
 
   @override
@@ -17,7 +21,7 @@ class ScreenSettingsPopup extends StatelessWidget {
 
     return AlertDialog(
       title: const Text("Settings"),
-      content: _DeleteScreenButton(onDelete: onDelete),
+      content: _DeleteScreenButton(screenName: screenName, onDelete: onDelete),
       actions: <Widget>[
         DialogueHelper.okButton(() async {
           await _okPressed();
@@ -28,9 +32,10 @@ class ScreenSettingsPopup extends StatelessWidget {
 }
 
 class _DeleteScreenButton extends StatelessWidget {
-  const _DeleteScreenButton({Key? key, required this.onDelete})
+  const _DeleteScreenButton({Key? key, required this.screenName, required this.onDelete})
       : super(key: key);
 
+  final String screenName;
   final Future<void> Function() onDelete;
 
   @override
@@ -41,8 +46,15 @@ class _DeleteScreenButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () async {
-            await onDelete();
-            Navigator.pop(context);
+            DialogueHelper.showDestructiveDialogue(
+              context: context,
+              title: "Delete Screen",
+              message: 'Are you sure you want to delete the screen named "$screenName"?',
+              onConfirm: () async {
+                await onDelete();
+                Navigator.pop(context);
+              },
+            );
           },
           child: const Text("Delete Screen"),
           style: ButtonStyle(

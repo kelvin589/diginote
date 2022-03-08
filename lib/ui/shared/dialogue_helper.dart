@@ -20,9 +20,9 @@ class DialogueHelper {
     );
   }
 
-  static void showSuccessDialogue(
-      BuildContext context, String title, String message) {
-    showDialog(
+  static Future<void> showSuccessDialogue (
+      BuildContext context, String title, String message) async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text(title),
@@ -33,6 +33,37 @@ class DialogueHelper {
             child: const Text('OK'),
             style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all(Colors.green)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static void showDestructiveDialogue(
+      {required BuildContext context,
+      required String title,
+      required String message,
+      required Future<void> Function() onConfirm}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.black)),
+          ),
+          TextButton(
+            onPressed: () async {
+              await onConfirm();
+              Navigator.pop(context);
+            },
+            child: const Text("Delete"),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.red)),
           ),
         ],
       ),

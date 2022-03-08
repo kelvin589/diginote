@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,14 @@ class _OptionsPanel extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () async {
-            await onDelete();
+              DialogueHelper.showDestructiveDialogue(
+              context: context,
+              title: "Delete Message",
+              message: 'Are you sure you want to delete this message?',
+              onConfirm: () async {
+                await onDelete();
+              },
+            );
           },
           icon: IconHelper.deleteIcon,
           constraints: const BoxConstraints(),

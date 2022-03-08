@@ -29,17 +29,17 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-                'Name your screen and enter the pairing code displayed:'),
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(hintText: 'Name'),
-              validator: isEmptyValidator,
+              decoration: const InputDecoration(hintText: 'Screen Name'),
+              validator: Validator.isValidScreenName,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
             TextFormField(
               controller: _pairingCodeController,
               decoration: const InputDecoration(hintText: 'Pairing Code'),
-              validator: isEmptyValidator,
+              validator: Validator.isValidPairingCodeFormat,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ],
         ),
@@ -66,8 +66,12 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
     );
     if (_formKey.currentState!.validate()) {
       await Provider.of<FirebaseScreensProvider>(context, listen: false)
-          .addScreen(partialScreen);
-      Navigator.pop(context);
+          .addScreen(
+        screen: partialScreen,
+        onSuccess: () => Navigator.pop(context),
+        onError: () => DialogueHelper.showSuccessDialogue(context,
+            "Unable to add screen", "Already paired or the code wrong."),
+      );
     }
   }
 }

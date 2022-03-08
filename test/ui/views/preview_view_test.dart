@@ -99,6 +99,10 @@ void main() async {
     await tester.tap(find.byIcon(IconHelper.deleteIcon.icon!));
     await tester.pump();
 
+    expect(find.text("Delete"), findsOneWidget);
+    await tester.tap(find.text("Delete"));
+    await tester.pump();
+
     expect(find.byType(MessageItemContent), findsNothing);
   });
 
