@@ -78,7 +78,9 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         }
       },
       child: AlertDialog(
-        title: widget.message == null ? const Text('Add Message') : const Text('Save Message'),
+        title: widget.message == null
+            ? const Text('Add Message')
+            : const Text('Save Message'),
         content: Form(
           key: _formKey,
           child: SizedBox(
@@ -103,7 +105,15 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
               : DialogueHelper.saveButton(isLoading
                   ? null
                   : () async {
-                      await _savePressed();
+                      DialogueHelper.showConfirmationDialogue(
+                          context: context,
+                          title: "Save Message",
+                          message:
+                              "Are you sure you want to save this edited message?",
+                          confirmationActionText: "Save",
+                          onConfirm: () async {
+                            await _savePressed();
+                          });
                     }),
         ],
       ),
