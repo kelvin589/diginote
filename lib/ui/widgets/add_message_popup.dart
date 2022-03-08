@@ -36,12 +36,20 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   bool isLoading = false;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     if (widget.message != null) {
       _headerController.text = widget.message!.header;
       _messageController.text = widget.message!.message;
+      fontFamily = widget.message!.fontFamily;
+      fontSize = widget.message!.fontSize;
+      backgroundColour = Color(widget.message!.backgrondColour);
+      foregroundColour = Color(widget.message!.foregroundColour);
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     List<Widget> formOptions = [
       _HeaderInput(
         headerController: _headerController,
@@ -175,10 +183,10 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         from: widget.message!.from,
         to: widget.message!.to,
         scheduled: widget.message!.scheduled,
-        fontFamily: widget.message!.fontFamily,
-        fontSize: widget.message!.fontSize,
-        backgrondColour: widget.message!.backgrondColour,
-        foregroundColour: widget.message!.foregroundColour);
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        backgrondColour: backgroundColour.value,
+        foregroundColour: foregroundColour.value);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
