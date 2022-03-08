@@ -6,6 +6,7 @@ import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:diginote/ui/widgets/add_message_popup.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'add_schedule_popup.dart';
@@ -48,7 +49,7 @@ class MessageItemContent extends StatelessWidget {
             maxWidth: width,
           ),
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: Color(message.backgrondColour),
             border:
                 !selected ? const Border() : Border.all(color: Colors.black),
           ),
@@ -59,7 +60,11 @@ class MessageItemContent extends StatelessWidget {
               children: [
                 message.header != ""
                     ? Padding(
-                        child: Text(message.header),
+                        child: Text(
+                          message.header,
+                          style: GoogleFonts.getFont(message.fontFamily,
+                              fontSize: message.fontSize, color: Color(message.foregroundColour)),
+                        ),
                         padding: const EdgeInsets.only(bottom: 16.0),
                       )
                     : Container(),
@@ -68,6 +73,8 @@ class MessageItemContent extends StatelessWidget {
                     child: AutoSizeText(
                       message.message,
                       minFontSize: 3,
+                      style: GoogleFonts.getFont(message.fontFamily,
+                          fontSize: message.fontSize, color: Color(message.foregroundColour)),
                     ),
                   ),
                 ),
@@ -99,7 +106,7 @@ class _OptionsPanel extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () async {
-              DialogueHelper.showDestructiveDialogue(
+            DialogueHelper.showDestructiveDialogue(
               context: context,
               title: "Delete Message",
               message: 'Are you sure you want to delete this message?',
