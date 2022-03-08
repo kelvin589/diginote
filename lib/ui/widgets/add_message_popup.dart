@@ -30,8 +30,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
 
   String fontFamily = "Roboto";
   double fontSize = 16.0;
-  Color messageBackgroundColour = Colors.yellow;
-  Color messageForegroundColour = Colors.black;
+  Color backgroundColour = Colors.yellow;
+  Color foregroundColour = Colors.black;
 
   bool isLoading = false;
 
@@ -47,15 +47,15 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         headerController: _headerController,
         fontFamily: fontFamily,
         fontSize: fontSize,
-        backgroundColour: messageBackgroundColour,
-        foregroundColour: messageForegroundColour,
+        backgroundColour: backgroundColour,
+        foregroundColour: foregroundColour,
       ),
       _MessageInput(
         messageController: _messageController,
         fontFamily: fontFamily,
         fontSize: fontSize,
-        backgroundColour: messageBackgroundColour,
-        foregroundColour: messageForegroundColour,
+        backgroundColour: backgroundColour,
+        foregroundColour: foregroundColour,
       ),
       const _TypefaceSelector(),
       _FontSelector(
@@ -133,11 +133,11 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   }
 
   void onForegroundColourChanged(Color newColour) {
-    setState(() => messageForegroundColour = newColour);
+    setState(() => foregroundColour = newColour);
   }
 
   void onBackgroundColourChanged(Color newColour) {
-    setState(() => messageBackgroundColour = newColour);
+    setState(() => backgroundColour = newColour);
   }
 
   Future<void> _okPressed() async {
@@ -150,7 +150,11 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         id: "",
         from: clock.now(),
         to: clock.now(),
-        scheduled: false);
+        scheduled: false,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        backgrondColour: backgroundColour.value,
+        foregroundColour: foregroundColour.value);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
@@ -170,7 +174,11 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         id: widget.message!.id,
         from: widget.message!.from,
         to: widget.message!.to,
-        scheduled: widget.message!.scheduled);
+        scheduled: widget.message!.scheduled,
+        fontFamily: widget.message!.fontFamily,
+        fontSize: widget.message!.fontSize,
+        backgrondColour: widget.message!.backgrondColour,
+        foregroundColour: widget.message!.foregroundColour);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;

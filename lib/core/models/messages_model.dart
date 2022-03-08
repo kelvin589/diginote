@@ -10,6 +10,10 @@ class Message {
     required this.from,
     required this.to,
     required this.scheduled,
+    required this.fontFamily,
+    required this.fontSize,
+    required this.backgrondColour,
+    required this.foregroundColour,
   });
 
   Message.fromJson(Map<String, Object?> json)
@@ -22,6 +26,10 @@ class Message {
           from: DateTime.parse((json['from']! as Timestamp).toDate().toString()),
           to: DateTime.parse((json['to']! as Timestamp).toDate().toString()),
           scheduled: (json['scheduled'])! as bool,
+          fontFamily: json['fontFamily']! as String,
+          fontSize: (json['fontSize']! as num).toDouble(),
+          backgrondColour: json['backgrondColour']! as int,
+          foregroundColour: json['foregroundColour']! as int,
         );
 
   final String header;
@@ -32,6 +40,10 @@ class Message {
   DateTime from;
   DateTime to;
   bool scheduled;
+  final String fontFamily;
+  final double fontSize;
+  final int backgrondColour;
+  final int foregroundColour;
 
   // Don't add id as field in firebase doc
   Map<String, Object?> toJson() {
@@ -43,6 +55,10 @@ class Message {
       'from': Timestamp.fromDate(from),
       'to': Timestamp.fromDate(to),
       'scheduled': scheduled,
+      'fontFamily': fontFamily,
+      'fontSize': fontSize,
+      'backgrondColour': backgrondColour,
+      'foregroundColour': foregroundColour,
     };
   }
 }
