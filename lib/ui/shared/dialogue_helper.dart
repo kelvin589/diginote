@@ -20,7 +20,7 @@ class DialogueHelper {
     );
   }
 
-  static Future<void> showSuccessDialogue (
+  static Future<void> showSuccessDialogue(
       BuildContext context, String title, String message) async {
     await showDialog(
       context: context,
@@ -70,6 +70,38 @@ class DialogueHelper {
     );
   }
 
+  static void showConfirmationDialogue(
+      {required BuildContext context,
+      required String title,
+      required String message,
+      required String confirmationActionText,
+      required Future<void> Function() onConfirm}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.black)),
+          ),
+          TextButton(
+            onPressed: () async {
+              await onConfirm();
+              Navigator.pop(context);
+            },
+            child: Text(confirmationActionText),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.green)),
+          ),
+        ],
+      ),
+    );
+  }
+
   static Widget cancelButton(BuildContext context) {
     return TextButton(
       onPressed: () => Navigator.pop(context),
@@ -88,6 +120,20 @@ class DialogueHelper {
               await okPressed();
             },
       child: const Text('OK'),
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.black),
+      ),
+    );
+  }
+
+  static Widget saveButton(Future<void> Function()? savePressed) {
+    return TextButton(
+      onPressed: savePressed == null
+          ? null
+          : () async {
+              await savePressed();
+            },
+      child: const Text('Save'),
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.all(Colors.black),
       ),

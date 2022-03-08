@@ -27,6 +27,18 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
   String? showErrorText = null;
 
   @override
+  void initState() {
+    super.initState();
+    // Show current scheduling only if it isn't in the past and message is set to be scheduled
+    if (widget.message.scheduled && !widget.message.to.isBefore(clock.now())) {
+      fromDate = widget.message.from;
+      fromTime = TimeOfDay(hour: widget.message.from.hour, minute: widget.message.from.minute);
+      toDate = widget.message.to;
+      toTime = TimeOfDay(hour: widget.message.to.hour, minute: widget.message.to.minute);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       insetPadding: EdgeInsets.zero,

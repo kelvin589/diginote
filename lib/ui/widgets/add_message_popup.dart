@@ -12,10 +12,12 @@ import 'package:provider/provider.dart';
 import 'font_picker.dart';
 
 class AddMessagePopup extends StatefulWidget {
-  const AddMessagePopup({Key? key, required this.screenToken})
+  const AddMessagePopup({Key? key, required this.screenToken, this.message})
       : super(key: key);
 
   final String screenToken;
+  // If message is not null, it means we are editing
+  final Message? message;
 
   @override
   _AddMessagePopupState createState() => _AddMessagePopupState();
@@ -28,10 +30,23 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
 
   String fontFamily = "Roboto";
   double fontSize = 16.0;
-  Color messageBackgroundColour = Colors.yellow;
-  Color messageForegroundColour = Colors.black;
+  Color backgroundColour = Colors.yellow;
+  Color foregroundColour = Colors.black;
 
   bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.message != null) {
+      _headerController.text = widget.message!.header;
+      _messageController.text = widget.message!.message;
+      fontFamily = widget.message!.fontFamily;
+      fontSize = widget.message!.fontSize;
+      backgroundColour = Color(widget.message!.backgrondColour);
+      foregroundColour = Color(widget.message!.foregroundColour);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +55,15 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         headerController: _headerController,
         fontFamily: fontFamily,
         fontSize: fontSize,
-        backgroundColour: messageBackgroundColour,
-        foregroundColour: messageForegroundColour,
+        backgroundColour: backgroundColour,
+        foregroundColour: foregroundColour,
       ),
       _MessageInput(
         messageController: _messageController,
         fontFamily: fontFamily,
         fontSize: fontSize,
-        backgroundColour: messageBackgroundColour,
-        foregroundColour: messageForegroundColour,
+        backgroundColour: backgroundColour,
+        foregroundColour: foregroundColour,
       ),
       const _TypefaceSelector(),
       _FontSelector(
@@ -71,7 +86,9 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         }
       },
       child: AlertDialog(
-        title: const Text('Add Message'),
+        title: widget.message == null
+            ? const Text('Add Message')
+            : const Text('Save Message'),
         content: Form(
           key: _formKey,
           child: SizedBox(
@@ -87,11 +104,25 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         ),
         actions: [
           DialogueHelper.cancelButton(context),
-          DialogueHelper.okButton(isLoading
-              ? null
-              : () async {
-                  await _okPressed();
-                }),
+          widget.message == null
+              ? DialogueHelper.okButton(isLoading
+                  ? null
+                  : () async {
+                      await _okPressed();
+                    })
+              : DialogueHelper.saveButton(isLoading
+                  ? null
+                  : () async {
+                      DialogueHelper.showConfirmationDialogue(
+                          context: context,
+                          title: "Save Message",
+                          message:
+                              "Are you sure you want to save this edited message?",
+                          confirmationActionText: "Save",
+                          onConfirm: () async {
+                            await _savePressed();
+                          });
+                    }),
         ],
       ),
     );
@@ -110,11 +141,11 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   }
 
   void onForegroundColourChanged(Color newColour) {
-    setState(() => messageForegroundColour = newColour);
+    setState(() => foregroundColour = newColour);
   }
 
   void onBackgroundColourChanged(Color newColour) {
-    setState(() => messageBackgroundColour = newColour);
+    setState(() => backgroundColour = newColour);
   }
 
   Future<void> _okPressed() async {
@@ -127,13 +158,41 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         id: "",
         from: clock.now(),
         to: clock.now(),
-        scheduled: false);
+        scheduled: false,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        backgrondColour: backgroundColour.value,
+        foregroundColour: foregroundColour.value);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
       await Provider.of<FirebasePreviewProvider>(context, listen: false)
           .addMessage(widget.screenToken, newMessage);
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> _savePressed() async {
+    Message newMessage = Message(
+        header: _headerController.text,
+        message: _messageController.text,
+        x: widget.message!.x,
+        y: widget.message!.y,
+        id: widget.message!.id,
+        from: widget.message!.from,
+        to: widget.message!.to,
+        scheduled: widget.message!.scheduled,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        backgrondColour: backgroundColour.value,
+        foregroundColour: foregroundColour.value);
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+      await Provider.of<FirebasePreviewProvider>(context, listen: false)
+          .updateMessage(widget.screenToken, newMessage);
       Navigator.pop(context);
     }
   }
