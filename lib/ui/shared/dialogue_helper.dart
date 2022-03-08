@@ -93,4 +93,18 @@ class DialogueHelper {
       ),
     );
   }
+
+  static Widget saveButton(Future<void> Function()? savePressed) {
+    return TextButton(
+      onPressed: savePressed == null
+          ? null
+          : () async {
+              await savePressed();
+            },
+      child: const Text('Save'),
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.black),
+      ),
+    );
+  }
 }

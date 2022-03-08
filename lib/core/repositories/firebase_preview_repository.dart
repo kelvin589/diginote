@@ -43,6 +43,26 @@ class FirebasePreviewRepository {
     await updateLastUpdatedToNow(screenToken);
   }
 
+    Future<void> updateMessage(String screenToken, Message message) async {
+    await firestoreInstance
+        .collection('messages')
+        .doc(screenToken)
+        .collection('message')
+        .doc(message.id)
+        .withConverter<Message>(
+          fromFirestore: (snapshot, _) {
+            Map<String, dynamic> map = snapshot.data()!;
+            map['id'] = snapshot.id;
+            return Message.fromJson(map);
+          },
+          toFirestore: (screen, _) => screen.toJson(),
+        )
+        .set(message, SetOptions(merge: true))
+        .then((value) => print("Updated the new message."))
+        .catchError((onError) => print("Unable to update the message."));
+    await updateLastUpdatedToNow(screenToken);
+  }
+
   Future<void> updateMessageCoordinates(
       String screenToken, Message message) async {
     await firestoreInstance

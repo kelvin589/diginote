@@ -17,6 +17,10 @@ class FirebasePreviewProvider extends ChangeNotifier {
     await _previewRepository.addMessage(screenToken, message);
   }
 
+  Future<void> updateMessage(String screenToken, Message message) async {
+    await _previewRepository.updateMessage(screenToken, message);
+  }
+
   Future<void> updateMessageCoordinates(String screenToken, Message message) async {
     await _previewRepository.updateMessageCoordinates(screenToken, message);
   }
