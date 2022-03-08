@@ -1,3 +1,4 @@
+import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
@@ -32,6 +33,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   double fontSize = 16.0;
   Color backgroundColour = Colors.yellow;
   Color foregroundColour = Colors.black;
+  double width = 100;
+  double height = 100;
 
   bool isLoading = false;
 
@@ -45,25 +48,53 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       fontSize = widget.message!.fontSize;
       backgroundColour = Color(widget.message!.backgrondColour);
       foregroundColour = Color(widget.message!.foregroundColour);
+      width = widget.message!.width;
+      height = widget.message!.height;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> formOptions = [
-      _HeaderInput(
-        headerController: _headerController,
-        fontFamily: fontFamily,
-        fontSize: fontSize,
-        backgroundColour: backgroundColour,
-        foregroundColour: foregroundColour,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: width,
+            height: height,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _HeaderInput(
+                  headerController: _headerController,
+                  fontFamily: fontFamily,
+                  fontSize: fontSize,
+                  backgroundColour: backgroundColour,
+                  foregroundColour: foregroundColour,
+                  width: width,
+                  height: height,
+                ),
+                _MessageInput(
+                  messageController: _messageController,
+                  fontFamily: fontFamily,
+                  fontSize: fontSize,
+                  backgroundColour: backgroundColour,
+                  foregroundColour: foregroundColour,
+                  width: width,
+                  height: height,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      _MessageInput(
-        messageController: _messageController,
-        fontFamily: fontFamily,
-        fontSize: fontSize,
-        backgroundColour: backgroundColour,
-        foregroundColour: foregroundColour,
+      _MessageSizeInput(
+        onMessageSizeChanged: (width, height) {
+          setState(() {
+            this.width = width;
+            this.height = height;
+          });
+        },
       ),
       const _TypefaceSelector(),
       _FontSelector(
@@ -162,7 +193,9 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         fontFamily: fontFamily,
         fontSize: fontSize,
         backgrondColour: backgroundColour.value,
-        foregroundColour: foregroundColour.value);
+        foregroundColour: foregroundColour.value,
+        width: width,
+        height: height);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
@@ -186,7 +219,9 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         fontFamily: fontFamily,
         fontSize: fontSize,
         backgrondColour: backgroundColour.value,
-        foregroundColour: foregroundColour.value);
+        foregroundColour: foregroundColour.value,
+        width: width,
+        height: height);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
@@ -205,7 +240,9 @@ class _HeaderInput extends StatelessWidget {
       required this.fontFamily,
       required this.fontSize,
       required this.backgroundColour,
-      required this.foregroundColour})
+      required this.foregroundColour,
+      required this.width,
+      required this.height})
       : super(key: key);
 
   final TextEditingController headerController;
@@ -213,18 +250,26 @@ class _HeaderInput extends StatelessWidget {
   final double fontSize;
   final Color backgroundColour;
   final Color foregroundColour;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: headerController,
-      decoration: InputDecoration(
-        hintText: 'Header',
-        fillColor: backgroundColour,
-        filled: true,
+    return SizedBox(
+      width: width,
+      height: height * 0.25,
+      child: AutoSizeTextField(
+        maxLines: 1,
+        controller: headerController,
+        decoration: InputDecoration(
+          hintText: 'Header',
+          fillColor: backgroundColour,
+          filled: true,
+          border: InputBorder.none,
+        ),
+        style: GoogleFonts.getFont(fontFamily,
+            fontSize: fontSize, color: foregroundColour),
       ),
-      style: GoogleFonts.getFont(fontFamily,
-          fontSize: fontSize, color: foregroundColour),
     );
   }
 }
@@ -236,7 +281,9 @@ class _MessageInput extends StatelessWidget {
       required this.fontFamily,
       required this.fontSize,
       required this.backgroundColour,
-      required this.foregroundColour})
+      required this.foregroundColour,
+      required this.width,
+      required this.height})
       : super(key: key);
 
   final TextEditingController messageController;
@@ -244,24 +291,63 @@ class _MessageInput extends StatelessWidget {
   final double fontSize;
   final Color backgroundColour;
   final Color foregroundColour;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: TextInputType.multiline,
-      minLines: 5,
-      maxLines: 10,
-      controller: messageController,
-      decoration: InputDecoration(
-        hintText: 'Message',
-        fillColor: backgroundColour,
-        filled: true,
-        border: InputBorder.none,
+    return SizedBox(
+      width: width,
+      height: height * 0.75,
+      child: TextFormField(
+        keyboardType: TextInputType.multiline,
+        controller: messageController,
+        maxLines: null,
+        expands: true,
+        decoration: InputDecoration(
+          hintText: 'Message',
+          fillColor: backgroundColour,
+          filled: true,
+          border: InputBorder.none,
+        ),
+        validator: Validator.isEmpty,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        style: GoogleFonts.getFont(fontFamily,
+            fontSize: fontSize, color: foregroundColour),
       ),
-      validator: Validator.isEmpty,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: GoogleFonts.getFont(fontFamily,
-          fontSize: fontSize, color: foregroundColour),
+    );
+  }
+}
+
+class _MessageSizeInput extends StatelessWidget {
+  const _MessageSizeInput({Key? key, required this.onMessageSizeChanged})
+      : super(key: key);
+
+  final Function(double, double) onMessageSizeChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("Message Size"),
+        Row(
+          children: [
+            TextButton(
+              onPressed: () => onMessageSizeChanged(100, 100),
+              child: const Text("Small"),
+            ),
+            TextButton(
+              onPressed: () => onMessageSizeChanged(150, 150),
+              child: const Text("Medium"),
+            ),
+            TextButton(
+              onPressed: () => onMessageSizeChanged(200, 200),
+              child: const Text("Large"),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

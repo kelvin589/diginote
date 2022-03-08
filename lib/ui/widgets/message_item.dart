@@ -42,6 +42,8 @@ class _MessageItemState extends State<MessageItem> {
               message: widget.message,
               onDelete: onDelete,
               showTimer: false,
+              width: widget.message.width,
+              height: widget.message.height,
             ),
           ),
           childWhenDragging: Container(),
@@ -50,6 +52,8 @@ class _MessageItemState extends State<MessageItem> {
             message: widget.message,
             displayOptions: displayOptions,
             onDelete: onDelete,
+            width: widget.message.width,
+            height: widget.message.height,
           ),
           onDragEnd: (details) async {
             // Offset was not correct
