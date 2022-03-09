@@ -56,7 +56,13 @@ void main() async {
         id: id,
         from: clock.now(),
         to: clock.now(),
-        scheduled: false);
+        scheduled: false,
+        fontFamily: "Roboto",
+        fontSize: 12,
+        backgrondColour: 4294961979,
+        foregroundColour: 4278190080,
+        width: 100,
+        height: 100);
   }
 
   testWidgets("Preview shows the screen's messages",

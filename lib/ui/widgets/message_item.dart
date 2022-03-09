@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/widgets/message_item_content.dart';
@@ -24,6 +26,13 @@ class MessageItem extends StatefulWidget {
 
 class _MessageItemState extends State<MessageItem> {
   bool displayOptions = false;
+  late final messageScaling;
+
+  @override
+  void initState() {
+    super.initState();
+    messageScaling = min(widget.scaleFactorX, widget.scaleFactorY);
+  }
 
   // Since positiioning message from top left, need to account for the size
   @override
@@ -42,6 +51,8 @@ class _MessageItemState extends State<MessageItem> {
               message: widget.message,
               onDelete: onDelete,
               showTimer: false,
+              width: widget.message.width / messageScaling,
+              height: widget.message.height / messageScaling,
             ),
           ),
           childWhenDragging: Container(),
@@ -50,6 +61,8 @@ class _MessageItemState extends State<MessageItem> {
             message: widget.message,
             displayOptions: displayOptions,
             onDelete: onDelete,
+            width: widget.message.width / messageScaling,
+            height: widget.message.height / messageScaling,
           ),
           onDragEnd: (details) async {
             // Offset was not correct

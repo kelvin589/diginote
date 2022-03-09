@@ -4,11 +4,15 @@ class FontPicker extends StatelessWidget {
   const FontPicker(
       {Key? key,
       required this.onFontFamilyChanged,
-      required this.onFontSizeChanged})
+      required this.onFontSizeChanged,
+      this.initialFontFamily,
+      this.initialFontSize})
       : super(key: key);
 
   final void Function(String) onFontFamilyChanged;
   final void Function(double) onFontSizeChanged;
+  final String? initialFontFamily;
+  final double? initialFontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +20,17 @@ class FontPicker extends StatelessWidget {
       children: [
         Expanded(
           flex: 3,
-          child: _FontFamily(onFontFamilyChanged: onFontFamilyChanged),
+          child: _FontFamily(
+            onFontFamilyChanged: onFontFamilyChanged,
+            initialFontFamily: initialFontFamily,
+          ),
         ),
         Expanded(
           flex: 1,
-          child: _FontSize(onFontSizeChanged: onFontSizeChanged),
+          child: _FontSize(
+            onFontSizeChanged: onFontSizeChanged,
+            initialFontSize: initialFontSize,
+          ),
         ),
       ],
     );
@@ -28,10 +38,12 @@ class FontPicker extends StatelessWidget {
 }
 
 class _FontFamily extends StatelessWidget {
-  const _FontFamily({Key? key, required this.onFontFamilyChanged})
+  const _FontFamily(
+      {Key? key, required this.onFontFamilyChanged, this.initialFontFamily})
       : super(key: key);
 
   final void Function(String) onFontFamilyChanged;
+  final String? initialFontFamily;
 
   static const int defaultFontIndex = 0;
   static const List<String> fontFamilies = [
@@ -44,8 +56,13 @@ class _FontFamily extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int fontFamilyIndex = defaultFontIndex;
+    if (initialFontFamily != null) {
+      fontFamilyIndex = fontFamilies.indexOf(initialFontFamily!);
+    }
+
     return DropdownButtonFormField<String>(
-      value: fontFamilies[defaultFontIndex],
+      value: fontFamilies[fontFamilyIndex],
       items: fontFamilies.map((font) {
         return DropdownMenuItem(
           value: font,
@@ -62,10 +79,12 @@ class _FontFamily extends StatelessWidget {
 }
 
 class _FontSize extends StatelessWidget {
-  const _FontSize({Key? key, required this.onFontSizeChanged})
+  const _FontSize(
+      {Key? key, required this.onFontSizeChanged, this.initialFontSize})
       : super(key: key);
 
   final void Function(double) onFontSizeChanged;
+  final double? initialFontSize;
 
   static const int defaultSizeIndex = 3;
   static const List<double> fontSizes = [
@@ -83,8 +102,13 @@ class _FontSize extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int fontSizeIndex = defaultSizeIndex;
+    if (initialFontSize != null) {
+      fontSizeIndex = fontSizes.indexOf(initialFontSize!);
+    }
+
     return DropdownButtonFormField<double>(
-      value: fontSizes[defaultSizeIndex],
+      value: fontSizes[fontSizeIndex],
       items: fontSizes.map((font) {
         return DropdownMenuItem(
           value: font,
