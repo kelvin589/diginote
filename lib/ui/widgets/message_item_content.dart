@@ -59,15 +59,16 @@ class MessageItemContent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 message.header != ""
-                    ? Padding(
-                        child: AutoSizeText(
-                          message.header,
-                          minFontSize: 3,
-                          style: GoogleFonts.getFont(message.fontFamily,
-                              fontSize: message.fontSize, color: Color(message.foregroundColour)),
-                        ),
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                      )
+                    ? SizedBox(
+                      height: height * 0.25,
+                      width: width,
+                      child: AutoSizeText(
+                        message.header,
+                        minFontSize: 3,
+                        style: GoogleFonts.getFont(message.fontFamily,
+                            fontSize: message.fontSize, color: Color(message.foregroundColour)),
+                      ),
+                    )
                     : Container(),
                 Expanded(
                   child: Center(
