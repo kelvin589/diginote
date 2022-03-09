@@ -100,8 +100,11 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       ),
       const _TypefaceSelector(),
       _FontSelector(
-          onFontFamilyChanged: onFontFamilyChanged,
-          onFontSizeChanged: onFontSizeChanged),
+        onFontFamilyChanged: onFontFamilyChanged,
+        onFontSizeChanged: onFontSizeChanged,
+        initialFontFamily: widget.message?.fontFamily ?? null,
+        initialFontSize: widget.message?.fontSize ?? null,
+      ),
       _ForegroundColour(onColourChanged: onForegroundColourChanged),
       _BackgroundColour(
         onColourChanged: onBackgroundColourChanged,
@@ -322,7 +325,11 @@ class _MessageInput extends StatelessWidget {
 }
 
 class _MessageSizeInput extends StatelessWidget {
-  const _MessageSizeInput({Key? key, required this.onMessageSizeChanged, required this.currentWidth, required this.currentHeight})
+  const _MessageSizeInput(
+      {Key? key,
+      required this.onMessageSizeChanged,
+      required this.currentWidth,
+      required this.currentHeight})
       : super(key: key);
 
   final Function(double, double) onMessageSizeChanged;
@@ -341,21 +348,24 @@ class _MessageSizeInput extends StatelessWidget {
               onPressed: () => onMessageSizeChanged(100, 100),
               child: Text(
                 "Small",
-                style: TextStyle(color: (currentWidth!=100) ? Colors.black : Colors.red),
+                style: TextStyle(
+                    color: (currentWidth != 100) ? Colors.black : Colors.red),
               ),
             ),
             TextButton(
               onPressed: () => onMessageSizeChanged(150, 150),
               child: Text(
                 "Medium",
-                style: TextStyle(color: (currentWidth!=150) ? Colors.black : Colors.red),
+                style: TextStyle(
+                    color: (currentWidth != 150) ? Colors.black : Colors.red),
               ),
             ),
             TextButton(
               onPressed: () => onMessageSizeChanged(200, 200),
               child: Text(
                 "Large",
-                style: TextStyle(color: (currentWidth!=200) ? Colors.black : Colors.red),
+                style: TextStyle(
+                    color: (currentWidth != 200) ? Colors.black : Colors.red),
               ),
             ),
           ],
@@ -410,11 +420,15 @@ class _FontSelector extends StatelessWidget {
   const _FontSelector(
       {Key? key,
       required this.onFontFamilyChanged,
-      required this.onFontSizeChanged})
+      required this.onFontSizeChanged,
+      this.initialFontFamily,
+      this.initialFontSize})
       : super(key: key);
 
   final void Function(String) onFontFamilyChanged;
   final void Function(double) onFontSizeChanged;
+  final String? initialFontFamily;
+  final double? initialFontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -425,6 +439,8 @@ class _FontSelector extends StatelessWidget {
         FontPicker(
           onFontFamilyChanged: onFontFamilyChanged,
           onFontSizeChanged: onFontSizeChanged,
+          initialFontFamily: initialFontFamily,
+          initialFontSize: initialFontSize,
         ),
       ],
     );
