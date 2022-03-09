@@ -56,37 +56,40 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   @override
   Widget build(BuildContext context) {
     List<Widget> formOptions = [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: width,
-            height: height,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _HeaderInput(
-                  headerController: _headerController,
-                  fontFamily: fontFamily,
-                  fontSize: fontSize,
-                  backgroundColour: backgroundColour,
-                  foregroundColour: foregroundColour,
-                  width: width,
-                  height: height,
-                ),
-                _MessageInput(
-                  messageController: _messageController,
-                  fontFamily: fontFamily,
-                  fontSize: fontSize,
-                  backgroundColour: backgroundColour,
-                  foregroundColour: foregroundColour,
-                  width: width,
-                  height: height,
-                ),
-              ],
+      Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: width,
+              height: height,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _HeaderInput(
+                    headerController: _headerController,
+                    fontFamily: fontFamily,
+                    fontSize: fontSize,
+                    backgroundColour: backgroundColour,
+                    foregroundColour: foregroundColour,
+                    width: width,
+                    height: height,
+                  ),
+                  _MessageInput(
+                    messageController: _messageController,
+                    fontFamily: fontFamily,
+                    fontSize: fontSize,
+                    backgroundColour: backgroundColour,
+                    foregroundColour: foregroundColour,
+                    width: width,
+                    height: height,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       _MessageSizeInput(
         currentWidth: width,
