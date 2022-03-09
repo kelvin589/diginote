@@ -31,8 +31,7 @@ void main() async {
         .collection('screens')
         .doc(screen.screenToken)
         .withConverter<Screen>(
-          fromFirestore: (snapshot, _) =>
-              Screen.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) => Screen.fromJson(snapshot.data()!),
           toFirestore: (screen, _) => screen.toJson(),
         )
         .set(screen);
@@ -48,7 +47,13 @@ void main() async {
         id: id,
         from: clock.now(),
         to: clock.now(),
-        scheduled: false);
+        scheduled: false,
+        fontFamily: "Roboto",
+        fontSize: 12,
+        backgrondColour: 4294961979,
+        foregroundColour: 4278190080,
+        width: 100,
+        height: 100);
   }
 
   Future<Message?> getFirstMessage() async {
@@ -78,7 +83,13 @@ void main() async {
         id: "id",
         from: clock.now(),
         to: clock.now(),
-        scheduled: false);
+        scheduled: false,
+        fontFamily: "Roboto",
+        fontSize: 12,
+        backgrondColour: 4294961979,
+        foregroundColour: 4278190080,
+        width: 100,
+        height: 100);
     await previewRepository.addMessage(screenToken, message);
 
     final firstMessage = await getFirstMessage();
@@ -129,7 +140,8 @@ void main() async {
     final message1WithXY =
         messageBodyIDOnly("message1", beforeUpdating!.id, x: 50, y: 50);
 
-    await previewRepository.updateMessageCoordinates(screenToken, message1WithXY);
+    await previewRepository.updateMessageCoordinates(
+        screenToken, message1WithXY);
     await Future.delayed(Duration.zero);
 
     final afterUpdating = await getFirstMessage();
@@ -161,7 +173,8 @@ void main() async {
 
     final scheduledDate = clock.now();
 
-    await previewRepository.updateMessageSchedule(screenToken, beforeUpdating!, scheduledDate, scheduledDate, true);
+    await previewRepository.updateMessageSchedule(
+        screenToken, beforeUpdating!, scheduledDate, scheduledDate, true);
     await Future.delayed(Duration.zero);
 
     final afterUpdating = await getFirstMessage();
