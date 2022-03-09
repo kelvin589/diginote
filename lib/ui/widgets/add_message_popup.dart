@@ -108,9 +108,17 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         initialFontFamily: widget.message?.fontFamily ?? null,
         initialFontSize: widget.message?.fontSize ?? null,
       ),
-      _ForegroundColour(onColourChanged: onForegroundColourChanged),
+      _ForegroundColour(
+        onColourChanged: onForegroundColourChanged,
+        initialColour: widget.message != null
+            ? Color(widget.message!.foregroundColour)
+            : null,
+      ),
       _BackgroundColour(
         onColourChanged: onBackgroundColourChanged,
+        initialColour: widget.message != null
+            ? Color(widget.message!.backgrondColour)
+            : null,
       ),
       const _ListingSelector(),
       const _TextAlignmentSelector(),
@@ -451,10 +459,12 @@ class _FontSelector extends StatelessWidget {
 }
 
 class _ForegroundColour extends StatelessWidget {
-  const _ForegroundColour({Key? key, required this.onColourChanged})
+  const _ForegroundColour(
+      {Key? key, required this.onColourChanged, this.initialColour})
       : super(key: key);
 
   final void Function(Color) onColourChanged;
+  final Color? initialColour;
 
   @override
   Widget build(BuildContext context) {
@@ -467,6 +477,7 @@ class _ForegroundColour extends StatelessWidget {
             context: context,
             builder: (BuildContext context) => ColourPicker(
               onColourChanged: onColourChanged,
+              initialColour: initialColour,
             ),
           ),
           icon: IconHelper.colourPickerIcon,
@@ -478,10 +489,12 @@ class _ForegroundColour extends StatelessWidget {
 }
 
 class _BackgroundColour extends StatelessWidget {
-  const _BackgroundColour({Key? key, required this.onColourChanged})
+  const _BackgroundColour(
+      {Key? key, required this.onColourChanged, this.initialColour})
       : super(key: key);
 
   final void Function(Color) onColourChanged;
+  final Color? initialColour;
 
   @override
   Widget build(BuildContext context) {
@@ -494,6 +507,7 @@ class _BackgroundColour extends StatelessWidget {
             context: context,
             builder: (BuildContext context) => ColourPicker(
               onColourChanged: onColourChanged,
+              initialColour: initialColour,
             ),
           ),
           icon: IconHelper.colourPickerIcon,
