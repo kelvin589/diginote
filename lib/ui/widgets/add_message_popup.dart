@@ -89,6 +89,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         ],
       ),
       _MessageSizeInput(
+        currentWidth: width,
+        currentHeight: height,
         onMessageSizeChanged: (width, height) {
           setState(() {
             this.width = width;
@@ -320,10 +322,12 @@ class _MessageInput extends StatelessWidget {
 }
 
 class _MessageSizeInput extends StatelessWidget {
-  const _MessageSizeInput({Key? key, required this.onMessageSizeChanged})
+  const _MessageSizeInput({Key? key, required this.onMessageSizeChanged, required this.currentWidth, required this.currentHeight})
       : super(key: key);
 
   final Function(double, double) onMessageSizeChanged;
+  final double currentWidth;
+  final double currentHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -335,15 +339,24 @@ class _MessageSizeInput extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () => onMessageSizeChanged(100, 100),
-              child: const Text("Small"),
+              child: Text(
+                "Small",
+                style: TextStyle(color: (currentWidth!=100) ? Colors.black : Colors.red),
+              ),
             ),
             TextButton(
               onPressed: () => onMessageSizeChanged(150, 150),
-              child: const Text("Medium"),
+              child: Text(
+                "Medium",
+                style: TextStyle(color: (currentWidth!=150) ? Colors.black : Colors.red),
+              ),
             ),
             TextButton(
               onPressed: () => onMessageSizeChanged(200, 200),
-              child: const Text("Large"),
+              child: Text(
+                "Large",
+                style: TextStyle(color: (currentWidth!=200) ? Colors.black : Colors.red),
+              ),
             ),
           ],
         ),
