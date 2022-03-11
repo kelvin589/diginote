@@ -27,14 +27,20 @@ class TemplatesView extends StatelessWidget {
 
             Iterable<Message>? templates = snapshot.data;
             if (templates != null) {
-              return GridView.count(
-                padding: const EdgeInsets.only(top: 16.0),
-                crossAxisCount: 2,
-                children: List.generate(templates.length, (index) {
-                  return Center(
-                    child: _TemplateItem(template: templates.elementAt(index)),
-                  );
-                }),
+              return Scrollbar(
+                child: GridView.count(
+                  crossAxisCount: 1,
+                  childAspectRatio: 1.4,
+                  shrinkWrap: true,
+                  children: List.generate(templates.length, (index) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [_TemplateItem(
+                        template: templates.elementAt(index),
+                      ),]
+                    );
+                  }),
+                ),
               );
             } else {
               return const Text('Error occurred');
