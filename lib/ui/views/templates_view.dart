@@ -31,6 +31,7 @@ class TemplatesView extends StatelessWidget {
             Iterable<Message>? templates = snapshot.data;
             if (templates != null) {
               return GridView.count(
+                padding: const EdgeInsets.only(top: 16.0),
                 crossAxisCount: 2,
                 children: List.generate(templates.length, (index) {
                   return Center(
