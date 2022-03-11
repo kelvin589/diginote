@@ -29,6 +29,14 @@ class MessageItemContent extends StatelessWidget {
       decoration: BoxDecoration(
         color: Color(message.backgrondColour),
         border: !selected ? const Border() : Border.all(color: Colors.black),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 0,
+            blurRadius: 7,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       padding: const EdgeInsets.all(8.0),
       child: Center(
