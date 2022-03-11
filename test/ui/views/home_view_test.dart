@@ -1,4 +1,5 @@
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/core/providers/io_templates_provider.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/screens_view.dart';
 import 'package:diginote/ui/views/settings_view.dart';
@@ -13,6 +14,7 @@ void main() async {
   late FakeFirebaseFirestore firestoreInstance;
   late MockFirebaseAuth firebaseAuth;
   late FirebaseScreensProvider screensProvider;
+  late TemplatesProvider templatesProvider;
   MockUser mockUser = MockUser();
 
   setUp(() {
@@ -20,13 +22,22 @@ void main() async {
     firebaseAuth = MockFirebaseAuth(signedIn: true, mockUser: mockUser);
     screensProvider = FirebaseScreensProvider(
         firestoreInstance: firestoreInstance, authInstance: firebaseAuth);
+    templatesProvider = TemplatesProvider();
+    templatesProvider.init();
   });
 
   Future<void> loadHomeView(WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        home: ChangeNotifierProvider<FirebaseScreensProvider>(
-          create: (_) => screensProvider,
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<FirebaseScreensProvider>(
+              create: (_) => screensProvider,
+            ),
+            ChangeNotifierProvider<TemplatesProvider>(
+              create: (_) => templatesProvider,
+            ),
+          ],
           child: const HomeView(),
         ),
       ),

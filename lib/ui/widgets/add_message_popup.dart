@@ -1,16 +1,18 @@
-import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
-import 'package:diginote/ui/shared/icon_helper.dart';
-import 'package:diginote/ui/shared/input_validators.dart';
-import 'package:diginote/ui/widgets/colour_picker.dart';
+import 'package:diginote/ui/widgets/message_options/background_colour_selector.dart';
+import 'package:diginote/ui/widgets/message_options/font_selector.dart';
+import 'package:diginote/ui/widgets/message_options/foreground_colour_selector.dart';
+import 'package:diginote/ui/widgets/message_options/header_input.dart';
+import 'package:diginote/ui/widgets/message_options/listing_selector.dart';
+import 'package:diginote/ui/widgets/message_options/message_input.dart';
+import 'package:diginote/ui/widgets/message_options/message_size_selector.dart';
+import 'package:diginote/ui/widgets/message_options/text_alignment_selector.dart';
+import 'package:diginote/ui/widgets/message_options/typeface_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
-import 'font_picker.dart';
 
 class AddMessagePopup extends StatefulWidget {
   const AddMessagePopup({Key? key, required this.screenToken, this.message})
@@ -67,7 +69,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _HeaderInput(
+                  HeaderInput(
                     headerController: _headerController,
                     fontFamily: fontFamily,
                     fontSize: fontSize,
@@ -76,7 +78,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
                     width: width,
                     height: height,
                   ),
-                  _MessageInput(
+                  MessageInput(
                     messageController: _messageController,
                     fontFamily: fontFamily,
                     fontSize: fontSize,
@@ -91,7 +93,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
           ],
         ),
       ),
-      _MessageSizeInput(
+      MessageSizeSelector(
         currentWidth: width,
         currentHeight: height,
         onMessageSizeChanged: (width, height) {
@@ -101,27 +103,27 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
           });
         },
       ),
-      const _TypefaceSelector(),
-      _FontSelector(
+      const TypefaceSelector(),
+      FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
-        initialFontFamily: widget.message?.fontFamily ?? null,
-        initialFontSize: widget.message?.fontSize ?? null,
+        initialFontFamily: widget.message?.fontFamily,
+        initialFontSize: widget.message?.fontSize,
       ),
-      _ForegroundColour(
+      ForegroundColourSelector(
         onColourChanged: onForegroundColourChanged,
         initialColour: widget.message != null
             ? Color(widget.message!.foregroundColour)
             : null,
       ),
-      _BackgroundColour(
+      BackgroundColourSelector(
         onColourChanged: onBackgroundColourChanged,
         initialColour: widget.message != null
             ? Color(widget.message!.backgrondColour)
             : null,
       ),
-      const _ListingSelector(),
-      const _TextAlignmentSelector(),
+      const ListingSelector(),
+      const TextAlignmentSelector(),
     ];
 
     return GestureDetector(
@@ -246,304 +248,5 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
           .updateMessage(widget.screenToken, newMessage);
       Navigator.pop(context);
     }
-  }
-}
-
-class _HeaderInput extends StatelessWidget {
-  const _HeaderInput(
-      {Key? key,
-      required this.headerController,
-      required this.fontFamily,
-      required this.fontSize,
-      required this.backgroundColour,
-      required this.foregroundColour,
-      required this.width,
-      required this.height})
-      : super(key: key);
-
-  final TextEditingController headerController;
-  final String fontFamily;
-  final double fontSize;
-  final Color backgroundColour;
-  final Color foregroundColour;
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height * 0.25,
-      child: AutoSizeTextField(
-        maxLines: 1,
-        controller: headerController,
-        decoration: InputDecoration(
-          hintText: 'Header',
-          fillColor: backgroundColour,
-          filled: true,
-          border: InputBorder.none,
-        ),
-        style: GoogleFonts.getFont(fontFamily,
-            fontSize: fontSize, color: foregroundColour),
-      ),
-    );
-  }
-}
-
-class _MessageInput extends StatelessWidget {
-  const _MessageInput(
-      {Key? key,
-      required this.messageController,
-      required this.fontFamily,
-      required this.fontSize,
-      required this.backgroundColour,
-      required this.foregroundColour,
-      required this.width,
-      required this.height})
-      : super(key: key);
-
-  final TextEditingController messageController;
-  final String fontFamily;
-  final double fontSize;
-  final Color backgroundColour;
-  final Color foregroundColour;
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height * 0.75,
-      child: TextFormField(
-        keyboardType: TextInputType.multiline,
-        controller: messageController,
-        maxLines: null,
-        expands: true,
-        decoration: InputDecoration(
-          hintText: 'Message',
-          fillColor: backgroundColour,
-          filled: true,
-          border: InputBorder.none,
-        ),
-        validator: Validator.isEmpty,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        style: GoogleFonts.getFont(fontFamily,
-            fontSize: fontSize, color: foregroundColour),
-      ),
-    );
-  }
-}
-
-class _MessageSizeInput extends StatelessWidget {
-  const _MessageSizeInput(
-      {Key? key,
-      required this.onMessageSizeChanged,
-      required this.currentWidth,
-      required this.currentHeight})
-      : super(key: key);
-
-  final Function(double, double) onMessageSizeChanged;
-  final double currentWidth;
-  final double currentHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text("Message Size"),
-        Row(
-          children: [
-            TextButton(
-              onPressed: () => onMessageSizeChanged(100, 100),
-              child: Text(
-                "Small",
-                style: TextStyle(
-                    color: (currentWidth != 100) ? Colors.black : Colors.red),
-              ),
-            ),
-            TextButton(
-              onPressed: () => onMessageSizeChanged(150, 150),
-              child: Text(
-                "Medium",
-                style: TextStyle(
-                    color: (currentWidth != 150) ? Colors.black : Colors.red),
-              ),
-            ),
-            TextButton(
-              onPressed: () => onMessageSizeChanged(200, 200),
-              child: Text(
-                "Large",
-                style: TextStyle(
-                    color: (currentWidth != 200) ? Colors.black : Colors.red),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-// TODO: Implement type face selector
-class _TypefaceSelector extends StatelessWidget {
-  const _TypefaceSelector({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final Widget typeface = Row(
-      children: [
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.boldIcon,
-          constraints: const BoxConstraints(),
-        ),
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.italicIcon,
-          constraints: const BoxConstraints(),
-        ),
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.strikethroughIcon,
-          constraints: const BoxConstraints(),
-        ),
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.underlineIcon,
-          constraints: const BoxConstraints(),
-        ),
-      ],
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Typeface'),
-        typeface,
-      ],
-    );
-  }
-}
-
-class _FontSelector extends StatelessWidget {
-  const _FontSelector(
-      {Key? key,
-      required this.onFontFamilyChanged,
-      required this.onFontSizeChanged,
-      this.initialFontFamily,
-      this.initialFontSize})
-      : super(key: key);
-
-  final void Function(String) onFontFamilyChanged;
-  final void Function(double) onFontSizeChanged;
-  final String? initialFontFamily;
-  final double? initialFontSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Font'),
-        FontPicker(
-          onFontFamilyChanged: onFontFamilyChanged,
-          onFontSizeChanged: onFontSizeChanged,
-          initialFontFamily: initialFontFamily,
-          initialFontSize: initialFontSize,
-        ),
-      ],
-    );
-  }
-}
-
-class _ForegroundColour extends StatelessWidget {
-  const _ForegroundColour(
-      {Key? key, required this.onColourChanged, this.initialColour})
-      : super(key: key);
-
-  final void Function(Color) onColourChanged;
-  final Color? initialColour;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Font Colour'),
-        IconButton(
-          onPressed: () => showDialog(
-            context: context,
-            builder: (BuildContext context) => ColourPicker(
-              onColourChanged: onColourChanged,
-              initialColour: initialColour,
-            ),
-          ),
-          icon: IconHelper.colourPickerIcon,
-          constraints: const BoxConstraints(),
-        ),
-      ],
-    );
-  }
-}
-
-class _BackgroundColour extends StatelessWidget {
-  const _BackgroundColour(
-      {Key? key, required this.onColourChanged, this.initialColour})
-      : super(key: key);
-
-  final void Function(Color) onColourChanged;
-  final Color? initialColour;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Background Colour'),
-        IconButton(
-          onPressed: () => showDialog(
-            context: context,
-            builder: (BuildContext context) => ColourPicker(
-              onColourChanged: onColourChanged,
-              initialColour: initialColour,
-            ),
-          ),
-          icon: IconHelper.colourPickerIcon,
-          constraints: const BoxConstraints(),
-        ),
-      ],
-    );
-  }
-}
-
-// TODO: Implement listing selector
-class _ListingSelector extends StatelessWidget {
-  const _ListingSelector({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text('Listing'),
-      ],
-    );
-  }
-}
-
-// TODO: Implement text alignemnt selector
-class _TextAlignmentSelector extends StatelessWidget {
-  const _TextAlignmentSelector({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text('Text Alignment'),
-      ],
-    );
   }
 }
