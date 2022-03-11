@@ -46,6 +46,7 @@ class TemplatesProvider extends ChangeNotifier {
   // Add or update if it exists
   Future<File> addTemplate(Message message) async {
     final file = await _localFile(message.id);
+    notifyListeners();
 
     return file.writeAsString(jsonEncode(message.toJsonWithIDAndISO()));
   }
@@ -56,6 +57,7 @@ class TemplatesProvider extends ChangeNotifier {
     if (await file.exists()) {
       print("File exists so delete it");
       await file.delete();
+      notifyListeners();
       return true;
     }
 
@@ -92,5 +94,6 @@ class TemplatesProvider extends ChangeNotifier {
     final files = await _localDirectoryFiles;
 
     files.forEach((file) async => await file.delete());
+    notifyListeners();
   }
 }
