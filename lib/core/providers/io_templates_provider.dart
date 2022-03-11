@@ -19,23 +19,27 @@ class TemplatesProvider extends ChangeNotifier {
     }
   }
 
+  // Get path to documents directory
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
     return directory.path;
   }
 
+  // Get a single file with id
   Future<File> _localFile(String id) async {
     final path = await _localPath;
 
     return File('$path/$directoryName/$id.txt');
   }
 
-  Future<List<FileSystemEntity>> get _localDirectoryFiles async {
+  // Get all the files in directory
+  Future<List<File>> get _localDirectoryFiles async {
     final path = await _localPath;
     final dir = Directory('$path/$directoryName');
+    final entities = await dir.list().toList();
 
-    return dir.list().toList();
+    return entities.whereType<File>().toList();
   }
 
   // Add or update if it exists
@@ -59,15 +63,14 @@ class TemplatesProvider extends ChangeNotifier {
   }
 
   Future<void> printAllFiles() async {
-    final entities = await _localDirectoryFiles;
-    final files = entities.whereType<File>();
+    final files = await _localDirectoryFiles;
+
     files.forEach((file) async => print(await file.readAsString()));
   }
 
-
   Future<void> deleteAll() async {
-    final entities = await _localDirectoryFiles;
-    final files = entities.whereType<File>();
+    final files = await _localDirectoryFiles;
+
     files.forEach((file) async => await file.delete());
   }
 }
