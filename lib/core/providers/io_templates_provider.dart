@@ -1,8 +1,11 @@
+import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:convert';
+
+import 'package:uuid/uuid.dart';
 
 class TemplatesProvider extends ChangeNotifier {
   final directoryName = "messages";
@@ -17,7 +20,28 @@ class TemplatesProvider extends ChangeNotifier {
     } else {
       print("Doesn't exist so creating path");
       await directory.create();
+      await _addDefaultTemplates();
     }
+  }
+
+  Future<void> _addDefaultTemplates() async {
+    final uuid = Uuid();
+    Message doNotDisturb = Message(
+        header: "",
+        message: "Do Not Disturb",
+        x: 0,
+        y: 0,
+        id: uuid.v4(),
+        from: clock.now(),
+        to: clock.now(),
+        scheduled: false,
+        fontFamily: "Roboto",
+        fontSize: 48.0,
+        backgrondColour: 4294702838,
+        foregroundColour: 4294902531,
+        width: 200.0,
+        height: 200.0);
+    await addTemplate(doNotDisturb);
   }
 
   // Get path to documents directory
@@ -70,7 +94,7 @@ class TemplatesProvider extends ChangeNotifier {
       final List<File> files = await _localDirectoryFiles;
       final List<Message> messages = [];
 
-      for(File file in files) {
+      for (File file in files) {
         final contents = await file.readAsString();
         final Map<String, Object?> map = jsonDecode(contents);
         final Message message = Message.fromJsonWithIDAndISO(map);
