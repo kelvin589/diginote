@@ -47,6 +47,8 @@ dependencies:
   fake_cloud_firestore: ^1.2.1
   firebase_auth_mocks: ^0.8.2
   auto_size_text_field: ^1.0.1
+  path_provider: ^2.0.9
+  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_test:
