@@ -13,31 +13,53 @@ class TemplatesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TemplatesProvider>(
       builder: (context, templatesProvider, child) {
-        return Column(
-          children: [
-            const Text("Templates view"),
-            ElevatedButton(
-              onPressed: () async =>
-                  await templatesProvider.addTemplate(newMessage()),
-              child: const Text("Add"),
-            ),
-            ElevatedButton(
-              onPressed: () async => await templatesProvider.deleteTemplate(""),
-              child: const Text("Delete"),
-            ),
-            ElevatedButton(
-              onPressed: () async => await templatesProvider.printAllFiles(),
-              child: const Text("Print All"),
-            ),
-            ElevatedButton(
-              onPressed: () async => await templatesProvider.deleteAll(),
-              child: const Text("DELETE ALL"),
-            ),
-            ElevatedButton(
-              onPressed: () async => await templatesProvider.readTemplates(),
-              child: const Text("Read all templates"),
-            ),
-          ],
+        return FutureBuilder<List<Message>>(
+          future: templatesProvider.readTemplates(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error ${(snapshot.error.toString())}');
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+
+            Iterable<Message>? messages = snapshot.data;
+            if (messages != null) {
+              return Column(
+                children: [
+                  const Text("Templates view"),
+                  ElevatedButton(
+                    onPressed: () async =>
+                        await templatesProvider.addTemplate(newMessage()),
+                    child: const Text("Add"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async =>
+                        await templatesProvider.deleteTemplate(""),
+                    child: const Text("Delete"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async =>
+                        await templatesProvider.printAllFiles(),
+                    child: const Text("Print All"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async => await templatesProvider.deleteAll(),
+                    child: const Text("DELETE ALL"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async =>
+                        await templatesProvider.readTemplates(),
+                    child: const Text("Read all templates"),
+                  ),
+                  Text("${messages.length}"),
+                ],
+              );
+            } else {
+              return const Text('Error occurred');
+            }
+          },
         );
       },
     );
