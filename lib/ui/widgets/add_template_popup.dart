@@ -13,6 +13,7 @@ import 'package:diginote/ui/widgets/message_options/text_alignment_selector.dart
 import 'package:diginote/ui/widgets/message_options/typeface_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class AddTemplatePopup extends StatefulWidget {
   const AddTemplatePopup({Key? key, this.template}) : super(key: key);
@@ -28,6 +29,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
+  final uuid = const Uuid();
 
   String fontFamily = "Roboto";
   double fontSize = 16.0;
@@ -201,7 +203,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         message: _messageController.text,
         x: 0,
         y: 0,
-        id: "",
+        id: uuid.v4(),
         from: clock.now(),
         to: clock.now(),
         scheduled: false,

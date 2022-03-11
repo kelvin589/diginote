@@ -6,12 +6,9 @@ import 'package:diginote/ui/widgets/add_template_popup.dart';
 import 'package:diginote/ui/widgets/message_item_content.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class TemplatesView extends StatelessWidget {
   const TemplatesView({Key? key}) : super(key: key);
-
-  final uuid = const Uuid();
 
   @override
   Widget build(BuildContext context) {
