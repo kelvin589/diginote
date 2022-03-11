@@ -3,6 +3,7 @@ import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/core/providers/io_templates_provider.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/login_view.dart';
 import 'package:diginote/ui/views/register_view.dart';
@@ -25,6 +26,8 @@ void main() async {
   final FirebaseRegisterProvider registerProvider = FirebaseRegisterProvider(authInstance: authInstance);
   final FirebaseScreensProvider screensProvider = FirebaseScreensProvider(authInstance: authInstance, firestoreInstance: firestoreInstance);
   final FirebasePreviewProvider previewProvider = FirebasePreviewProvider(firestoreInstance: firestoreInstance);
+  final TemplatesProvider templatesProvider = TemplatesProvider();
+  await templatesProvider.init();
   loginProvider.listen(authInstance);
 
   runApp(MultiProvider(
@@ -33,6 +36,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => registerProvider),
       ChangeNotifierProvider(create: (context) => screensProvider),
       ChangeNotifierProvider(create: (context) => previewProvider),
+      ChangeNotifierProvider(create: (context) => templatesProvider),
     ],
     child: const MyApp(),
   ));

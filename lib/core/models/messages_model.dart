@@ -69,4 +69,23 @@ class Message {
       'height': height,
     };
   }
+
+  Map<String, Object?> toJsonWithID() {
+    return {
+      'header': header,
+      'message': message,
+      'x': x,
+      'y': y,
+      'id': id,
+      'from': Timestamp.fromDate(from),
+      'to': Timestamp.fromDate(to),
+      'scheduled': scheduled,
+      'fontFamily': fontFamily,
+      'fontSize': fontSize,
+      'backgrondColour': backgrondColour,
+      'foregroundColour': foregroundColour,
+      'width': width,
+      'height': height,
+    };
+  }
 }
