@@ -1,5 +1,8 @@
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/io_templates_provider.dart';
+import 'package:diginote/ui/shared/dialogue_helper.dart';
+import 'package:diginote/ui/shared/icon_helper.dart';
+import 'package:diginote/ui/widgets/add_template_popup.dart';
 import 'package:diginote/ui/widgets/message_item_content.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,48 +28,15 @@ class TemplatesView extends StatelessWidget {
               return const CircularProgressIndicator();
             }
 
-            Iterable<Message>? messages = snapshot.data;
-            if (messages != null) {
+            Iterable<Message>? templates = snapshot.data;
+            if (templates != null) {
               return GridView.count(
                 crossAxisCount: 2,
-                children: List.generate(messages.length, (index) {
+                children: List.generate(templates.length, (index) {
                   return Center(
-                    child: MessageItemContent(
-                      message: messages.elementAt(index),
-                      selected: true,
-                    ),
+                    child: _TemplateItem(template: templates.elementAt(index)),
                   );
                 }),
-              );
-              return Column(
-                children: [
-                  const Text("Templates view"),
-                  ElevatedButton(
-                    onPressed: () async =>
-                        await templatesProvider.addTemplate(newMessage()),
-                    child: const Text("Add"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async =>
-                        await templatesProvider.deleteTemplate(""),
-                    child: const Text("Delete"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async =>
-                        await templatesProvider.printAllFiles(),
-                    child: const Text("Print All"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async => await templatesProvider.deleteAll(),
-                    child: const Text("DELETE ALL"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async =>
-                        await templatesProvider.readTemplates(),
-                    child: const Text("Read all templates"),
-                  ),
-                  Text("${messages.length}"),
-                ],
               );
             } else {
               return const Text('Error occurred');
@@ -76,23 +46,97 @@ class TemplatesView extends StatelessWidget {
       },
     );
   }
+}
 
-  Message newMessage() {
-    final id = uuid.v4();
-    return Message(
-        header: "header",
-        message: "message",
-        x: 0,
-        y: 0,
-        id: id,
-        from: DateTime.now(),
-        to: DateTime.now(),
-        scheduled: false,
-        fontFamily: "Oswald",
-        fontSize: 12,
-        backgrondColour: 4294961979,
-        foregroundColour: 4294902017,
-        width: 100,
-        height: 100);
+class _TemplateItem extends StatefulWidget {
+  const _TemplateItem({Key? key, required this.template}) : super(key: key);
+
+  final Message template;
+
+  @override
+  State<_TemplateItem> createState() => _TemplateItemState();
+}
+
+class _TemplateItemState extends State<_TemplateItem> {
+  bool displayOptions = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        displayOptions
+            ? _OptionsPanel(template: widget.template, onDelete: onDelete)
+            : Container(),
+        GestureDetector(
+          onTap: toggleDisplayOptions,
+          child: MessageItemContent(
+            message: widget.template,
+            width: widget.template.width,
+            height: widget.template.height,
+            selected: false,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> onDelete() async {
+    setDisplayOptions(false);
+    await Provider.of<TemplatesProvider>(context, listen: false)
+        .deleteTemplate(widget.template.id);
+  }
+
+  void toggleDisplayOptions() {
+    setState(() {
+      displayOptions = !displayOptions;
+    });
+  }
+
+  void setDisplayOptions(bool newValue) {
+    setState(() {
+      displayOptions = newValue;
+    });
+  }
+}
+
+class _OptionsPanel extends StatelessWidget {
+  const _OptionsPanel(
+      {Key? key, required this.template, required this.onDelete})
+      : super(key: key);
+
+  final Message template;
+  final Future<void> Function() onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          onPressed: () async {
+            DialogueHelper.showDestructiveDialogue(
+              context: context,
+              title: "Delete Template",
+              message: 'Are you sure you want to delete this template?',
+              onConfirm: () async {
+                await onDelete();
+              },
+            );
+          },
+          icon: IconHelper.deleteIcon,
+          constraints: const BoxConstraints(),
+        ),
+        IconButton(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AddTemplatePopup(
+              template: template,
+            ),
+          ),
+          icon: IconHelper.editIcon,
+          constraints: const BoxConstraints(),
+        ),
+      ],
+    );
   }
 }
