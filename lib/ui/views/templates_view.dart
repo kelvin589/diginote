@@ -1,5 +1,6 @@
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/io_templates_provider.dart';
+import 'package:diginote/ui/widgets/message_item_content.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -26,6 +27,17 @@ class TemplatesView extends StatelessWidget {
 
             Iterable<Message>? messages = snapshot.data;
             if (messages != null) {
+              return GridView.count(
+                crossAxisCount: 2,
+                children: List.generate(messages.length, (index) {
+                  return Center(
+                    child: MessageItemContent(
+                      message: messages.elementAt(index),
+                      selected: true,
+                    ),
+                  );
+                }),
+              );
               return Column(
                 children: [
                   const Text("Templates view"),
@@ -76,10 +88,10 @@ class TemplatesView extends StatelessWidget {
         from: DateTime.now(),
         to: DateTime.now(),
         scheduled: false,
-        fontFamily: "Roboto",
+        fontFamily: "Oswald",
         fontSize: 12,
-        backgrondColour: 0,
-        foregroundColour: 0,
+        backgrondColour: 4294961979,
+        foregroundColour: 4294902017,
         width: 100,
         height: 100);
   }
