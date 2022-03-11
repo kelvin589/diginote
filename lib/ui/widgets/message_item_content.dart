@@ -37,6 +37,12 @@ class MessageItemContent extends StatelessWidget {
             offset: const Offset(0, 10),
           ),
         ],
+        gradient: RadialGradient(
+          colors: computeColours(Color(message.backgrondColour)),
+          radius: 1.0,
+          stops: const [0.5, 1.0],
+          center: Alignment.bottomLeft,
+        ),
       ),
       padding: const EdgeInsets.all(8.0),
       child: Center(
@@ -71,5 +77,14 @@ class MessageItemContent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Color> computeColours(Color original) {
+    // Code to darken Colour taken from here:
+    // https://stackoverflow.com/questions/58360989/programmatically-lighten-or-darken-a-hex-color-in-dart
+    final hsl = HSLColor.fromColor(original);
+    final hslDark = hsl.withLightness((hsl.lightness - 0.1).clamp(0.0, 1.0));
+
+    return [Color(message.backgrondColour), hslDark.toColor()];
   }
 }
