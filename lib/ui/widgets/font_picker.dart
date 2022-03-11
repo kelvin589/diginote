@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FontPicker extends StatelessWidget {
   const FontPicker(
@@ -52,6 +53,13 @@ class _FontFamily extends StatelessWidget {
     'Lato',
     'Poppins',
     'Oswald',
+    'Sansita Swashed',
+    'Shadows Into Light',
+    'Indie Flower',
+    'Caveat',
+    'Amatic SC',
+    'Tajawal',
+    'Parisienne'
   ];
 
   @override
@@ -66,7 +74,10 @@ class _FontFamily extends StatelessWidget {
       items: fontFamilies.map((font) {
         return DropdownMenuItem(
           value: font,
-          child: Text(font),
+          child: Text(
+            font,
+            style: GoogleFonts.getFont(font),
+          ),
         );
       }).toList(),
       onChanged: (selectedFontFamily) {
