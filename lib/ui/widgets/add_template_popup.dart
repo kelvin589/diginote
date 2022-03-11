@@ -1,6 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
-import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/core/providers/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/widgets/message_options/background_colour_selector.dart';
 import 'package:diginote/ui/widgets/message_options/font_selector.dart';
@@ -13,23 +13,23 @@ import 'package:diginote/ui/widgets/message_options/text_alignment_selector.dart
 import 'package:diginote/ui/widgets/message_options/typeface_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
-class AddMessagePopup extends StatefulWidget {
-  const AddMessagePopup({Key? key, required this.screenToken, this.message})
-      : super(key: key);
+class AddTemplatePopup extends StatefulWidget {
+  const AddTemplatePopup({Key? key, this.template}) : super(key: key);
 
-  final String screenToken;
-  // If message is not null, it means we are editing
-  final Message? message;
+  // If template is not null, it means we are editing
+  final Message? template;
 
   @override
-  _AddMessagePopupState createState() => _AddMessagePopupState();
+  _AddTemplatePopupState createState() => _AddTemplatePopupState();
 }
 
-class _AddMessagePopupState extends State<AddMessagePopup> {
+class _AddTemplatePopupState extends State<AddTemplatePopup> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
+  final uuid = const Uuid();
 
   String fontFamily = "Roboto";
   double fontSize = 16.0;
@@ -43,15 +43,15 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   @override
   void initState() {
     super.initState();
-    if (widget.message != null) {
-      _headerController.text = widget.message!.header;
-      _messageController.text = widget.message!.message;
-      fontFamily = widget.message!.fontFamily;
-      fontSize = widget.message!.fontSize;
-      backgroundColour = Color(widget.message!.backgrondColour);
-      foregroundColour = Color(widget.message!.foregroundColour);
-      width = widget.message!.width;
-      height = widget.message!.height;
+    if (widget.template != null) {
+      _headerController.text = widget.template!.header;
+      _messageController.text = widget.template!.message;
+      fontFamily = widget.template!.fontFamily;
+      fontSize = widget.template!.fontSize;
+      backgroundColour = Color(widget.template!.backgrondColour);
+      foregroundColour = Color(widget.template!.foregroundColour);
+      width = widget.template!.width;
+      height = widget.template!.height;
     }
   }
 
@@ -107,19 +107,19 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
-        initialFontFamily: widget.message?.fontFamily,
-        initialFontSize: widget.message?.fontSize,
+        initialFontFamily: widget.template?.fontFamily,
+        initialFontSize: widget.template?.fontSize,
       ),
       ForegroundColourSelector(
         onColourChanged: onForegroundColourChanged,
-        initialColour: widget.message != null
-            ? Color(widget.message!.foregroundColour)
+        initialColour: widget.template != null
+            ? Color(widget.template!.foregroundColour)
             : null,
       ),
       BackgroundColourSelector(
         onColourChanged: onBackgroundColourChanged,
-        initialColour: widget.message != null
-            ? Color(widget.message!.backgrondColour)
+        initialColour: widget.template != null
+            ? Color(widget.template!.backgrondColour)
             : null,
       ),
       const ListingSelector(),
@@ -135,9 +135,9 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         }
       },
       child: AlertDialog(
-        title: widget.message == null
-            ? const Text('Add Message')
-            : const Text('Save Message'),
+        title: widget.template == null
+            ? const Text('Add Template')
+            : const Text('Save Template'),
         content: Form(
           key: _formKey,
           child: SizedBox(
@@ -153,7 +153,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         ),
         actions: [
           DialogueHelper.cancelButton(context),
-          widget.message == null
+          widget.template == null
               ? DialogueHelper.okButton(isLoading
                   ? null
                   : () async {
@@ -164,9 +164,9 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
                   : () async {
                       DialogueHelper.showConfirmationDialogue(
                           context: context,
-                          title: "Save Message",
+                          title: "Save Template",
                           message:
-                              "Are you sure you want to save this edited message?",
+                              "Are you sure you want to save this edited template?",
                           confirmationActionText: "Save",
                           onConfirm: () async {
                             await _savePressed();
@@ -198,13 +198,12 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   }
 
   Future<void> _okPressed() async {
-    // TODO: Implement X/Y
-    Message newMessage = Message(
+    Message newTemplate = Message(
         header: _headerController.text,
         message: _messageController.text,
         x: 0,
         y: 0,
-        id: "",
+        id: uuid.v4(),
         from: clock.now(),
         to: clock.now(),
         scheduled: false,
@@ -218,22 +217,22 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       setState(() {
         isLoading = true;
       });
-      await Provider.of<FirebasePreviewProvider>(context, listen: false)
-          .addMessage(widget.screenToken, newMessage);
+      await Provider.of<TemplatesProvider>(context, listen: false)
+          .addTemplate(newTemplate);
       Navigator.pop(context);
     }
   }
 
   Future<void> _savePressed() async {
-    Message newMessage = Message(
+    Message newTemplate = Message(
         header: _headerController.text,
         message: _messageController.text,
-        x: widget.message!.x,
-        y: widget.message!.y,
-        id: widget.message!.id,
-        from: widget.message!.from,
-        to: widget.message!.to,
-        scheduled: widget.message!.scheduled,
+        x: widget.template!.x,
+        y: widget.template!.y,
+        id: widget.template!.id,
+        from: widget.template!.from,
+        to: widget.template!.to,
+        scheduled: widget.template!.scheduled,
         fontFamily: fontFamily,
         fontSize: fontSize,
         backgrondColour: backgroundColour.value,
@@ -244,8 +243,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       setState(() {
         isLoading = true;
       });
-      await Provider.of<FirebasePreviewProvider>(context, listen: false)
-          .updateMessage(widget.screenToken, newMessage);
+      await Provider.of<TemplatesProvider>(context, listen: false)
+          .addTemplate(newTemplate);
       Navigator.pop(context);
     }
   }

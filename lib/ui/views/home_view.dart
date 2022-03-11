@@ -1,6 +1,7 @@
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/navigation_page_enum.dart';
 import 'package:diginote/ui/widgets/add_screen_popup.dart';
+import 'package:diginote/ui/widgets/add_template_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 
@@ -62,10 +63,6 @@ class _HomeNavigationState extends State<HomeNavigation> {
     });
   }
 
-  void _onTapped(BuildContext context, String message) {
-    DialogueHelper.showSuccessDialogue(context, 'Tapped', message);
-  }
-
   List<Widget> _appbarActions(NavigationPage page) {
     switch (page) {
       case NavigationPage.screens:
@@ -81,11 +78,10 @@ class _HomeNavigationState extends State<HomeNavigation> {
       case NavigationPage.templates:
         return [
           IconButton(
-            onPressed: () => _onTapped(context, 'Edit templates'),
-            icon: IconHelper.editIcon,
-          ),
-          IconButton(
-            onPressed: () => _onTapped(context, 'Add templates'),
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => const AddTemplatePopup(),
+            ),
             icon: IconHelper.addIcon,
           ),
         ];

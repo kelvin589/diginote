@@ -4,7 +4,7 @@ import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:diginote/ui/views/preview_view.dart';
-import 'package:diginote/ui/widgets/message_item_content.dart';
+import 'package:diginote/ui/widgets/message_item_paneled.dart';
 import 'package:diginote/ui/widgets/message_item.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +98,7 @@ void main() async {
     await tester.idle();
     await tester.pump();
 
-    await tester.tap(find.byType(MessageItemContent));
+    await tester.tap(find.byType(MessageItemPaneled));
     await tester.pump();
 
     expect(find.byIcon(IconHelper.deleteIcon.icon!), findsOneWidget);
@@ -109,7 +109,7 @@ void main() async {
     await tester.tap(find.text("Delete"));
     await tester.pump();
 
-    expect(find.byType(MessageItemContent), findsNothing);
+    expect(find.byType(MessageItemPaneled), findsNothing);
   });
 
   testWidgets(
