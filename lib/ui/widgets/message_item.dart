@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/ui/widgets/message_item_content.dart';
+import 'package:diginote/ui/widgets/message_item_paneled.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,17 +47,14 @@ class _MessageItemState extends State<MessageItem> {
           onDragStarted: () => setDisplayOptions(false),
           feedback: Material(
             child: MessageItemContent(
-              screenToken: widget.screenToken,
               selected: true,
               message: widget.message,
-              onDelete: onDelete,
-              showTimer: false,
               width: widget.message.width / messageScaling,
               height: widget.message.height / messageScaling,
             ),
           ),
           childWhenDragging: Container(),
-          child: MessageItemContent(
+          child: MessageItemPaneled(
             screenToken: widget.screenToken,
             message: widget.message,
             displayOptions: displayOptions,
