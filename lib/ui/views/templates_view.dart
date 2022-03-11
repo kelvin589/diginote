@@ -11,9 +11,39 @@ class TemplatesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final id = uuid.v4();
-    const id = "some-unique-id";
-    final testMessage = Message(
+    return Consumer<TemplatesProvider>(
+      builder: (context, templatesProvider, child) {
+        return Column(
+          children: [
+            const Text("Templates view"),
+            ElevatedButton(
+              onPressed: () async =>
+                  await templatesProvider.addTemplate(newMessage()),
+              child: const Text("Add"),
+            ),
+            ElevatedButton(
+              onPressed: () async =>
+                  await templatesProvider.deleteTemplate(""),
+              child: const Text("Delete"),
+            ),
+            ElevatedButton(
+              onPressed: () async => await templatesProvider.printAllFiles(),
+              child: const Text("Print All"),
+            ),
+            ElevatedButton(
+              onPressed: () async =>
+                  await templatesProvider.deleteAll(),
+              child: const Text("DELETE ALL"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Message newMessage() {
+    final id = uuid.v4();
+    return Message(
         header: "header",
         message: "message",
         x: 0,
@@ -28,28 +58,5 @@ class TemplatesView extends StatelessWidget {
         foregroundColour: 0,
         width: 100,
         height: 100);
-
-    return Consumer<TemplatesProvider>(
-      builder: (context, templatesProvider, child) {
-        return Column(
-          children: [
-            const Text("Templates view"),
-            ElevatedButton(
-              onPressed: () async =>
-                  await templatesProvider.addTemplate(testMessage),
-              child: const Text("Add"),
-            ),
-            ElevatedButton(
-              onPressed: () async => await templatesProvider.deleteTemplate(testMessage.id),
-              child: const Text("Delete"),
-            ),
-            ElevatedButton(
-              onPressed: () async => await templatesProvider.printAllFiles(),
-              child: const Text("Print All"),
-            ),
-          ],
-        );
-      },
-    );
   }
 }

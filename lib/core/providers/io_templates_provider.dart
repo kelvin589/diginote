@@ -38,6 +38,7 @@ class TemplatesProvider extends ChangeNotifier {
     return dir.list().toList();
   }
 
+  // Add or update if it exists
   Future<File> addTemplate(Message message) async {
     final file = await _localFile(message.id);
 
@@ -61,5 +62,12 @@ class TemplatesProvider extends ChangeNotifier {
     final entities = await _localDirectoryFiles;
     final files = entities.whereType<File>();
     files.forEach((file) async => print(await file.readAsString()));
+  }
+
+
+  Future<void> deleteAll() async {
+    final entities = await _localDirectoryFiles;
+    final files = entities.whereType<File>();
+    files.forEach((file) async => await file.delete());
   }
 }
