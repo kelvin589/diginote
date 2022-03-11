@@ -108,12 +108,6 @@ class TemplatesProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> printAllFiles() async {
-    final files = await _localDirectoryFiles;
-
-    files.forEach((file) async => print(await file.readAsString()));
-  }
-
   Future<void> deleteAll() async {
     final files = await _localDirectoryFiles;
 
