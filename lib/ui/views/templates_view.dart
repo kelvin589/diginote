@@ -22,8 +22,7 @@ class TemplatesView extends StatelessWidget {
               child: const Text("Add"),
             ),
             ElevatedButton(
-              onPressed: () async =>
-                  await templatesProvider.deleteTemplate(""),
+              onPressed: () async => await templatesProvider.deleteTemplate(""),
               child: const Text("Delete"),
             ),
             ElevatedButton(
@@ -31,9 +30,12 @@ class TemplatesView extends StatelessWidget {
               child: const Text("Print All"),
             ),
             ElevatedButton(
-              onPressed: () async =>
-                  await templatesProvider.deleteAll(),
+              onPressed: () async => await templatesProvider.deleteAll(),
               child: const Text("DELETE ALL"),
+            ),
+            ElevatedButton(
+              onPressed: () async => await templatesProvider.readTemplates(),
+              child: const Text("Read all templates"),
             ),
           ],
         );

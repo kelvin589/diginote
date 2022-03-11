@@ -70,15 +70,16 @@ class Message {
     };
   }
 
-  Map<String, Object?> toJsonWithID() {
+  // For use with the templates as DateTime/Timestamp must be encoded //
+  Map<String, Object?> toJsonWithIDAndISO() {
     return {
       'header': header,
       'message': message,
       'x': x,
       'y': y,
       'id': id,
-      'from': Timestamp.fromDate(from),
-      'to': Timestamp.fromDate(to),
+      'from': from.toIso8601String(),
+      'to': to.toIso8601String(),
       'scheduled': scheduled,
       'fontFamily': fontFamily,
       'fontSize': fontSize,
@@ -88,4 +89,22 @@ class Message {
       'height': height,
     };
   }
+
+  Message.fromJsonWithIDAndISO(Map<String, Object?> json)
+    : this(
+        header: json['header']! as String,
+        message: json['message']! as String,
+        x: (json['x']! as num).toDouble(),
+        y: (json['y']! as num).toDouble(),
+        id: json['id']! as String,
+        from: DateTime.parse(json['from']! as String),
+        to: DateTime.parse(json['to']! as String),
+        scheduled: (json['scheduled'])! as bool,
+        fontFamily: json['fontFamily']! as String,
+        fontSize: (json['fontSize']! as num).toDouble(),
+        backgrondColour: json['backgrondColour']! as int,
+        foregroundColour: json['foregroundColour']! as int,
+        width: (json['width']! as num).toDouble(),
+        height: (json['height']! as num).toDouble(),
+      );
 }

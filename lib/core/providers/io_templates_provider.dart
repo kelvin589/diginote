@@ -2,6 +2,7 @@ import 'package:diginote/core/models/messages_model.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'dart:convert';
 
 class TemplatesProvider extends ChangeNotifier {
   final directoryName = "messages";
@@ -46,7 +47,7 @@ class TemplatesProvider extends ChangeNotifier {
   Future<File> addTemplate(Message message) async {
     final file = await _localFile(message.id);
 
-    return file.writeAsString(message.toJsonWithID().toString());
+    return file.writeAsString(jsonEncode(message.toJsonWithIDAndISO()));
   }
 
   Future<bool> deleteTemplate(String id) async {
@@ -60,6 +61,25 @@ class TemplatesProvider extends ChangeNotifier {
 
     print("Couldn't delete the file");
     return false;
+  }
+
+  Future<List<Message>> readTemplates() async {
+    try {
+      final List<File> files = await _localDirectoryFiles;
+      final List<Message> messages = [];
+
+      for(File file in files) {
+        final contents = await file.readAsString();
+        final Map<String, Object?> map = jsonDecode(contents);
+        final Message message = Message.fromJsonWithIDAndISO(map);
+        messages.add(message);
+      }
+
+      return messages;
+    } catch (e) {
+      print(e);
+      return [];
+    }
   }
 
   Future<void> printAllFiles() async {
