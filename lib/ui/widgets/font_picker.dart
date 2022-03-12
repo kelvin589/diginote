@@ -106,7 +106,6 @@ class _FontSize extends StatelessWidget {
     30,
     36,
     48,
-    60
   ];
 
   @override
