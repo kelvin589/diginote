@@ -147,9 +147,11 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: messageBodyAndHeader,
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: messageBodyAndHeader,
+                ),
               ),
               Expanded(
                 child: Container(
