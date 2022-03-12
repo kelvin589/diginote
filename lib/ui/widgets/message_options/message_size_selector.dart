@@ -20,28 +20,34 @@ class MessageSizeSelector extends StatelessWidget {
         const Text("Message Size"),
         Row(
           children: [
-            TextButton(
-              onPressed: () => onMessageSizeChanged(100, 100),
-              child: Text(
-                "Small",
-                style: TextStyle(
-                    color: (currentWidth != 100) ? Colors.black : Colors.red),
+            Expanded(
+              child: TextButton(
+                onPressed: () => onMessageSizeChanged(100, 100),
+                child: Text(
+                  "S",
+                  style: TextStyle(
+                      color: (currentWidth != 100) ? Colors.black : Colors.red),
+                ),
               ),
             ),
-            TextButton(
-              onPressed: () => onMessageSizeChanged(150, 150),
-              child: Text(
-                "Medium",
-                style: TextStyle(
-                    color: (currentWidth != 150) ? Colors.black : Colors.red),
+            Expanded(
+              child: TextButton(
+                onPressed: () => onMessageSizeChanged(150, 150),
+                child: Text(
+                  "M",
+                  style: TextStyle(
+                      color: (currentWidth != 150) ? Colors.black : Colors.red),
+                ),
               ),
             ),
-            TextButton(
-              onPressed: () => onMessageSizeChanged(200, 200),
-              child: Text(
-                "Large",
-                style: TextStyle(
-                    color: (currentWidth != 200) ? Colors.black : Colors.red),
+            Expanded(
+              child: TextButton(
+                onPressed: () => onMessageSizeChanged(200, 200),
+                child: Text(
+                  "L",
+                  style: TextStyle(
+                      color: (currentWidth != 200) ? Colors.black : Colors.red),
+                ),
               ),
             ),
           ],

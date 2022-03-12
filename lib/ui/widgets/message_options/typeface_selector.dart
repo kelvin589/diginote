@@ -9,25 +9,33 @@ class TypefaceSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget typeface = Row(
       children: [
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.boldIcon,
-          constraints: const BoxConstraints(),
+        Expanded(
+          child: IconButton(
+            onPressed: () => {},
+            icon: IconHelper.boldIcon,
+            constraints: const BoxConstraints(),
+          ),
         ),
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.italicIcon,
-          constraints: const BoxConstraints(),
+        Expanded(
+          child: IconButton(
+            onPressed: () => {},
+            icon: IconHelper.italicIcon,
+            constraints: const BoxConstraints(),
+          ),
         ),
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.strikethroughIcon,
-          constraints: const BoxConstraints(),
+        Expanded(
+          child: IconButton(
+            onPressed: () => {},
+            icon: IconHelper.strikethroughIcon,
+            constraints: const BoxConstraints(),
+          ),
         ),
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.underlineIcon,
-          constraints: const BoxConstraints(),
+        Expanded(
+          child: IconButton(
+            onPressed: () => {},
+            icon: IconHelper.underlineIcon,
+            constraints: const BoxConstraints(),
+          ),
         ),
       ],
     );

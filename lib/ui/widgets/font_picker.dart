@@ -17,21 +17,15 @@ class FontPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Wrap(
       children: [
-        Expanded(
-          flex: 3,
-          child: _FontFamily(
-            onFontFamilyChanged: onFontFamilyChanged,
-            initialFontFamily: initialFontFamily,
-          ),
+        _FontFamily(
+          onFontFamilyChanged: onFontFamilyChanged,
+          initialFontFamily: initialFontFamily,
         ),
-        Expanded(
-          flex: 1,
-          child: _FontSize(
-            onFontSizeChanged: onFontSizeChanged,
-            initialFontSize: initialFontSize,
-          ),
+        _FontSize(
+          onFontSizeChanged: onFontSizeChanged,
+          initialFontSize: initialFontSize,
         ),
       ],
     );
@@ -69,22 +63,26 @@ class _FontFamily extends StatelessWidget {
       fontFamilyIndex = fontFamilies.indexOf(initialFontFamily!);
     }
 
-    return DropdownButtonFormField<String>(
-      value: fontFamilies[fontFamilyIndex],
-      items: fontFamilies.map((font) {
-        return DropdownMenuItem(
-          value: font,
-          child: Text(
-            font,
-            style: GoogleFonts.getFont(font),
-          ),
-        );
-      }).toList(),
-      onChanged: (selectedFontFamily) {
-        if (selectedFontFamily != null) {
-          onFontFamilyChanged(selectedFontFamily);
-        }
-      },
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 140),
+      child: DropdownButtonFormField<String>(
+        value: fontFamilies[fontFamilyIndex],
+        isExpanded: true,
+        items: fontFamilies.map((font) {
+          return DropdownMenuItem(
+            value: font,
+            child: Text(
+              font,
+              style: GoogleFonts.getFont(font),
+            ),
+          );
+        }).toList(),
+        onChanged: (selectedFontFamily) {
+          if (selectedFontFamily != null) {
+            onFontFamilyChanged(selectedFontFamily);
+          }
+        },
+      ),
     );
   }
 }
@@ -118,19 +116,23 @@ class _FontSize extends StatelessWidget {
       fontSizeIndex = fontSizes.indexOf(initialFontSize!);
     }
 
-    return DropdownButtonFormField<double>(
-      value: fontSizes[fontSizeIndex],
-      items: fontSizes.map((font) {
-        return DropdownMenuItem(
-          value: font,
-          child: Text(font.toInt().toString()),
-        );
-      }).toList(),
-      onChanged: (selectedFontSize) {
-        if (selectedFontSize != null) {
-          onFontSizeChanged(selectedFontSize);
-        }
-      },
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 45),
+      child: DropdownButtonFormField<double>(
+        value: fontSizes[fontSizeIndex],
+        isExpanded: true,
+        items: fontSizes.map((font) {
+          return DropdownMenuItem(
+            value: font,
+            child: Text(font.toInt().toString()),
+          );
+        }).toList(),
+        onChanged: (selectedFontSize) {
+          if (selectedFontSize != null) {
+            onFontSizeChanged(selectedFontSize);
+          }
+        },
+      ),
     );
   }
 }

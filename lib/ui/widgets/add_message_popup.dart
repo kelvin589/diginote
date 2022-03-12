@@ -13,6 +13,7 @@ import 'package:diginote/ui/widgets/message_options/text_alignment_selector.dart
 import 'package:diginote/ui/widgets/message_options/typeface_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AddMessagePopup extends StatefulWidget {
   const AddMessagePopup({Key? key, required this.screenToken, this.message})
@@ -57,42 +58,43 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> formOptions = [
-      Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: width,
-              height: height,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  HeaderInput(
-                    headerController: _headerController,
-                    fontFamily: fontFamily,
-                    fontSize: fontSize,
-                    backgroundColour: backgroundColour,
-                    foregroundColour: foregroundColour,
-                    width: width,
-                    height: height,
-                  ),
-                  MessageInput(
-                    messageController: _messageController,
-                    fontFamily: fontFamily,
-                    fontSize: fontSize,
-                    backgroundColour: backgroundColour,
-                    foregroundColour: foregroundColour,
-                    width: width,
-                    height: height,
-                  ),
-                ],
-              ),
+    Widget messageBodyAndHeader = Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: width,
+            height: height,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                HeaderInput(
+                  headerController: _headerController,
+                  fontFamily: fontFamily,
+                  fontSize: fontSize,
+                  backgroundColour: backgroundColour,
+                  foregroundColour: foregroundColour,
+                  width: width,
+                  height: height,
+                ),
+                MessageInput(
+                  messageController: _messageController,
+                  fontFamily: fontFamily,
+                  fontSize: fontSize,
+                  backgroundColour: backgroundColour,
+                  foregroundColour: foregroundColour,
+                  width: width,
+                  height: height,
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+
+    List<Widget> formOptions = [
       MessageSizeSelector(
         currentWidth: width,
         currentHeight: height,
@@ -138,17 +140,33 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         title: widget.message == null
             ? const Text('Add Message')
             : const Text('Save Message'),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
+        contentPadding: const EdgeInsets.all(16.0),
         content: Form(
           key: _formKey,
-          child: SizedBox(
-            width: double.maxFinite,
-            child: ListView.separated(
-              itemCount: formOptions.length,
-              separatorBuilder: (context, index) => const Divider(
-                color: Colors.transparent,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: messageBodyAndHeader,
               ),
-              itemBuilder: (context, index) => formOptions[index],
-            ),
+              Expanded(
+                child: Container(
+                  width: kIsWeb ? 400 : double.maxFinite,
+                  child: Scrollbar(
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: formOptions.length,
+                      separatorBuilder: (context, index) => const Divider(
+                        color: Colors.transparent,
+                      ),
+                      itemBuilder: (context, index) => formOptions[index],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         actions: [
