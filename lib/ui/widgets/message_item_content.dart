@@ -32,9 +32,8 @@ class MessageItemContent extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               message.header != ""
-                  ? SizedBox(
-                      height: height * 0.25,
-                      width: width,
+                  ? Expanded(
+                      flex: 1,
                       child: AutoSizeText(
                         message.header,
                         minFontSize: 3,
@@ -45,6 +44,7 @@ class MessageItemContent extends StatelessWidget {
                     )
                   : Container(),
               Expanded(
+                flex: 2,
                 child: Center(
                   child: AutoSizeText(
                     message.message,
@@ -64,7 +64,12 @@ class MessageItemContent extends StatelessWidget {
 }
 
 class StickyNote extends StatelessWidget {
-  const StickyNote({Key? key, required this.child, required this.color, required this.width, required this.height})
+  const StickyNote(
+      {Key? key,
+      required this.child,
+      required this.color,
+      required this.width,
+      required this.height})
       : super(key: key);
 
   final Widget child;
