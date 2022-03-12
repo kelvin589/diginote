@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/core/providers/zoom_provider.dart';
 import 'package:diginote/ui/widgets/message_item_content.dart';
 import 'package:diginote/ui/widgets/message_item_paneled.dart';
 import 'package:flutter/material.dart';
@@ -32,12 +33,14 @@ class _MessageItemState extends State<MessageItem> {
   @override
   void initState() {
     super.initState();
-    messageScaling = min(widget.scaleFactorX, widget.scaleFactorY);
+    messageScaling = max(widget.scaleFactorX, widget.scaleFactorY);
   }
 
   // Since positiioning message from top left, need to account for the size
   @override
   Widget build(BuildContext context) {
+    double zoom = Provider.of<ZoomProvider>(context).zoom;
+
     return Positioned(
       left: widget.message.x / widget.scaleFactorX,
       top: widget.message.y / widget.scaleFactorY,
@@ -49,8 +52,8 @@ class _MessageItemState extends State<MessageItem> {
             child: MessageItemContent(
               selected: true,
               message: widget.message,
-              width: widget.message.width * messageScaling,
-              height: widget.message.height * messageScaling,
+              width: widget.message.width / messageScaling * zoom,
+              height: widget.message.height / messageScaling * zoom,
             ),
           ),
           childWhenDragging: Container(),
@@ -59,8 +62,8 @@ class _MessageItemState extends State<MessageItem> {
             message: widget.message,
             displayOptions: displayOptions,
             onDelete: onDelete,
-            width: widget.message.width * messageScaling,
-            height: widget.message.height * messageScaling,
+            width: widget.message.width / messageScaling * zoom,
+            height: widget.message.height / messageScaling * zoom,
           ),
           onDragEnd: (details) async {
             // Offset was not correct
