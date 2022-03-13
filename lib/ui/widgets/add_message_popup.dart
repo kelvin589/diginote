@@ -58,36 +58,33 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
 
   @override
   Widget build(BuildContext context) {
-    Widget messageBodyAndHeader = Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+    Widget messageBodyAndHeader = Container(
+      width: width,
+      height: height,
+      child: Column(
         children: [
-          Container(
-            width: width,
-            height: height,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                HeaderInput(
-                  headerController: _headerController,
-                  fontFamily: fontFamily,
-                  fontSize: fontSize,
-                  backgroundColour: backgroundColour,
-                  foregroundColour: foregroundColour,
-                  width: width,
-                  height: height,
-                ),
-                MessageInput(
-                  messageController: _messageController,
-                  fontFamily: fontFamily,
-                  fontSize: fontSize,
-                  backgroundColour: backgroundColour,
-                  foregroundColour: foregroundColour,
-                  width: width,
-                  height: height,
-                ),
-              ],
+          Expanded(
+            flex: 1,
+            child: HeaderInput(
+              headerController: _headerController,
+              fontFamily: fontFamily,
+              fontSize: fontSize,
+              backgroundColour: backgroundColour,
+              foregroundColour: foregroundColour,
+              width: width,
+              height: height,
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: MessageInput(
+              messageController: _messageController,
+              fontFamily: fontFamily,
+              fontSize: fontSize,
+              backgroundColour: backgroundColour,
+              foregroundColour: foregroundColour,
+              width: width,
+              height: height,
             ),
           ),
         ],
@@ -141,7 +138,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
             ? const Text('Add Message')
             : const Text('Save Message'),
         insetPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
-        contentPadding: const EdgeInsets.all(16.0),
+        contentPadding: const EdgeInsets.all(8.0),
         content: Form(
           key: _formKey,
           child: Row(

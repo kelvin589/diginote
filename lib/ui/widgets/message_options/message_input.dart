@@ -24,25 +24,23 @@ class MessageInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height * 0.75,
-      child: TextFormField(
-        keyboardType: TextInputType.multiline,
-        controller: messageController,
-        maxLines: null,
-        expands: true,
-        decoration: InputDecoration(
-          hintText: 'Message',
-          fillColor: backgroundColour,
-          filled: true,
-          border: InputBorder.none,
-        ),
-        validator: Validator.isEmpty,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        style: GoogleFonts.getFont(fontFamily,
-            fontSize: fontSize, color: foregroundColour),
+    return TextFormField(
+      keyboardType: TextInputType.multiline,
+      controller: messageController,
+      maxLines: null,
+      expands: true,
+      decoration: InputDecoration(
+        hintText: 'Message*',
+        fillColor: backgroundColour,
+        filled: true,
+        border: InputBorder.none,
+        errorMaxLines: 2,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)
       ),
+      validator: Validator.isEmpty,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      style: GoogleFonts.getFont(fontFamily,
+          fontSize: fontSize, color: foregroundColour),
     );
   }
 }
