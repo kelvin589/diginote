@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class IconHelper {
   static Icon screensIcon = const Icon(Icons.tablet);
-  static Icon templatesIcon = const Icon(Icons.note_outlined);
+  static Icon templatesIcon = const Icon(Icons.sticky_note_2_outlined);
   static Icon settingsIcon = const Icon(Icons.settings_outlined);
   static Icon previewIcon = const Icon(Icons.remove_red_eye_outlined);
   static Icon addIcon = const Icon(Icons.add_box_outlined);
