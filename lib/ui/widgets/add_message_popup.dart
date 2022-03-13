@@ -34,7 +34,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
 
   String fontFamily = "Roboto";
   double fontSize = 16.0;
-  Color backgroundColour = Colors.yellow;
+  Color backgroundColour = const Color.fromARGB(255, 255, 255, 153);
   Color foregroundColour = Colors.black;
   double width = 100;
   double height = 100;
