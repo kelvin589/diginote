@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:uuid/uuid.dart';
 
@@ -12,6 +13,8 @@ class TemplatesProvider extends ChangeNotifier {
 
   // Must call init after creating provider
   Future<void> init() async {
+    if (kIsWeb) { return; }
+
     final path = await _localPath;
     final directory = Directory('$path/$directoryName');
 

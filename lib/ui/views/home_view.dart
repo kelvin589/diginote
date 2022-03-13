@@ -31,7 +31,6 @@ class _HomeNavigationState extends State<HomeNavigation> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_selectedPage.titleText),
-        actions: _appbarActions(_selectedPage),
       ),
       body: Center(
         child: _selectedPage.widget,
@@ -54,6 +53,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
         currentIndex: _selectedPage.index,
         onTap: _onItemTapped,
       ),
+      floatingActionButton: _getFloatingActionButton(_selectedPage),
     );
   }
 
@@ -63,30 +63,26 @@ class _HomeNavigationState extends State<HomeNavigation> {
     });
   }
 
-  List<Widget> _appbarActions(NavigationPage page) {
+  Widget? _getFloatingActionButton(NavigationPage page) {
     switch (page) {
       case NavigationPage.screens:
-        return [
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => const AddScreenPopup(),
-            ),
-            icon: IconHelper.addIcon,
+        return FloatingActionButton(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => const AddScreenPopup(),
           ),
-        ];
+          child: Icon(Icons.add),
+        );
       case NavigationPage.templates:
-        return [
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => const AddTemplatePopup(),
-            ),
-            icon: IconHelper.addIcon,
+        return FloatingActionButton(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => const AddTemplatePopup(),
           ),
-        ];
+          child: Icon(Icons.add),
+        );
       default:
-        return [];
+        return null;
     }
   }
 }

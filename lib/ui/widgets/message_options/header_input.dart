@@ -24,21 +24,19 @@ class HeaderInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height * 0.25,
-      child: AutoSizeTextField(
-        maxLines: 1,
-        controller: headerController,
-        decoration: InputDecoration(
-          hintText: 'Header',
-          fillColor: backgroundColour,
-          filled: true,
-          border: InputBorder.none,
-        ),
-        style: GoogleFonts.getFont(fontFamily,
-            fontSize: fontSize, color: foregroundColour),
+    return AutoSizeTextField(
+      maxLines: 1,
+      minFontSize: 1,
+      controller: headerController,
+      decoration: InputDecoration(
+        hintText: 'Header',
+        fillColor: backgroundColour,
+        filled: true,
+        border: InputBorder.none,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8.0,)
       ),
+      style: GoogleFonts.getFont(fontFamily,
+          fontSize: fontSize, color: foregroundColour, height: 0.1),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/core/providers/zoom_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/widgets/add_message_popup.dart';
 import 'package:diginote/ui/widgets/message_item.dart';
@@ -64,38 +65,59 @@ class _PreviewViewState extends State<PreviewView> {
           title: Text(widget.screenName),
           actions: actionItems,
         ),
-        body: Center(
-          child: Container(
-            width: deviceSize.width,
-            height: deviceSize.height,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-            ),
-            child: StreamBuilder<Iterable<Message>>(
-              stream:
-                  Provider.of<FirebasePreviewProvider>(context, listen: false)
+        body: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            Center(
+              child: Container(
+                width: deviceSize.width,
+                height: deviceSize.height,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                ),
+                child: StreamBuilder<Iterable<Message>>(
+                  stream: Provider.of<FirebasePreviewProvider>(context,
+                          listen: false)
                       .getMessages(widget.screenToken),
-              builder: (BuildContext context, snapshot) {
-                if (snapshot.hasError) {
-                  return Text('Error ${(snapshot.error.toString())}');
-                }
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error ${(snapshot.error.toString())}');
+                    }
 
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                Iterable<Message>? screens = snapshot.data;
-                if (screens != null) {
-                  return Stack(
-                    children: _updateScreenItems(
-                        context, screens, scaleFactorX, scaleFactorY),
-                  );
-                } else {
-                  return const Text('Error occurred');
-                }
-              },
+                    Iterable<Message>? screens = snapshot.data;
+                    if (screens != null) {
+                      return Stack(
+                        children: _updateScreenItems(
+                            context, screens, scaleFactorX, scaleFactorY),
+                      );
+                    } else {
+                      return const Text('Error occurred');
+                    }
+                  },
+                ),
+              ),
             ),
-          ),
+            Column(
+              children: [
+                TextButton(
+                  onPressed: () =>
+                      Provider.of<ZoomProvider>(context, listen: false)
+                          .zoomIn(),
+                  child: const Text("+", style: TextStyle(fontSize: 35)),
+                ),
+                TextButton(
+                  onPressed: () =>
+                      Provider.of<ZoomProvider>(context, listen: false)
+                          .zoomOut(),
+                  child: const Text("-", style: TextStyle(fontSize: 35)),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

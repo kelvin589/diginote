@@ -1,5 +1,6 @@
 import 'package:diginote/core/models/screen_model.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/core/providers/zoom_provider.dart';
 import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:diginote/ui/views/preview_view.dart';
 import 'package:diginote/ui/widgets/screen_item.dart';
@@ -21,7 +22,7 @@ class ScreensView extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
 
         Iterable<Screen>? screens = snapshot.data;
@@ -76,9 +77,17 @@ class ScreensView extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider<TimerProvider>(
-          create: (context) =>
-              TimerProvider(duration: const Duration(seconds: 1)),
+        builder: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider<TimerProvider>(
+              create: (context) =>
+                  TimerProvider(duration: const Duration(seconds: 1)),
+            ),
+            ChangeNotifierProvider<ZoomProvider>(
+              create: (context) =>
+                  ZoomProvider(),
+            ),
+          ],
           child: PreviewView(
             screenToken: screen.screenToken,
             screenWidth: screen.width,

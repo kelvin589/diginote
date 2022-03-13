@@ -5,29 +5,43 @@ import 'package:flutter/material.dart';
 class TypefaceSelector extends StatelessWidget {
   const TypefaceSelector({Key? key}) : super(key: key);
 
+  final buttonPadding = EdgeInsets.zero;
+
   @override
   Widget build(BuildContext context) {
     final Widget typeface = Row(
       children: [
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.boldIcon,
-          constraints: const BoxConstraints(),
+        Expanded(
+          child: IconButton(
+            onPressed: () => {},
+            icon: IconHelper.boldIcon,
+            constraints: const BoxConstraints(),
+            padding: buttonPadding,
+          ),
         ),
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.italicIcon,
-          constraints: const BoxConstraints(),
+        Expanded(
+          child: IconButton(
+            onPressed: () => {},
+            icon: IconHelper.italicIcon,
+            constraints: const BoxConstraints(),
+            padding: buttonPadding,
+          ),
         ),
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.strikethroughIcon,
-          constraints: const BoxConstraints(),
+        Expanded(
+          child: IconButton(
+            onPressed: () => {},
+            icon: IconHelper.strikethroughIcon,
+            constraints: const BoxConstraints(),
+            padding: buttonPadding,
+          ),
         ),
-        IconButton(
-          onPressed: () => {},
-          icon: IconHelper.underlineIcon,
-          constraints: const BoxConstraints(),
+        Expanded(
+          child: IconButton(
+            onPressed: () => {},
+            icon: IconHelper.underlineIcon,
+            constraints: const BoxConstraints(),
+            padding: buttonPadding,
+          ),
         ),
       ],
     );
