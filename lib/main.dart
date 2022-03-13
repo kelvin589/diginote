@@ -10,6 +10,7 @@ import 'package:diginote/ui/views/login_view.dart';
 import 'package:diginote/ui/views/register_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,15 +23,21 @@ void main() async {
 
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
   FirebaseAuth authInstance = FirebaseAuth.instance;
+  FirebaseMessaging messagingInstance = FirebaseMessaging.instance;
 
   final FirebaseLoginProvider loginProvider = FirebaseLoginProvider(authInstance: authInstance);
+  loginProvider.listen(authInstance);
+
   final FirebaseRegisterProvider registerProvider = FirebaseRegisterProvider(authInstance: authInstance);
   final FirebaseScreensProvider screensProvider = FirebaseScreensProvider(authInstance: authInstance, firestoreInstance: firestoreInstance);
   final FirebasePreviewProvider previewProvider = FirebasePreviewProvider(firestoreInstance: firestoreInstance);
   final FirebaseScreenInfoProvider screenInfoProvider = FirebaseScreenInfoProvider(firestoreInstance: firestoreInstance, authInstance: authInstance);
+  
   final TemplatesProvider templatesProvider = TemplatesProvider();
   await templatesProvider.init();
-  loginProvider.listen(authInstance);
+  
+  final TokenUpdater tokenUpdater = TokenUpdater(authInstance: authInstance, messagingInstance: messagingInstance, firestoreInstance: firestoreInstance);
+  await tokenUpdater.init();
 
   runApp(MultiProvider(
     providers: [
@@ -69,5 +76,39 @@ class MyApp extends StatelessWidget {
                     .applicationRegisterState),
       },
     );
+  }
+}
+
+class TokenUpdater {
+  TokenUpdater(
+      {required this.authInstance,
+      required this.messagingInstance,
+      required this.firestoreInstance});
+
+  final FirebaseAuth authInstance;
+  final FirebaseMessaging messagingInstance;
+  final FirebaseFirestore firestoreInstance;
+
+  String userID = "";
+
+  Future<void> init() async {
+    print("INIT");
+    authInstance.userChanges().listen((User? user) {
+      if (user != null) {
+        userID = user.uid;
+      }
+    });
+
+    String? token = await FirebaseMessaging.instance.getToken();
+    if (token != null) {
+      await _updateToken(token);
+    }
+    messagingInstance.onTokenRefresh.listen(_updateToken);
+  }
+
+  Future<void> _updateToken(String token) async {
+    await FirebaseFirestore.instance.collection('users').doc(userID).set({
+      'FCMTokens': FieldValue.arrayUnion([token]),
+    }, SetOptions(merge: true),);
   }
 }
