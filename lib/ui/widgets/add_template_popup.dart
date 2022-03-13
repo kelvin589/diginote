@@ -109,20 +109,20 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
-        initialFontFamily: widget.template?.fontFamily,
-        initialFontSize: widget.template?.fontSize,
+        initialFontFamily: widget.template?.fontFamily ?? fontFamily,
+        initialFontSize: widget.template?.fontSize ?? fontSize,
       ),
       ForegroundColourSelector(
         onColourChanged: onForegroundColourChanged,
         initialColour: widget.template != null
             ? Color(widget.template!.foregroundColour)
-            : null,
+            : foregroundColour,
       ),
       BackgroundColourSelector(
         onColourChanged: onBackgroundColourChanged,
         initialColour: widget.template != null
             ? Color(widget.template!.backgrondColour)
-            : null,
+            : backgroundColour,
       ),
       const ListingSelector(),
       const TextAlignmentSelector(),

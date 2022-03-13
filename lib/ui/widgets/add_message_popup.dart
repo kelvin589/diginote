@@ -109,20 +109,20 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
-        initialFontFamily: widget.message?.fontFamily,
-        initialFontSize: widget.message?.fontSize,
+        initialFontFamily: widget.message?.fontFamily ?? fontFamily,
+        initialFontSize: widget.message?.fontSize ?? fontSize,
       ),
       ForegroundColourSelector(
         onColourChanged: onForegroundColourChanged,
         initialColour: widget.message != null
             ? Color(widget.message!.foregroundColour)
-            : null,
+            : foregroundColour,
       ),
       BackgroundColourSelector(
         onColourChanged: onBackgroundColourChanged,
         initialColour: widget.message != null
             ? Color(widget.message!.backgrondColour)
-            : null,
+            : backgroundColour,
       ),
       const ListingSelector(),
       const TextAlignmentSelector(),
