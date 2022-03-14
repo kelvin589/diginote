@@ -5,6 +5,7 @@ import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/core/providers/firebase_screen_info_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/core/providers/io_templates_provider.dart';
+import 'package:diginote/core/services/notification_service.dart';
 import 'package:diginote/core/services/token_updater_service.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/login_view.dart';
@@ -48,6 +49,9 @@ void main() async {
       messagingInstance: messagingInstance,
       firestoreInstance: firestoreInstance);
   await tokenUpdater.init();
+
+  final NotificationService notificationService = NotificationService();
+  await notificationService.init();
 
   runApp(MultiProvider(
     providers: [
