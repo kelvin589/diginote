@@ -40,6 +40,7 @@ class ScreenItem extends StatelessWidget {
               context: context,
               screenToken: screen.screenToken,
               screenName: screen.name,
+              screenInfo: screenInfo,
             ),
           );
         } else {
@@ -77,12 +78,14 @@ class ScreenItem extends StatelessWidget {
   void _showScreenSettings(
       {required BuildContext context,
       required String screenToken,
-      required String screenName}) {
+      required String screenName,
+      required ScreenInfo screenInfo}) {
     showDialog(
       context: context,
       builder: (context) => ScreenSettingsPopup(
         screenToken: screenToken,
         screenName: screenName,
+        screenInfo: screenInfo,
         onDelete: () async {
           await _onDelete(context, screenToken);
         },

@@ -1,3 +1,4 @@
+import 'package:diginote/core/models/screen_info_model.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -6,11 +7,13 @@ class ScreenSettingsPopup extends StatelessWidget {
       {Key? key,
       required this.screenToken,
       required this.screenName,
-      required this.onDelete})
+      required this.onDelete,
+      required this.screenInfo})
       : super(key: key);
 
   final String screenToken;
   final String screenName;
+  final ScreenInfo screenInfo;
   final Future<void> Function() onDelete;
 
   @override
