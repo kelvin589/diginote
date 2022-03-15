@@ -108,5 +108,11 @@ class FirebaseScreensRepository {
         }, SetOptions(merge: true))
         .then((value) => print("Deleted user's screen"))
         .catchError((onError) => print("Couldn't delete the user's screen"));
+    await firestoreInstance
+        .collection('screenInfo')
+        .doc(screenToken)
+        .delete()
+        .then((value) => print("Deleted screen info"))
+        .catchError((onError) => print("Failed to delete screen info: $onError"));
   }
 }
