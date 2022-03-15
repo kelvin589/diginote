@@ -16,4 +16,8 @@ class FirebaseScreenInfoProvider extends ChangeNotifier {
   Stream<Iterable<ScreenInfo>> getScreenInfo(String screenToken) {
     return _screenInfoRepository.getScreenInfo(screenToken);
   }
+
+  Future<void> setScreenInfo(String screenToken, ScreenInfo newScreenInfo) async {
+    await _screenInfoRepository.setScreenInfo(screenToken, newScreenInfo);
+  }
 }
