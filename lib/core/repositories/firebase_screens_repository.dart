@@ -64,6 +64,16 @@ class FirebaseScreensRepository {
         }, SetOptions(merge: true))
         .then((value) => print("Updated user's screens"))
         .catchError((onError) => print("Couldn't update the user's screens"));
+    // Set default values in screen screenInfo
+    await firestoreInstance
+        .collection('screenInfo')
+        .doc(screenToken)
+        .set({
+          "lowBatteryThreshold": 30,
+          "lowBatteryNotificationDelay": 600,
+        }, SetOptions(merge: true))
+        .then((value) => print("Updated screen info"))
+        .catchError((onError) => print("Couldn't update screen info"));
   }
 
   Stream<Iterable<Screen>> getScreens() {
@@ -113,6 +123,7 @@ class FirebaseScreensRepository {
         .doc(screenToken)
         .delete()
         .then((value) => print("Deleted screen info"))
-        .catchError((onError) => print("Failed to delete screen info: $onError"));
+        .catchError(
+            (onError) => print("Failed to delete screen info: $onError"));
   }
 }
