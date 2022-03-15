@@ -15,14 +15,18 @@ class TokenUpdaterService {
   String userID = "";
 
   Future<void> init() async {
-    authInstance.userChanges().listen((User? user) {
+    String? token = await FirebaseMessaging.instance.getToken();
+
+    authInstance.userChanges().listen((User? user) async {
       if (user != null) {
         userID = user.uid;
+        if (token != null) {
+          await _updateToken(token);
+        }
       }
     });
 
-    String? token = await FirebaseMessaging.instance.getToken();
-    if (token != null) {
+    if (token != null  && userID.isEmpty == false) {
       await _updateToken(token);
     }
     messagingInstance.onTokenRefresh.listen(_updateToken);
