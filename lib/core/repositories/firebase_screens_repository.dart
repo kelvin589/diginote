@@ -33,8 +33,8 @@ class FirebaseScreensRepository {
         )
         .get()
         .then(
-      (value) {
-        _updatescreen(screen, value.docs.map((e) => e.id).first);
+      (value) async {
+        await _updatescreen(screen, value.docs.map((e) => e.id).first);
         onSuccess();
       },
     ).catchError((_) async => await onError());
@@ -72,6 +72,7 @@ class FirebaseScreensRepository {
           "lowBatteryThreshold": 30,
           "lowBatteryNotificationDelay": 600,
           "batteryReportingDelay": 600,
+          "screenToken": screenToken,
         }, SetOptions(merge: true))
         .then((value) => print("Updated screen info"))
         .catchError((onError) => print("Couldn't update screen info"));
