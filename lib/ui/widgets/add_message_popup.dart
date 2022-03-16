@@ -101,7 +101,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         currentHeight: height,
         onMessageSizeChanged: onMessageSizeChanged,
       ),
-      const TypefaceSelector(),
+      // const TypefaceSelector(),
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
@@ -116,7 +116,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         onColourChanged: onBackgroundColourChanged,
         initialColour: backgroundColour,
       ),
-      const ListingSelector(),
+      // const ListingSelector(),
       TextAlignmentSelector(
         onTextAlignmentChanged: onTextAlignmentChanged,
         initialTextAlignment: textAlignment,

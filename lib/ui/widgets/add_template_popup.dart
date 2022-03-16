@@ -102,7 +102,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         currentHeight: height,
         onMessageSizeChanged: onMessageSizeChanged,
       ),
-      const TypefaceSelector(),
+      // const TypefaceSelector(),
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
@@ -117,7 +117,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         onColourChanged: onBackgroundColourChanged,
         initialColour: backgroundColour,
       ),
-      const ListingSelector(),
+      // const ListingSelector(),
       TextAlignmentSelector(
         onTextAlignmentChanged: onTextAlignmentChanged,
         initialTextAlignment: textAlignment,
