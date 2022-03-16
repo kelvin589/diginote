@@ -37,7 +37,8 @@ class TemplatesProvider extends ChangeNotifier {
         backgrondColour: 4294702838,
         foregroundColour: 4294902531,
         width: 200.0,
-        height: 200.0);
+        height: 200.0,
+        textAlignment: TextAlign.left.toString());
     await addTemplate(doNotDisturb);
   }
 

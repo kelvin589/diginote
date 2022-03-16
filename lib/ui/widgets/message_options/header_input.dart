@@ -11,7 +11,8 @@ class HeaderInput extends StatelessWidget {
       required this.backgroundColour,
       required this.foregroundColour,
       required this.width,
-      required this.height})
+      required this.height,
+      required this.textAlign})
       : super(key: key);
 
   final TextEditingController headerController;
@@ -21,6 +22,7 @@ class HeaderInput extends StatelessWidget {
   final Color foregroundColour;
   final double width;
   final double height;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class HeaderInput extends StatelessWidget {
       ),
       style: GoogleFonts.getFont(fontFamily,
           fontSize: fontSize, color: foregroundColour, height: 0.1),
+      textAlign: textAlign,
     );
   }
 }

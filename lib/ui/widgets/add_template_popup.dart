@@ -39,6 +39,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
   Color foregroundColour = Colors.black;
   double width = 100;
   double height = 100;
+  TextAlign textAlignment = TextAlign.left;
 
   bool isLoading = false;
 
@@ -54,6 +55,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
       foregroundColour = Color(widget.template!.foregroundColour);
       width = widget.template!.width;
       height = widget.template!.height;
+      textAlignment = TextAlign.values.byName(widget.template!.textAlignment);
     }
   }
 
@@ -74,6 +76,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
               foregroundColour: foregroundColour,
               width: width,
               height: height,
+              textAlign: textAlignment,
             ),
           ),
           Expanded(
@@ -86,6 +89,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
               foregroundColour: foregroundColour,
               width: width,
               height: height,
+              textAlign: textAlignment,
             ),
           ),
         ],
@@ -96,34 +100,28 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
       MessageSizeSelector(
         currentWidth: width,
         currentHeight: height,
-        onMessageSizeChanged: (width, height) {
-          setState(() {
-            this.width = width;
-            this.height = height;
-          });
-        },
+        onMessageSizeChanged: onMessageSizeChanged,
       ),
-      const TypefaceSelector(),
+      // const TypefaceSelector(),
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
-        initialFontFamily: widget.template?.fontFamily ?? fontFamily,
-        initialFontSize: widget.template?.fontSize ?? fontSize,
+        initialFontFamily: fontFamily,
+        initialFontSize: fontSize,
       ),
       ForegroundColourSelector(
         onColourChanged: onForegroundColourChanged,
-        initialColour: widget.template != null
-            ? Color(widget.template!.foregroundColour)
-            : foregroundColour,
+        initialColour: foregroundColour,
       ),
       BackgroundColourSelector(
         onColourChanged: onBackgroundColourChanged,
-        initialColour: widget.template != null
-            ? Color(widget.template!.backgrondColour)
-            : backgroundColour,
+        initialColour: backgroundColour,
       ),
-      const ListingSelector(),
-      const TextAlignmentSelector(),
+      // const ListingSelector(),
+      TextAlignmentSelector(
+        onTextAlignmentChanged: onTextAlignmentChanged,
+        initialTextAlignment: textAlignment,
+      ),
     ];
 
     return GestureDetector(
@@ -138,7 +136,8 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         title: widget.template == null
             ? const Text('Add Template')
             : const Text('Save Template'),
-        insetPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
+        insetPadding:
+            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
         contentPadding: const EdgeInsets.all(8.0),
         content: Form(
           key: _formKey,
@@ -195,16 +194,19 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
     );
   }
 
-  void onFontFamilyChanged(String fontFamily) {
+  void onMessageSizeChanged(double width, double height) {
     setState(() {
-      this.fontFamily = fontFamily;
+      this.width = width;
+      this.height = height;
     });
   }
 
+  void onFontFamilyChanged(String fontFamily) {
+    setState(() => this.fontFamily = fontFamily);
+  }
+
   void onFontSizeChanged(double fontSize) {
-    setState(() {
-      this.fontSize = fontSize;
-    });
+    setState(() => this.fontSize = fontSize);
   }
 
   void onForegroundColourChanged(Color newColour) {
@@ -213,6 +215,10 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
 
   void onBackgroundColourChanged(Color newColour) {
     setState(() => backgroundColour = newColour);
+  }
+
+  void onTextAlignmentChanged(TextAlign newTextAlignment) {
+    setState(() => textAlignment = newTextAlignment);
   }
 
   Future<void> _okPressed() async {
@@ -225,7 +231,8 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         backgrondColour: backgroundColour.value,
         foregroundColour: foregroundColour.value,
         width: width,
-        height: height);
+        height: height,
+        textAlignment: textAlignment.name);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
@@ -246,7 +253,8 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         backgrondColour: backgroundColour.value,
         foregroundColour: foregroundColour.value,
         width: width,
-        height: height);
+        height: height,
+        textAlignment: textAlignment.name);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;

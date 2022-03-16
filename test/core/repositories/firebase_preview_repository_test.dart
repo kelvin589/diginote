@@ -3,6 +3,7 @@ import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/models/screen_model.dart';
 import 'package:diginote/core/repositories/firebase_preview_repository.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../message_matcher.dart';
@@ -40,20 +41,22 @@ void main() async {
   Message messageBodyIDOnly(String message, String id,
       {double x = 0, double y = 0}) {
     return Message(
-        header: "header",
-        message: message,
-        x: x,
-        y: y,
-        id: id,
-        from: clock.now(),
-        to: clock.now(),
-        scheduled: false,
-        fontFamily: "Roboto",
-        fontSize: 12,
-        backgrondColour: 4294961979,
-        foregroundColour: 4278190080,
-        width: 100,
-        height: 100);
+      header: "header",
+      message: message,
+      x: x,
+      y: y,
+      id: id,
+      from: clock.now(),
+      to: clock.now(),
+      scheduled: false,
+      fontFamily: "Roboto",
+      fontSize: 12,
+      backgrondColour: 4294961979,
+      foregroundColour: 4278190080,
+      width: 100,
+      height: 100,
+      textAlignment: TextAlign.left.name,
+    );
   }
 
   Future<Message?> getFirstMessage() async {
@@ -76,20 +79,22 @@ void main() async {
 
   test('Add message', () async {
     Message message = Message(
-        header: "header",
-        message: "message",
-        x: 0,
-        y: 0,
-        id: "id",
-        from: clock.now(),
-        to: clock.now(),
-        scheduled: false,
-        fontFamily: "Roboto",
-        fontSize: 12,
-        backgrondColour: 4294961979,
-        foregroundColour: 4278190080,
-        width: 100,
-        height: 100);
+      header: "header",
+      message: "message",
+      x: 0,
+      y: 0,
+      id: "id",
+      from: clock.now(),
+      to: clock.now(),
+      scheduled: false,
+      fontFamily: "Roboto",
+      fontSize: 12,
+      backgrondColour: 4294961979,
+      foregroundColour: 4278190080,
+      width: 100,
+      height: 100,
+      textAlignment: TextAlign.left.name,
+    );
     await previewRepository.addMessage(screenToken, message);
 
     final firstMessage = await getFirstMessage();

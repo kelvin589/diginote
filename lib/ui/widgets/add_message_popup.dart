@@ -38,6 +38,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   Color foregroundColour = Colors.black;
   double width = 100;
   double height = 100;
+  TextAlign textAlignment = TextAlign.left;
 
   bool isLoading = false;
 
@@ -53,6 +54,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       foregroundColour = Color(widget.message!.foregroundColour);
       width = widget.message!.width;
       height = widget.message!.height;
+      textAlignment = TextAlign.values.byName(widget.message!.textAlignment);
     }
   }
 
@@ -73,6 +75,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
               foregroundColour: foregroundColour,
               width: width,
               height: height,
+              textAlign: textAlignment,
             ),
           ),
           Expanded(
@@ -85,6 +88,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
               foregroundColour: foregroundColour,
               width: width,
               height: height,
+              textAlign: textAlignment,
             ),
           ),
         ],
@@ -95,34 +99,28 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       MessageSizeSelector(
         currentWidth: width,
         currentHeight: height,
-        onMessageSizeChanged: (width, height) {
-          setState(() {
-            this.width = width;
-            this.height = height;
-          });
-        },
+        onMessageSizeChanged: onMessageSizeChanged,
       ),
-      const TypefaceSelector(),
+      // const TypefaceSelector(),
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
-        initialFontFamily: widget.message?.fontFamily ?? fontFamily,
-        initialFontSize: widget.message?.fontSize ?? fontSize,
+        initialFontFamily: fontFamily,
+        initialFontSize: fontSize,
       ),
       ForegroundColourSelector(
         onColourChanged: onForegroundColourChanged,
-        initialColour: widget.message != null
-            ? Color(widget.message!.foregroundColour)
-            : foregroundColour,
+        initialColour: foregroundColour,
       ),
       BackgroundColourSelector(
         onColourChanged: onBackgroundColourChanged,
-        initialColour: widget.message != null
-            ? Color(widget.message!.backgrondColour)
-            : backgroundColour,
+        initialColour: backgroundColour,
       ),
-      const ListingSelector(),
-      const TextAlignmentSelector(),
+      // const ListingSelector(),
+      TextAlignmentSelector(
+        onTextAlignmentChanged: onTextAlignmentChanged,
+        initialTextAlignment: textAlignment,
+      ),
     ];
 
     return GestureDetector(
@@ -137,7 +135,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         title: widget.message == null
             ? const Text('Add Message')
             : const Text('Save Message'),
-        insetPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
+        insetPadding:
+            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
         contentPadding: const EdgeInsets.all(8.0),
         content: Form(
           key: _formKey,
@@ -194,16 +193,19 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
     );
   }
 
-  void onFontFamilyChanged(String fontFamily) {
+  void onMessageSizeChanged(double width, double height) {
     setState(() {
-      this.fontFamily = fontFamily;
+      this.width = width;
+      this.height = height;
     });
   }
 
+  void onFontFamilyChanged(String fontFamily) {
+    setState(() => this.fontFamily = fontFamily);
+  }
+
   void onFontSizeChanged(double fontSize) {
-    setState(() {
-      this.fontSize = fontSize;
-    });
+    setState(() => this.fontSize = fontSize);
   }
 
   void onForegroundColourChanged(Color newColour) {
@@ -212,6 +214,10 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
 
   void onBackgroundColourChanged(Color newColour) {
     setState(() => backgroundColour = newColour);
+  }
+
+  void onTextAlignmentChanged(TextAlign newTextAlignment) {
+    setState(() => textAlignment = newTextAlignment);
   }
 
   Future<void> _okPressed() async {
@@ -230,7 +236,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         backgrondColour: backgroundColour.value,
         foregroundColour: foregroundColour.value,
         width: width,
-        height: height);
+        height: height,
+        textAlignment: textAlignment.name);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
@@ -256,7 +263,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         backgrondColour: backgroundColour.value,
         foregroundColour: foregroundColour.value,
         width: width,
-        height: height);
+        height: height,
+        textAlignment: textAlignment.name);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;

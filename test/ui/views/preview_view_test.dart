@@ -49,20 +49,22 @@ void main() async {
   Message messageBodyIDOnly(String message, String id,
       {double x = 0, double y = 0}) {
     return Message(
-        header: "header",
-        message: message,
-        x: x,
-        y: y,
-        id: id,
-        from: clock.now(),
-        to: clock.now(),
-        scheduled: false,
-        fontFamily: "Roboto",
-        fontSize: 12,
-        backgrondColour: 4294961979,
-        foregroundColour: 4278190080,
-        width: 100,
-        height: 100);
+      header: "header",
+      message: message,
+      x: x,
+      y: y,
+      id: id,
+      from: clock.now(),
+      to: clock.now(),
+      scheduled: false,
+      fontFamily: "Roboto",
+      fontSize: 12,
+      backgrondColour: 4294961979,
+      foregroundColour: 4278190080,
+      width: 100,
+      height: 100,
+      textAlignment: TextAlign.left.name,
+    );
   }
 
   testWidgets("Preview shows the screen's messages",
