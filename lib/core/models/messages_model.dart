@@ -16,6 +16,7 @@ class Message {
     required this.foregroundColour,
     required this.width,
     required this.height,
+    required this.textAlignment,
   });
 
   Message.fromJson(Map<String, Object?> json)
@@ -34,6 +35,7 @@ class Message {
           foregroundColour: json['foregroundColour']! as int,
           width: (json['width']! as num).toDouble(),
           height: (json['height']! as num).toDouble(),
+          textAlignment: json['textAlignment']! as String, 
         );
 
   final String header;
@@ -50,6 +52,7 @@ class Message {
   final int foregroundColour;
   final double width;
   final double height;
+  String textAlignment;
 
   // Don't add id as field in firebase doc
   Map<String, Object?> toJson() {
@@ -67,6 +70,7 @@ class Message {
       'foregroundColour': foregroundColour,
       'width': width,
       'height': height,
+      'textAlignment': textAlignment,
     };
   }
 }

@@ -9,6 +9,7 @@ class Template {
     required this.foregroundColour,
     required this.width,
     required this.height,
+    required this.textAlignment,
   });
 
   Template.fromJson(Map<String, Object?> json)
@@ -22,6 +23,7 @@ class Template {
         foregroundColour: json['foregroundColour']! as int,
         width: (json['width']! as num).toDouble(),
         height: (json['height']! as num).toDouble(),
+        textAlignment: json['textAlignment']! as String, 
       );
 
   final String header;
@@ -33,6 +35,7 @@ class Template {
   final int foregroundColour;
   final double width;
   final double height;
+  String textAlignment;
 
   Map<String, Object?> toJson() {
     return {
@@ -45,6 +48,7 @@ class Template {
       'foregroundColour': foregroundColour,
       'width': width,
       'height': height,
+      'textAlignment': textAlignment,
     };
   }
 }
