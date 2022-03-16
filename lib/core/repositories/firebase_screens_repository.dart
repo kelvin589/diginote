@@ -71,6 +71,7 @@ class FirebaseScreensRepository {
         .set({
           "lowBatteryThreshold": 30,
           "lowBatteryNotificationDelay": 600,
+          "batteryReportingDelay": 600,
         }, SetOptions(merge: true))
         .then((value) => print("Updated screen info"))
         .catchError((onError) => print("Couldn't update screen info"));

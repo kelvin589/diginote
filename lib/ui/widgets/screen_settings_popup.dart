@@ -25,6 +25,7 @@ class ScreenSettingsPopup extends StatefulWidget {
 class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
   late double lowBatteryNotificationDelay;
   late double lowBatteryThreshold;
+  late double batteryReportingDelay;
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
     lowBatteryNotificationDelay =
         (widget.screenInfo.lowBatteryNotificationDelay / 60).toDouble();
     lowBatteryThreshold = widget.screenInfo.lowBatteryThreshold.toDouble();
+    batteryReportingDelay = (widget.screenInfo.batteryReportingDelay / 60).toDouble();
   }
 
   @override
@@ -70,6 +72,20 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
               divisions: 60,
               label: "$lowBatteryThreshold",
             ),
+            const Text("Delay between battery reporting:"),
+            Text("${batteryReportingDelay.toInt()} minutes"),
+            Slider(
+              value: batteryReportingDelay,
+              onChanged: (newValue) {
+                setState(() {
+                  batteryReportingDelay = newValue;
+                });
+              },
+              min: 10,
+              max: 60,
+              divisions: 50,
+              label: "$batteryReportingDelay",
+            ),
             const Text("Delete Screen:"),
             _DeleteScreenButton(
                 screenName: widget.screenName, onDelete: widget.onDelete),
@@ -97,6 +113,7 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
     widget.screenInfo.lowBatteryNotificationDelay =
         (lowBatteryNotificationDelay * 60).toInt();
     widget.screenInfo.lowBatteryThreshold = lowBatteryThreshold.toInt();
+    widget.screenInfo.batteryReportingDelay = (batteryReportingDelay * 60).toInt();
     await Provider.of<FirebaseScreenInfoProvider>(context, listen: false)
         .setScreenInfo(widget.screenToken, widget.screenInfo);
   }
