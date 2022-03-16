@@ -98,38 +98,27 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
       MessageSizeSelector(
         currentWidth: width,
         currentHeight: height,
-        onMessageSizeChanged: (width, height) {
-          setState(() {
-            this.width = width;
-            this.height = height;
-          });
-        },
+        onMessageSizeChanged: onMessageSizeChanged,
       ),
       const TypefaceSelector(),
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
-        initialFontFamily: widget.template?.fontFamily ?? fontFamily,
-        initialFontSize: widget.template?.fontSize ?? fontSize,
+        initialFontFamily: fontFamily,
+        initialFontSize: fontSize,
       ),
       ForegroundColourSelector(
         onColourChanged: onForegroundColourChanged,
-        initialColour: widget.template != null
-            ? Color(widget.template!.foregroundColour)
-            : foregroundColour,
+        initialColour: foregroundColour,
       ),
       BackgroundColourSelector(
         onColourChanged: onBackgroundColourChanged,
-        initialColour: widget.template != null
-            ? Color(widget.template!.backgrondColour)
-            : backgroundColour,
+        initialColour: backgroundColour,
       ),
       const ListingSelector(),
       TextAlignmentSelector(
         onTextAlignmentChanged: onTextAlignmentChanged,
-        initialTextAlignment: widget.template != null
-            ? TextAlign.values.byName(widget.template!.textAlignment)
-            : textAlignment,
+        initialTextAlignment: textAlignment,
       ),
     ];
 
@@ -145,7 +134,8 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         title: widget.template == null
             ? const Text('Add Template')
             : const Text('Save Template'),
-        insetPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
+        insetPadding:
+            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
         contentPadding: const EdgeInsets.all(8.0),
         content: Form(
           key: _formKey,
@@ -202,16 +192,19 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
     );
   }
 
-  void onFontFamilyChanged(String fontFamily) {
+  void onMessageSizeChanged(double width, double height) {
     setState(() {
-      this.fontFamily = fontFamily;
+      this.width = width;
+      this.height = height;
     });
   }
 
+  void onFontFamilyChanged(String fontFamily) {
+    setState(() => this.fontFamily = fontFamily);
+  }
+
   void onFontSizeChanged(double fontSize) {
-    setState(() {
-      this.fontSize = fontSize;
-    });
+    setState(() => this.fontSize = fontSize);
   }
 
   void onForegroundColourChanged(Color newColour) {
@@ -223,9 +216,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
   }
 
   void onTextAlignmentChanged(TextAlign newTextAlignment) {
-    setState(() {
-      textAlignment = newTextAlignment;
-    });
+    setState(() => textAlignment = newTextAlignment);
   }
 
   Future<void> _okPressed() async {
