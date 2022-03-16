@@ -4,7 +4,7 @@ import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/core/providers/firebase_screen_info_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
-import 'package:diginote/core/providers/io_templates_provider.dart';
+import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/core/services/notification_service.dart';
 import 'package:diginote/core/services/token_updater_service.dart';
 import 'package:diginote/ui/views/home_view.dart';

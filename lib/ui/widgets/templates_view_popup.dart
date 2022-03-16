@@ -1,6 +1,6 @@
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
-import 'package:diginote/core/providers/io_templates_provider.dart';
+import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/widgets/message_item_content.dart';
 import 'package:flutter/material.dart';
