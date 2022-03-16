@@ -4,7 +4,7 @@ import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/views/home_view.dart';
-import 'package:diginote/ui/widgets/screen_item.dart';
+import 'package:diginote/ui/widgets/screen_item_content.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/material.dart';
@@ -70,13 +70,13 @@ void main() async {
   testWidgets("Screens view shows only the user's screens", (WidgetTester tester) async {
     await loadScreensView(tester);
 
-    expect(find.byType(ScreenItem), findsNothing);
+    expect(find.byType(ScreenItemContent), findsNothing);
 
     await addPairedScreen(name: "Screen1", userID: user.uid, token: "Screen1");
     await tester.idle();
     await tester.pump();
 
-    expect(find.byType(ScreenItem), findsOneWidget);
+    expect(find.byType(ScreenItemContent), findsOneWidget);
     expect(find.text("Screen1"), findsOneWidget);
 
     await addPairedScreen(name: "Screen2", userID: user.uid, token: "Screen2");
@@ -87,7 +87,7 @@ void main() async {
     await tester.idle();
     await tester.pump();
 
-    expect(find.byType(ScreenItem), findsNWidgets(2));
+    expect(find.byType(ScreenItemContent), findsNWidgets(2));
     expect(find.text("Screen1"), findsOneWidget);
     expect(find.text("Screen2"), findsOneWidget);
   });
@@ -99,7 +99,7 @@ void main() async {
     await tester.idle();
     await tester.pump();
 
-    expect(find.byType(ScreenItem), findsOneWidget);
+    expect(find.byType(ScreenItemContent), findsOneWidget);
     await tester.tap(find.byIcon(IconHelper.settingsIcon.icon!).first);
     await tester.pump();
 
@@ -112,6 +112,6 @@ void main() async {
     await tester.tap(find.text("Delete"));
     await tester.pump();
 
-    expect(find.byType(ScreenItem), findsNothing);
+    expect(find.byType(ScreenItemContent), findsNothing);
   });
 }

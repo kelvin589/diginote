@@ -41,6 +41,7 @@ class FirebaseScreensRepository {
   }
 
   Future<void> _updatescreen(Screen screen, String screenToken) async {
+    // Update screens collection with screenToken
     await firestoreInstance
         .collection('screens')
         .doc(screenToken)
@@ -54,6 +55,26 @@ class FirebaseScreensRepository {
         })
         .then((value) => print("Updated paired Boolean"))
         .catchError((onError) => print("Couldn't update the paired Boolean"));
+    // Update users collection screen's table with the token
+    await firestoreInstance
+        .collection('users')
+        .doc(userID)
+        .set({
+          "screens": FieldValue.arrayUnion([screenToken])
+        }, SetOptions(merge: true))
+        .then((value) => print("Updated user's screens"))
+        .catchError((onError) => print("Couldn't update the user's screens"));
+    // Set default values in screen screenInfo
+    await firestoreInstance
+        .collection('screenInfo')
+        .doc(screenToken)
+        .set({
+          "lowBatteryThreshold": 30,
+          "lowBatteryNotificationDelay": 600,
+          "batteryReportingDelay": 600,
+        }, SetOptions(merge: true))
+        .then((value) => print("Updated screen info"))
+        .catchError((onError) => print("Couldn't update screen info"));
   }
 
   Stream<Iterable<Screen>> getScreens() {
@@ -90,5 +111,20 @@ class FirebaseScreensRepository {
         }
       },
     ).catchError((onError) => print("Failed to delete error: $onError"));
+    await firestoreInstance
+        .collection('users')
+        .doc(userID)
+        .set({
+          "screens": FieldValue.arrayRemove([screenToken])
+        }, SetOptions(merge: true))
+        .then((value) => print("Deleted user's screen"))
+        .catchError((onError) => print("Couldn't delete the user's screen"));
+    await firestoreInstance
+        .collection('screenInfo')
+        .doc(screenToken)
+        .delete()
+        .then((value) => print("Deleted screen info"))
+        .catchError(
+            (onError) => print("Failed to delete screen info: $onError"));
   }
 }

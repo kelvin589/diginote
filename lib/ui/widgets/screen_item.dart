@@ -1,58 +1,100 @@
-import 'package:diginote/ui/shared/icon_helper.dart';
+import 'package:diginote/core/models/screen_info_model.dart';
+import 'package:diginote/core/models/screen_model.dart';
+import 'package:diginote/core/providers/firebase_screen_info_provider.dart';
+import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/core/providers/zoom_provider.dart';
+import 'package:diginote/ui/shared/timer_provider.dart';
+import 'package:diginote/ui/views/preview_view.dart';
+import 'package:diginote/ui/widgets/screen_item_content.dart';
+import 'package:diginote/ui/widgets/screen_settings_popup.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ScreenItem extends StatelessWidget {
-  const ScreenItem(
-      {Key? key,
-      required this.screenName,
-      required this.lastUpdated,
-      required this.batteryPercentage,
-      required this.onSettingsTapped,
-      required this.onPreviewTapped})
-      : super(key: key);
+  const ScreenItem({Key? key, required this.screen}) : super(key: key);
 
-  final String screenName;
-  final DateTime lastUpdated;
-  final int batteryPercentage;
-  final Function() onSettingsTapped;
-  final Function() onPreviewTapped;
+  final Screen screen;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(screenName),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Last Updated: ${lastUpdatedString(lastUpdated)}'),
-          Text('Battery Percentage: $batteryPercentage%'),
-        ],
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          IconButton(
-            onPressed: onSettingsTapped,
-            icon: IconHelper.settingsIcon,
-            constraints: const BoxConstraints(),
+    return StreamBuilder<Iterable<ScreenInfo>>(
+      stream: Provider.of<FirebaseScreenInfoProvider>(context, listen: false)
+          .getScreenInfo(screen.screenToken),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error ${(snapshot.error.toString())}');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        ScreenInfo? screenInfo = snapshot.data?.first;
+        if (screenInfo != null) {
+          return ScreenItemContent(
+            screenName: screen.name,
+            lastUpdated: screen.lastUpdated,
+            batteryPercentage: screenInfo.batteryPercentage,
+            onPreviewTapped: () => _showPreview(context, screen),
+            onSettingsTapped: () => _showScreenSettings(
+              context: context,
+              screenToken: screen.screenToken,
+              screenName: screen.name,
+              screenInfo: screenInfo,
+            ),
+          );
+        } else {
+          return const Text('Error occurred');
+        }
+      },
+    );
+  }
+
+  void _showPreview(BuildContext context, Screen screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider<TimerProvider>(
+              create: (context) =>
+                  TimerProvider(duration: const Duration(seconds: 1)),
+            ),
+            ChangeNotifierProvider<ZoomProvider>(
+              create: (context) => ZoomProvider(),
+            ),
+          ],
+          child: PreviewView(
+            screenToken: screen.screenToken,
+            screenWidth: screen.width,
+            screenHeight: screen.height,
+            screenName: screen.name,
           ),
-          const SizedBox(width: 10),
-          IconButton(
-            onPressed: onPreviewTapped,
-            icon: IconHelper.previewIcon,
-            constraints: const BoxConstraints(),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  String lastUpdatedString(DateTime lastUpdated) {
-    String day = lastUpdated.day.toString().padLeft(2, '0');
-    String month = lastUpdated.month.toString().padLeft(2, '0');
-    int year = lastUpdated.year;
-    String hour = lastUpdated.hour.toString().padLeft(2, '0');
-    String minute = lastUpdated.minute.toString().padLeft(2, '0');
-    return "$day/$month/$year - $hour:$minute";
+  void _showScreenSettings(
+      {required BuildContext context,
+      required String screenToken,
+      required String screenName,
+      required ScreenInfo screenInfo}) {
+    showDialog(
+      context: context,
+      builder: (context) => ScreenSettingsPopup(
+        screenToken: screenToken,
+        screenName: screenName,
+        screenInfo: screenInfo,
+        onDelete: () async {
+          await _onDelete(context, screenToken);
+        },
+      ),
+    );
+  }
+
+  Future<void> _onDelete(BuildContext context, String screenToken) async {
+    await Provider.of<FirebaseScreensProvider>(context, listen: false)
+        .deleteScreen(screenToken);
   }
 }
