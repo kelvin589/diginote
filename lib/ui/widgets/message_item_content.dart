@@ -40,6 +40,7 @@ class MessageItemContent extends StatelessWidget {
                         style: GoogleFonts.getFont(message.fontFamily,
                             fontSize: message.fontSize,
                             color: Color(message.foregroundColour)),
+                        textAlign: TextAlign.values.byName(message.textAlignment),
                       ),
                     )
                   : Container(),
@@ -52,6 +53,7 @@ class MessageItemContent extends StatelessWidget {
                     style: GoogleFonts.getFont(message.fontFamily,
                         fontSize: message.fontSize,
                         color: Color(message.foregroundColour)),
+                    textAlign: TextAlign.values.byName(message.textAlignment),
                   ),
                 ),
               ),
