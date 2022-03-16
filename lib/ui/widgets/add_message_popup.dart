@@ -75,6 +75,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
               foregroundColour: foregroundColour,
               width: width,
               height: height,
+              textAlign: textAlignment,
             ),
           ),
           Expanded(
@@ -87,6 +88,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
               foregroundColour: foregroundColour,
               width: width,
               height: height,
+              textAlign: textAlignment,
             ),
           ),
         ],

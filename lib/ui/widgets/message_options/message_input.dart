@@ -11,7 +11,8 @@ class MessageInput extends StatelessWidget {
       required this.backgroundColour,
       required this.foregroundColour,
       required this.width,
-      required this.height})
+      required this.height,
+      required this.textAlign})
       : super(key: key);
 
   final TextEditingController messageController;
@@ -21,6 +22,7 @@ class MessageInput extends StatelessWidget {
   final Color foregroundColour;
   final double width;
   final double height;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class MessageInput extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       style: GoogleFonts.getFont(fontFamily,
           fontSize: fontSize, color: foregroundColour),
+      textAlign: textAlign,
     );
   }
 }

@@ -76,6 +76,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
               foregroundColour: foregroundColour,
               width: width,
               height: height,
+              textAlign: textAlignment,
             ),
           ),
           Expanded(
@@ -88,6 +89,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
               foregroundColour: foregroundColour,
               width: width,
               height: height,
+              textAlign: textAlignment,
             ),
           ),
         ],
