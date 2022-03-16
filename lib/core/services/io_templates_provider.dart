@@ -1,5 +1,4 @@
-import 'package:clock/clock.dart';
-import 'package:diginote/core/models/messages_model.dart';
+import 'package:diginote/core/models/templates_model.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -29,15 +28,10 @@ class TemplatesProvider extends ChangeNotifier {
 
   Future<void> _addDefaultTemplates() async {
     final uuid = Uuid();
-    Message doNotDisturb = Message(
+    Template doNotDisturb = Template(
         header: "",
         message: "Do Not Disturb",
-        x: 0,
-        y: 0,
         id: uuid.v4(),
-        from: clock.now(),
-        to: clock.now(),
-        scheduled: false,
         fontFamily: "Roboto",
         fontSize: 48.0,
         backgrondColour: 4294702838,
@@ -71,11 +65,11 @@ class TemplatesProvider extends ChangeNotifier {
   }
 
   // Add or update if it exists
-  Future<File> addTemplate(Message message) async {
-    final file = await _localFile(message.id);
+  Future<File> addTemplate(Template template) async {
+    final file = await _localFile(template.id);
     notifyListeners();
 
-    return file.writeAsString(jsonEncode(message.toJsonWithIDAndISO()));
+    return file.writeAsString(jsonEncode(template.toJson()));
   }
 
   Future<bool> deleteTemplate(String id) async {
@@ -92,19 +86,19 @@ class TemplatesProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<List<Message>> readTemplates() async {
+  Future<List<Template>> readTemplates() async {
     try {
       final List<File> files = await _localDirectoryFiles;
-      final List<Message> messages = [];
+      final List<Template> templates = [];
 
       for (File file in files) {
         final contents = await file.readAsString();
         final Map<String, Object?> map = jsonDecode(contents);
-        final Message message = Message.fromJsonWithIDAndISO(map);
-        messages.add(message);
+        final Template message = Template.fromJson(map);
+        templates.add(message);
       }
 
-      return messages;
+      return templates;
     } catch (e) {
       print(e);
       return [];

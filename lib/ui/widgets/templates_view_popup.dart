@@ -1,4 +1,6 @@
+import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
+import 'package:diginote/core/models/templates_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
@@ -18,7 +20,7 @@ class TemplatesViewPopup extends StatelessWidget {
       title: const Text("Insert Template"),
       content: Consumer<TemplatesProvider>(
         builder: (context, templatesProvider, child) {
-          return FutureBuilder<List<Message>>(
+          return FutureBuilder<List<Template>>(
             future: templatesProvider.readTemplates(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -29,7 +31,7 @@ class TemplatesViewPopup extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              Iterable<Message>? templates = snapshot.data;
+              Iterable<Template>? templates = snapshot.data;
               if (templates != null) {
                 return Scrollbar(
                   child: GridView.count(
@@ -71,7 +73,7 @@ class _TemplateItem extends StatelessWidget {
       required this.screenToken})
       : super(key: key);
 
-  final Message template;
+  final Template template;
   final BuildContext context;
   final String screenToken;
 
@@ -80,7 +82,21 @@ class _TemplateItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async => await insertTemplate(),
       child: MessageItemContent(
-        message: template,
+        message: Message(
+            header: template.header,
+            message: template.message,
+            x: 0,
+            y: 0,
+            id: template.id,
+            from: clock.now(),
+            to: clock.now(),
+            scheduled: false,
+            fontFamily: template.fontFamily,
+            fontSize: template.fontSize,
+            backgrondColour: template.backgrondColour,
+            foregroundColour: template.foregroundColour,
+            width: template.width,
+            height: template.height),
         width: template.width,
         height: template.height,
         selected: false,
@@ -90,7 +106,24 @@ class _TemplateItem extends StatelessWidget {
 
   Future<void> insertTemplate() async {
     await Provider.of<FirebasePreviewProvider>(context, listen: false)
-        .addMessage(screenToken, template);
+        .addMessage(
+      screenToken,
+      Message(
+          header: template.header,
+          message: template.message,
+          x: 0,
+          y: 0,
+          id: template.id,
+          from: clock.now(),
+          to: clock.now(),
+          scheduled: false,
+          fontFamily: template.fontFamily,
+          fontSize: template.fontSize,
+          backgrondColour: template.backgrondColour,
+          foregroundColour: template.foregroundColour,
+          width: template.width,
+          height: template.height),
+    );
     Navigator.pop(context);
   }
 }

@@ -1,5 +1,5 @@
 import 'package:clock/clock.dart';
-import 'package:diginote/core/models/messages_model.dart';
+import 'package:diginote/core/models/templates_model.dart';
 import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/widgets/message_options/background_colour_selector.dart';
@@ -20,7 +20,7 @@ class AddTemplatePopup extends StatefulWidget {
   const AddTemplatePopup({Key? key, this.template}) : super(key: key);
 
   // If template is not null, it means we are editing
-  final Message? template;
+  final Template? template;
 
   @override
   _AddTemplatePopupState createState() => _AddTemplatePopupState();
@@ -215,15 +215,10 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
   }
 
   Future<void> _okPressed() async {
-    Message newTemplate = Message(
+    Template newTemplate = Template(
         header: _headerController.text,
         message: _messageController.text,
-        x: 0,
-        y: 0,
         id: uuid.v4(),
-        from: clock.now(),
-        to: clock.now(),
-        scheduled: false,
         fontFamily: fontFamily,
         fontSize: fontSize,
         backgrondColour: backgroundColour.value,
@@ -241,15 +236,10 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
   }
 
   Future<void> _savePressed() async {
-    Message newTemplate = Message(
+    Template newTemplate = Template(
         header: _headerController.text,
         message: _messageController.text,
-        x: widget.template!.x,
-        y: widget.template!.y,
         id: widget.template!.id,
-        from: widget.template!.from,
-        to: widget.template!.to,
-        scheduled: widget.template!.scheduled,
         fontFamily: fontFamily,
         fontSize: fontSize,
         backgrondColour: backgroundColour.value,
