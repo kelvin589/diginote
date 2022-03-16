@@ -38,6 +38,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   Color foregroundColour = Colors.black;
   double width = 100;
   double height = 100;
+  TextAlign textAlignment = TextAlign.left;
 
   bool isLoading = false;
 
@@ -53,6 +54,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       foregroundColour = Color(widget.message!.foregroundColour);
       width = widget.message!.width;
       height = widget.message!.height;
+      textAlignment = TextAlign.values.byName(widget.message!.textAlignment);
     }
   }
 
@@ -122,7 +124,12 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
             : backgroundColour,
       ),
       const ListingSelector(),
-      const TextAlignmentSelector(),
+      TextAlignmentSelector(
+        onTextAlignmentChanged: onTextAlignmentChanged,
+        initialTextAlignment: widget.message != null
+            ? TextAlign.values.byName(widget.message!.textAlignment)
+            : textAlignment,
+      ),
     ];
 
     return GestureDetector(
@@ -214,6 +221,12 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
     setState(() => backgroundColour = newColour);
   }
 
+  void onTextAlignmentChanged(TextAlign newTextAlignment) {
+    setState(() {
+      textAlignment = newTextAlignment;
+    });
+  }
+
   Future<void> _okPressed() async {
     // TODO: Implement X/Y
     Message newMessage = Message(
@@ -230,7 +243,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         backgrondColour: backgroundColour.value,
         foregroundColour: foregroundColour.value,
         width: width,
-        height: height);
+        height: height,
+        textAlignment: textAlignment.name);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
@@ -256,7 +270,8 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         backgrondColour: backgroundColour.value,
         foregroundColour: foregroundColour.value,
         width: width,
-        height: height);
+        height: height,
+        textAlignment: textAlignment.name);
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;

@@ -97,7 +97,8 @@ class _TemplateItem extends StatelessWidget {
             backgrondColour: template.backgrondColour,
             foregroundColour: template.foregroundColour,
             width: template.width,
-            height: template.height),
+            height: template.height,
+            textAlignment: template.textAlignment),
         width: template.width,
         height: template.height,
         selected: false,
@@ -123,7 +124,8 @@ class _TemplateItem extends StatelessWidget {
           backgrondColour: template.backgrondColour,
           foregroundColour: template.foregroundColour,
           width: template.width,
-          height: template.height),
+          height: template.height,
+          textAlignment: template.textAlignment),
     );
     Navigator.pop(context);
   }
