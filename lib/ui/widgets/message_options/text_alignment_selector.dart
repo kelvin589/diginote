@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 
 // TODO: Implement text alignemnt selector
 class TextAlignmentSelector extends StatelessWidget {
-  const TextAlignmentSelector({Key? key, required this.initialTextAlignment, required this.onTextAlignmentChanged}) : super(key: key);
+  const TextAlignmentSelector(
+      {Key? key,
+      required this.initialTextAlignment,
+      required this.onTextAlignmentChanged})
+      : super(key: key);
 
   final buttonPadding = EdgeInsets.zero;
   final TextAlign initialTextAlignment;
@@ -19,6 +23,9 @@ class TextAlignmentSelector extends StatelessWidget {
             icon: IconHelper.leftAlignIcon,
             constraints: const BoxConstraints(),
             padding: buttonPadding,
+            color: initialTextAlignment != TextAlign.left
+                ? Colors.black
+                : Colors.red,
           ),
         ),
         Expanded(
@@ -27,6 +34,9 @@ class TextAlignmentSelector extends StatelessWidget {
             icon: IconHelper.centreAlignIcon,
             constraints: const BoxConstraints(),
             padding: buttonPadding,
+            color: initialTextAlignment != TextAlign.center
+                ? Colors.black
+                : Colors.red,
           ),
         ),
         Expanded(
@@ -35,6 +45,9 @@ class TextAlignmentSelector extends StatelessWidget {
             icon: IconHelper.rightAlignIcon,
             constraints: const BoxConstraints(),
             padding: buttonPadding,
+            color: initialTextAlignment != TextAlign.right
+                ? Colors.black
+                : Colors.red,
           ),
         ),
         Expanded(
@@ -43,11 +56,14 @@ class TextAlignmentSelector extends StatelessWidget {
             icon: IconHelper.justifyAlignIcon,
             constraints: const BoxConstraints(),
             padding: buttonPadding,
+            color: initialTextAlignment != TextAlign.justify
+                ? Colors.black
+                : Colors.red,
           ),
         ),
       ],
     );
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

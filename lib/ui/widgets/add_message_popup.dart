@@ -126,9 +126,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       const ListingSelector(),
       TextAlignmentSelector(
         onTextAlignmentChanged: onTextAlignmentChanged,
-        initialTextAlignment: widget.message != null
-            ? TextAlign.values.byName(widget.message!.textAlignment)
-            : textAlignment,
+        initialTextAlignment: textAlignment,
       ),
     ];
 
