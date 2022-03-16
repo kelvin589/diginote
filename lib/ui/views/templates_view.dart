@@ -1,5 +1,8 @@
+import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
-import 'package:diginote/core/providers/io_templates_provider.dart';
+import 'package:diginote/core/models/templates_model.dart';
+import 'package:diginote/core/providers/firebase_templates_provider.dart';
+import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/widgets/add_template_popup.dart';
@@ -12,10 +15,10 @@ class TemplatesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TemplatesProvider>(
+    return Consumer<FirebaseTemplatesProvider>(
       builder: (context, templatesProvider, child) {
-        return FutureBuilder<List<Message>>(
-          future: templatesProvider.readTemplates(),
+        return StreamBuilder<Iterable<Template>>(
+          stream: templatesProvider.readTemplates(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('Error ${(snapshot.error.toString())}');
@@ -25,7 +28,7 @@ class TemplatesView extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            Iterable<Message>? templates = snapshot.data;
+            Iterable<Template>? templates = snapshot.data;
             if (templates != null) {
               return Scrollbar(
                 child: GridView.count(
@@ -34,11 +37,12 @@ class TemplatesView extends StatelessWidget {
                   shrinkWrap: true,
                   children: List.generate(templates.length, (index) {
                     return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [_TemplateItem(
-                        template: templates.elementAt(index),
-                      ),]
-                    );
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _TemplateItem(
+                            template: templates.elementAt(index),
+                          ),
+                        ]);
                   }),
                 ),
               );
@@ -55,7 +59,7 @@ class TemplatesView extends StatelessWidget {
 class _TemplateItem extends StatefulWidget {
   const _TemplateItem({Key? key, required this.template}) : super(key: key);
 
-  final Message template;
+  final Template template;
 
   @override
   State<_TemplateItem> createState() => _TemplateItemState();
@@ -74,7 +78,21 @@ class _TemplateItemState extends State<_TemplateItem> {
         GestureDetector(
           onTap: toggleDisplayOptions,
           child: MessageItemContent(
-            message: widget.template,
+            message: Message(
+                header: widget.template.header,
+                message: widget.template.message,
+                x: 0,
+                y: 0,
+                id: widget.template.id,
+                from: clock.now(),
+                to: clock.now(),
+                scheduled: false,
+                fontFamily: widget.template.fontFamily,
+                fontSize: widget.template.fontSize,
+                backgrondColour: widget.template.backgrondColour,
+                foregroundColour: widget.template.foregroundColour,
+                width: widget.template.width,
+                height: widget.template.height),
             width: widget.template.width,
             height: widget.template.height,
             selected: false,
@@ -86,7 +104,7 @@ class _TemplateItemState extends State<_TemplateItem> {
 
   Future<void> onDelete() async {
     setDisplayOptions(false);
-    await Provider.of<TemplatesProvider>(context, listen: false)
+    await Provider.of<FirebaseTemplatesProvider>(context, listen: false)
         .deleteTemplate(widget.template.id);
   }
 
@@ -108,7 +126,7 @@ class _OptionsPanel extends StatelessWidget {
       {Key? key, required this.template, required this.onDelete})
       : super(key: key);
 
-  final Message template;
+  final Template template;
   final Future<void> Function() onDelete;
 
   @override
