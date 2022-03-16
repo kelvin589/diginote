@@ -33,7 +33,9 @@ class _PreviewViewState extends State<PreviewView> {
     final devicePadding = MediaQuery.of(context).viewPadding;
     final deviceSize = MediaQuery.of(context).size;
     final deviceWidth = MediaQuery.of(context).size.width;
-    final deviceHeight = MediaQuery.of(context).size.height - devicePadding.top - devicePadding.bottom;
+    final deviceHeight = MediaQuery.of(context).size.height -
+        devicePadding.top -
+        devicePadding.bottom;
     // Scaling from screen to device
     final scaleFactorX = widget.screenWidth / deviceWidth;
     final scaleFactorY = widget.screenHeight / deviceHeight;
@@ -103,17 +105,17 @@ class _PreviewViewState extends State<PreviewView> {
             ),
             Column(
               children: [
-                TextButton(
+                IconButton(
                   onPressed: () =>
                       Provider.of<ZoomProvider>(context, listen: false)
                           .zoomIn(),
-                  child: const Text("+", style: TextStyle(fontSize: 35)),
+                  icon: IconHelper.zoomIn,
                 ),
-                TextButton(
+                IconButton(
                   onPressed: () =>
                       Provider.of<ZoomProvider>(context, listen: false)
                           .zoomOut(),
-                  child: const Text("-", style: TextStyle(fontSize: 35)),
+                  icon: IconHelper.zoomOut,
                 ),
               ],
             ),

@@ -5,7 +5,7 @@ class IconHelper {
   static Icon templatesIcon = const Icon(Icons.sticky_note_2_outlined);
   static Icon settingsIcon = const Icon(Icons.settings_outlined);
   static Icon previewIcon = const Icon(Icons.remove_red_eye_outlined);
-  static Icon addIcon = const Icon(Icons.add_box_outlined);
+  static Icon addIcon = const Icon(Icons.note_add_outlined);
   static Icon editIcon = const Icon(Icons.mode_edit_outlined);
 
   static Icon boldIcon = const Icon(Icons.format_bold_rounded);
@@ -22,4 +22,7 @@ class IconHelper {
 
   static Icon deleteIcon = const Icon(Icons.delete_forever);
   static Icon scheduleIcon = const Icon(Icons.access_time_rounded);
+
+  static Icon zoomIn = const Icon(Icons.zoom_in);
+  static Icon zoomOut = const Icon(Icons.zoom_out);
 }
