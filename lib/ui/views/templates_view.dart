@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/models/templates_model.dart';
+import 'package:diginote/core/providers/firebase_templates_provider.dart';
 import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
@@ -14,10 +15,10 @@ class TemplatesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TemplatesProvider>(
+    return Consumer<FirebaseTemplatesProvider>(
       builder: (context, templatesProvider, child) {
-        return FutureBuilder<List<Template>>(
-          future: templatesProvider.readTemplates(),
+        return StreamBuilder<Iterable<Template>>(
+          stream: templatesProvider.readTemplates(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('Error ${(snapshot.error.toString())}');
@@ -103,7 +104,7 @@ class _TemplateItemState extends State<_TemplateItem> {
 
   Future<void> onDelete() async {
     setDisplayOptions(false);
-    await Provider.of<TemplatesProvider>(context, listen: false)
+    await Provider.of<FirebaseTemplatesProvider>(context, listen: false)
         .deleteTemplate(widget.template.id);
   }
 

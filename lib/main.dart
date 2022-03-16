@@ -4,6 +4,7 @@ import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/core/providers/firebase_screen_info_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/core/providers/firebase_templates_provider.dart';
 import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/core/services/notification_service.dart';
 import 'package:diginote/core/services/token_updater_service.dart';
@@ -41,8 +42,8 @@ void main() async {
       FirebaseScreenInfoProvider(
           firestoreInstance: firestoreInstance, authInstance: authInstance);
 
-  final TemplatesProvider templatesProvider = TemplatesProvider();
-  await templatesProvider.init();
+  final FirebaseTemplatesProvider templatesProvider = FirebaseTemplatesProvider(firestoreInstance: firestoreInstance, authInstance: authInstance);
+  // await templatesProvider.init();
 
   final TokenUpdaterService tokenUpdater = TokenUpdaterService(
       authInstance: authInstance,

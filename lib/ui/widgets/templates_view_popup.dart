@@ -2,6 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/models/templates_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/core/providers/firebase_templates_provider.dart';
 import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/widgets/message_item_content.dart';
@@ -18,10 +19,10 @@ class TemplatesViewPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text("Insert Template"),
-      content: Consumer<TemplatesProvider>(
+      content: Consumer<FirebaseTemplatesProvider>(
         builder: (context, templatesProvider, child) {
-          return FutureBuilder<List<Template>>(
-            future: templatesProvider.readTemplates(),
+          return StreamBuilder<Iterable<Template>>(
+            stream: templatesProvider.readTemplates(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Text('Error ${(snapshot.error.toString())}');

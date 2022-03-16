@@ -1,5 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/templates_model.dart';
+import 'package:diginote/core/providers/firebase_templates_provider.dart';
 import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/widgets/message_options/background_colour_selector.dart';
@@ -229,7 +230,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
       setState(() {
         isLoading = true;
       });
-      await Provider.of<TemplatesProvider>(context, listen: false)
+      await Provider.of<FirebaseTemplatesProvider>(context, listen: false)
           .addTemplate(newTemplate);
       Navigator.pop(context);
     }
@@ -250,7 +251,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
       setState(() {
         isLoading = true;
       });
-      await Provider.of<TemplatesProvider>(context, listen: false)
+      await Provider.of<FirebaseTemplatesProvider>(context, listen: false)
           .addTemplate(newTemplate);
       Navigator.pop(context);
     }
