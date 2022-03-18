@@ -8,6 +8,7 @@ class ScreenItemContent extends StatelessWidget {
       required this.screenName,
       required this.lastUpdated,
       required this.batteryPercentage,
+      required this.isOnline,
       required this.onSettingsTapped,
       required this.onPreviewTapped})
       : super(key: key);
@@ -15,6 +16,7 @@ class ScreenItemContent extends StatelessWidget {
   final String screenName;
   final DateTime lastUpdated;
   final int batteryPercentage;
+  final bool isOnline;
   final Function() onSettingsTapped;
   final Function() onPreviewTapped;
 
@@ -25,7 +27,7 @@ class ScreenItemContent extends StatelessWidget {
         children: [
           Text(screenName),
           const Padding(padding: EdgeInsets.only(left: 4)),
-          OnlineStatusIcon(isOnline: false),
+          OnlineStatusIcon(isOnline: isOnline),
         ],
       ),
       subtitle: Column(
