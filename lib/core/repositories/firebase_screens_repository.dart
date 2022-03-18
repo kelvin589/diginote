@@ -73,6 +73,7 @@ class FirebaseScreensRepository {
           "lowBatteryNotificationDelay": 600,
           "batteryReportingDelay": 600,
           "screenToken": screenToken,
+          "isOnline": true,
         }, SetOptions(merge: true))
         .then((value) => print("Updated screen info"))
         .catchError((onError) => print("Couldn't update screen info"));
