@@ -35,6 +35,7 @@ class ScreenItem extends StatelessWidget {
             screenName: screen.name,
             lastUpdated: screen.lastUpdated,
             batteryPercentage: screenInfo.batteryPercentage,
+            isOnline: screenInfo.isOnline,
             onPreviewTapped: () => _showPreview(context, screen),
             onSettingsTapped: () => _showScreenSettings(
               context: context,

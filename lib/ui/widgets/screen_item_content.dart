@@ -1,4 +1,5 @@
 import 'package:diginote/ui/shared/icon_helper.dart';
+import 'package:diginote/ui/widgets/online_status_icon.dart';
 import 'package:flutter/material.dart';
 
 class ScreenItemContent extends StatelessWidget {
@@ -7,6 +8,7 @@ class ScreenItemContent extends StatelessWidget {
       required this.screenName,
       required this.lastUpdated,
       required this.batteryPercentage,
+      required this.isOnline,
       required this.onSettingsTapped,
       required this.onPreviewTapped})
       : super(key: key);
@@ -14,13 +16,20 @@ class ScreenItemContent extends StatelessWidget {
   final String screenName;
   final DateTime lastUpdated;
   final int batteryPercentage;
+  final bool isOnline;
   final Function() onSettingsTapped;
   final Function() onPreviewTapped;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(screenName),
+      title: Row(
+        children: [
+          Text(screenName),
+          const Padding(padding: EdgeInsets.only(left: 4)),
+          OnlineStatusIcon(isOnline: isOnline),
+        ],
+      ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
