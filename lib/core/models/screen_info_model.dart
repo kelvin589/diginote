@@ -1,5 +1,5 @@
 class ScreenInfo {
-  ScreenInfo({required this.screenToken, required this.batteryPercentage, required this.lowBatteryThreshold, required this.lowBatteryNotificationDelay, required this.batteryReportingDelay});
+  ScreenInfo({required this.screenToken, required this.batteryPercentage, required this.lowBatteryThreshold, required this.lowBatteryNotificationDelay, required this.batteryReportingDelay, required this.isOnline});
 
   ScreenInfo.fromJson(Map<String, Object?> json)
       : this(
@@ -8,6 +8,7 @@ class ScreenInfo {
           lowBatteryThreshold: json['lowBatteryThreshold']! as int,
           lowBatteryNotificationDelay: json['lowBatteryNotificationDelay']! as int,
           batteryReportingDelay: json['batteryReportingDelay']! as int,
+          isOnline: json['isOnline']! as bool,
         );
 
   final String screenToken;
@@ -15,6 +16,7 @@ class ScreenInfo {
   int lowBatteryThreshold;
   int lowBatteryNotificationDelay;
   int batteryReportingDelay;
+  final bool isOnline;
 
   Map<String, Object?> toJson() {
     return {
@@ -23,6 +25,7 @@ class ScreenInfo {
       'lowBatteryThreshold': lowBatteryThreshold,
       'lowBatteryNotificationDelay': lowBatteryNotificationDelay,
       'batteryReportingDelay': batteryReportingDelay,
+      'isOnline': isOnline,
     };
   }
 }
