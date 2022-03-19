@@ -33,8 +33,7 @@ class _SettingsViewState extends State<SettingsView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text("Allow Notifications"),
-            Switch(
+            _AllowNotificationsToggle(
               value: allowNotifications,
               onChanged: (newValue) => setState(
                 () {
@@ -42,8 +41,7 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
             ),
-            const Text("Dark Mode"),
-            Switch(
+            _DarkModeToggle(
               value: isDarkMode,
               onChanged: (newValue) => setState(
                 () {
@@ -53,8 +51,7 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
             ),
-            const Text("Background Colour"),
-            ColourPickerIcon(
+            _BackgroundColourPicker(
               initialColour: backgroundColour,
               onColourChanged: (newColour) => setState(
                 () {
@@ -64,18 +61,97 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
             ),
-            ElevatedButton(
+            _LogoutButton(
               onPressed: () async {
                 await Provider.of<FirebaseLoginProvider>(context, listen: false)
                     .logout();
               },
-              child: const Text("Logout"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _AllowNotificationsToggle extends StatelessWidget {
+  const _AllowNotificationsToggle(
+      {Key? key, required this.value, required this.onChanged})
+      : super(key: key);
+
+  final bool value;
+  final void Function(bool) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Text("Allow Notifications"),
+        Switch(
+          value: value,
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _DarkModeToggle extends StatelessWidget {
+  const _DarkModeToggle(
+      {Key? key, required this.value, required this.onChanged})
+      : super(key: key);
+
+  final bool value;
+  final void Function(bool) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Text("Dark Mode"),
+        Switch(
+          value: value,
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _BackgroundColourPicker extends StatelessWidget {
+  const _BackgroundColourPicker(
+      {Key? key, required this.initialColour, required this.onColourChanged})
+      : super(key: key);
+
+  final Color initialColour;
+  final void Function(Color) onColourChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Text("Background Colour"),
+        ColourPickerIcon(
+          initialColour: initialColour,
+          onColourChanged: onColourChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _LogoutButton extends StatelessWidget {
+  const _LogoutButton({Key? key, required this.onPressed}) : super(key: key);
+
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: const Text("Logout"),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.red),
       ),
     );
   }
