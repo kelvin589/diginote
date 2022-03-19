@@ -79,11 +79,13 @@ class MyApp extends StatelessWidget {
       builder: ((context, themeProvider, child) {
         return MaterialApp(
           title: 'Flutter Demo',
-          theme: themeProvider.isDarkMode ? ThemeData.dark() : ThemeData.light(),
-          //theme: ThemeData.dark().copyWith(),
-          // theme: ThemeData(
-          //   primarySwatch: Colors.purple,
-          // ),
+          theme: themeProvider.isDarkMode
+              ? ThemeData.dark()
+              : ThemeData(
+                  colorScheme: ColorScheme.light().copyWith(
+                      primary: themeProvider.backgroundColour,
+                      secondary: themeProvider.backgroundColour),
+                ),
           initialRoute: LoginView.route,
           routes: {
             HomeView.route: (context) => const HomeView(),

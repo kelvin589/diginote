@@ -14,11 +14,14 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   bool isDarkMode = false;
   bool allowNotifications = false;
+  Color backgroundColour = Colors.transparent;
 
   @override
   void initState() {
     super.initState();
     isDarkMode = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
+    backgroundColour =
+        Provider.of<ThemeProvider>(context, listen: false).backgroundColour;
   }
 
   @override
@@ -44,13 +47,23 @@ class _SettingsViewState extends State<SettingsView> {
               value: isDarkMode,
               onChanged: (newValue) => setState(
                 () {
-                  Provider.of<ThemeProvider>(context, listen: false).toggleIsDarkMode();
-                  isDarkMode = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .toggleIsDarkMode();
+                  isDarkMode = newValue;
                 },
               ),
             ),
             const Text("Background Colour"),
-            ColourPickerIcon(onColourChanged: (newColour) => {}),
+            ColourPickerIcon(
+              initialColour: backgroundColour,
+              onColourChanged: (newColour) => setState(
+                () {
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .setBackgroundColour(newColour);
+                  backgroundColour = newColour;
+                },
+              ),
+            ),
             const Text("Foreground Colour"),
             ColourPickerIcon(onColourChanged: (newColour) => {}),
             ElevatedButton(

@@ -7,6 +7,9 @@ class ThemeProvider extends ChangeNotifier {
   bool _isDarkMode = false;
   bool get isDarkMode => _isDarkMode;
 
+  Color _backgroundColour = Colors.purple;
+  Color get backgroundColour => _backgroundColour;
+
   ThemeProvider() {
     _getIsDarkMode();
   }
@@ -17,7 +20,18 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setBackgroundColour(Color backgroundColour) async {
+    _backgroundColour = backgroundColour;
+    await themeManager.setBackgroundColour(backgroundColour);
+    notifyListeners();
+  }
+
+  // Methods for initialising values of this class
   Future<void> _getIsDarkMode() async {
     _isDarkMode = await themeManager.getIsDarkMode();
+  }
+
+  Future<void> _getBackgroundColour() async {
+    _backgroundColour = Color(await themeManager.getBackgroundColour());
   }
 }
