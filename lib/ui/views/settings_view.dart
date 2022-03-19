@@ -1,4 +1,5 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
+import 'package:diginote/core/providers/theme_provider.dart';
 import 'package:diginote/ui/widgets/colour_picker_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,14 @@ class _SettingsViewState extends State<SettingsView> {
   bool allowNotifications = false;
 
   @override
+  void initState() {
+    super.initState();
+    isDarkMode = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Hide background/foreground selector if dark mode
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -36,7 +44,8 @@ class _SettingsViewState extends State<SettingsView> {
               value: isDarkMode,
               onChanged: (newValue) => setState(
                 () {
-                  isDarkMode = newValue;
+                  Provider.of<ThemeProvider>(context, listen: false).toggleIsDarkMode();
+                  isDarkMode = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
                 },
               ),
             ),
