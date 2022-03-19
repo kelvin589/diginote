@@ -28,49 +28,47 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     // Hide background/foreground selector if dark mode
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _AllowNotificationsToggle(
-              value: allowNotifications,
-              onChanged: (newValue) => setState(
-                () {
-                  allowNotifications = newValue;
-                },
-              ),
-            ),
-            _DarkModeToggle(
-              value: isDarkMode,
-              onChanged: (newValue) => setState(
-                () {
-                  Provider.of<ThemeProvider>(context, listen: false)
-                      .toggleIsDarkMode();
-                  isDarkMode = newValue;
-                },
-              ),
-            ),
-            !isDarkMode
-                ? _BackgroundColourPicker(
-                    initialColour: backgroundColour,
-                    onColourChanged: (newColour) => setState(
-                      () {
-                        Provider.of<ThemeProvider>(context, listen: false)
-                            .setBackgroundColour(newColour);
-                        backgroundColour = newColour;
-                      },
-                    ),
-                  )
-                : Container(),
-            _LogoutButton(
-              onPressed: () async {
-                await Provider.of<FirebaseLoginProvider>(context, listen: false)
-                    .logout();
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        children: [
+          _AllowNotificationsToggle(
+            value: allowNotifications,
+            onChanged: (newValue) => setState(
+              () {
+                allowNotifications = newValue;
               },
             ),
-          ],
-        ),
+          ),
+          _DarkModeToggle(
+            value: isDarkMode,
+            onChanged: (newValue) => setState(
+              () {
+                Provider.of<ThemeProvider>(context, listen: false)
+                    .toggleIsDarkMode();
+                isDarkMode = newValue;
+              },
+            ),
+          ),
+          !isDarkMode
+              ? _BackgroundColourPicker(
+                  initialColour: backgroundColour,
+                  onColourChanged: (newColour) => setState(
+                    () {
+                      Provider.of<ThemeProvider>(context, listen: false)
+                          .setBackgroundColour(newColour);
+                      backgroundColour = newColour;
+                    },
+                  ),
+                )
+              : Container(),
+          Spacer(),
+          _LogoutButton(
+            onPressed: () async {
+              await Provider.of<FirebaseLoginProvider>(context, listen: false)
+                  .logout();
+            },
+          ),
+        ],
       ),
     );
   }
