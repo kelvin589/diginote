@@ -51,16 +51,18 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
             ),
-            _BackgroundColourPicker(
-              initialColour: backgroundColour,
-              onColourChanged: (newColour) => setState(
-                () {
-                  Provider.of<ThemeProvider>(context, listen: false)
-                      .setBackgroundColour(newColour);
-                  backgroundColour = newColour;
-                },
-              ),
-            ),
+            !isDarkMode
+                ? _BackgroundColourPicker(
+                    initialColour: backgroundColour,
+                    onColourChanged: (newColour) => setState(
+                      () {
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .setBackgroundColour(newColour);
+                        backgroundColour = newColour;
+                      },
+                    ),
+                  )
+                : Container(),
             _LogoutButton(
               onPressed: () async {
                 await Provider.of<FirebaseLoginProvider>(context, listen: false)
