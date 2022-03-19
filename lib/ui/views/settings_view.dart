@@ -64,8 +64,6 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
             ),
-            const Text("Foreground Colour"),
-            ColourPickerIcon(onColourChanged: (newColour) => {}),
             ElevatedButton(
               onPressed: () async {
                 await Provider.of<FirebaseLoginProvider>(context, listen: false)
