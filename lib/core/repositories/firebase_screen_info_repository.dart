@@ -33,7 +33,7 @@ class FirebaseScreenInfoRepository {
         .map((snapshot) => snapshot.docs.map((e) => e.data()));
   }
 
-  Future<void> setScreenInfo(String screenToken, ScreenInfo newScreenInfo) async {
+  Future<void> setScreenInfo(String screenToken, ScreenInfo newScreenInfo, {String? screenName}) async {
     await firestoreInstance
         .collection('screenInfo')
         .doc(screenToken)
@@ -42,5 +42,11 @@ class FirebaseScreenInfoRepository {
           toFirestore: (screen, _) => screen.toJson(),
         )
         .set(newScreenInfo);
+    if (screenName != null) {
+    await firestoreInstance
+        .collection('screens')
+        .doc(screenToken)
+        .set({"name" : screenName}, SetOptions(merge: true));
+    }
   }
 }
