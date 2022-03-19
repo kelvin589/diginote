@@ -56,6 +56,9 @@ void main() async {
   final NotificationService notificationService = NotificationService();
   await notificationService.init();
 
+  final ThemeProvider themeProvider = ThemeProvider();
+  await themeProvider.init();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => loginProvider),
@@ -64,7 +67,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => previewProvider),
       ChangeNotifierProvider(create: (context) => templatesProvider),
       ChangeNotifierProvider(create: (context) => screenInfoProvider),
-      ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ChangeNotifierProvider(create: (context) => themeProvider),
     ],
     child: const MyApp(),
   ));
