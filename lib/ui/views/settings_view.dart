@@ -31,14 +31,14 @@ class _SettingsViewState extends State<SettingsView> {
       padding: const EdgeInsets.all(24.0),
       child: Column(
         children: [
-          _AllowNotificationsToggle(
-            value: allowNotifications,
-            onChanged: (newValue) => setState(
-              () {
-                allowNotifications = newValue;
-              },
-            ),
-          ),
+          // _AllowNotificationsToggle(
+          //   value: allowNotifications,
+          //   onChanged: (newValue) => setState(
+          //     () {
+          //       allowNotifications = newValue;
+          //     },
+          //   ),
+          // ),
           _DarkModeToggle(
             value: isDarkMode,
             onChanged: (newValue) => setState(
