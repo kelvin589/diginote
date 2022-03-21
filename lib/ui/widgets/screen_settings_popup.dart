@@ -27,6 +27,8 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
   late double lowBatteryThreshold;
   late double batteryReportingDelay;
 
+  final screenNameController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +36,7 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
         (widget.screenInfo.lowBatteryNotificationDelay / 60).toDouble();
     lowBatteryThreshold = widget.screenInfo.lowBatteryThreshold.toDouble();
     batteryReportingDelay = (widget.screenInfo.batteryReportingDelay / 60).toDouble();
+    screenNameController.text = widget.screenName;
   }
 
   @override
@@ -44,6 +47,11 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Text("Screen name"),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: TextFormField(controller: screenNameController,),
+            ),
             const Text("Delay between notifications:"),
             Text("${lowBatteryNotificationDelay.toInt()} minutes"),
             Slider(
@@ -114,8 +122,9 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
         (lowBatteryNotificationDelay * 60).toInt();
     widget.screenInfo.lowBatteryThreshold = lowBatteryThreshold.toInt();
     widget.screenInfo.batteryReportingDelay = (batteryReportingDelay * 60).toInt();
+    final String? screenName = widget.screenName == screenNameController.text ? null : screenNameController.text;
     await Provider.of<FirebaseScreenInfoProvider>(context, listen: false)
-        .setScreenInfo(widget.screenToken, widget.screenInfo);
+        .setScreenInfo(widget.screenToken, widget.screenInfo, screenName: screenName);
   }
 }
 

@@ -5,6 +5,7 @@ import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/core/providers/firebase_screen_info_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/core/providers/firebase_templates_provider.dart';
+import 'package:diginote/core/providers/theme_provider.dart';
 import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/core/services/notification_service.dart';
 import 'package:diginote/core/services/token_updater_service.dart';
@@ -42,7 +43,8 @@ void main() async {
       FirebaseScreenInfoProvider(
           firestoreInstance: firestoreInstance, authInstance: authInstance);
 
-  final FirebaseTemplatesProvider templatesProvider = FirebaseTemplatesProvider(firestoreInstance: firestoreInstance, authInstance: authInstance);
+  final FirebaseTemplatesProvider templatesProvider = FirebaseTemplatesProvider(
+      firestoreInstance: firestoreInstance, authInstance: authInstance);
   // await templatesProvider.init();
 
   final TokenUpdaterService tokenUpdater = TokenUpdaterService(
@@ -54,6 +56,9 @@ void main() async {
   final NotificationService notificationService = NotificationService();
   await notificationService.init();
 
+  final ThemeProvider themeProvider = ThemeProvider();
+  await themeProvider.init();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => loginProvider),
@@ -62,6 +67,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => previewProvider),
       ChangeNotifierProvider(create: (context) => templatesProvider),
       ChangeNotifierProvider(create: (context) => screenInfoProvider),
+      ChangeNotifierProvider(create: (context) => themeProvider),
     ],
     child: const MyApp(),
   ));
@@ -72,24 +78,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-      ),
-      initialRoute: LoginView.route,
-      //initialRoute: HomeView.route,
-      routes: {
-        HomeView.route: (context) => const HomeView(),
-        LoginView.route: (_) => Consumer<FirebaseLoginProvider>(
-              builder: (context, loginProvider, child) => LoginView(
-                  applicationLoginState: loginProvider.applicationLoginState),
-            ),
-        RegisterView.route: (_) => RegisterView(
-            applicationRegisterState:
-                Provider.of<FirebaseRegisterProvider>(context)
-                    .applicationRegisterState),
-      },
+    return Consumer<ThemeProvider>(
+      builder: ((context, themeProvider, child) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: themeProvider.isDarkMode
+              ? ThemeData.dark()
+              : ThemeData(
+                  colorScheme: ColorScheme.light().copyWith(
+                      primary: themeProvider.backgroundColour,
+                      secondary: themeProvider.backgroundColour),
+                ),
+          initialRoute: LoginView.route,
+          routes: {
+            HomeView.route: (context) => const HomeView(),
+            LoginView.route: (_) => Consumer<FirebaseLoginProvider>(
+                  builder: (context, loginProvider, child) => LoginView(
+                      applicationLoginState:
+                          loginProvider.applicationLoginState),
+                ),
+            RegisterView.route: (_) => RegisterView(
+                applicationRegisterState:
+                    Provider.of<FirebaseRegisterProvider>(context)
+                        .applicationRegisterState),
+          },
+        );
+      }),
     );
   }
 }
