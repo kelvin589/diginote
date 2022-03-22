@@ -83,7 +83,11 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Flutter Demo',
           theme: themeProvider.isDarkMode
-              ? ThemeData.dark()
+              ? ThemeData(
+                  colorScheme: ColorScheme.dark().copyWith(
+                      primary: themeProvider.backgroundColour,
+                      secondary: themeProvider.backgroundColour,),
+                )
               : ThemeData(
                   colorScheme: ColorScheme.light().copyWith(
                       primary: themeProvider.backgroundColour,

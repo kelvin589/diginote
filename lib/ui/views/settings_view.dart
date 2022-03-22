@@ -49,18 +49,16 @@ class _SettingsViewState extends State<SettingsView> {
               },
             ),
           ),
-          !isDarkMode
-              ? _HighlightColourPicker(
-                  initialColour: backgroundColour,
-                  onColourChanged: (newColour) => setState(
-                    () {
-                      Provider.of<ThemeProvider>(context, listen: false)
-                          .setBackgroundColour(newColour);
-                      backgroundColour = newColour;
-                    },
-                  ),
-                )
-              : Container(),
+          _HighlightColourPicker(
+            initialColour: backgroundColour,
+            onColourChanged: (newColour) => setState(
+              () {
+                Provider.of<ThemeProvider>(context, listen: false)
+                    .setBackgroundColour(newColour);
+                backgroundColour = newColour;
+              },
+            ),
+          ),
           Spacer(),
           _LogoutButton(
             onPressed: () async {
