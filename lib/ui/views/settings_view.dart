@@ -50,7 +50,7 @@ class _SettingsViewState extends State<SettingsView> {
             ),
           ),
           !isDarkMode
-              ? _BackgroundColourPicker(
+              ? _HighlightColourPicker(
                   initialColour: backgroundColour,
                   onColourChanged: (newColour) => setState(
                     () {
@@ -118,8 +118,8 @@ class _DarkModeToggle extends StatelessWidget {
   }
 }
 
-class _BackgroundColourPicker extends StatelessWidget {
-  const _BackgroundColourPicker(
+class _HighlightColourPicker extends StatelessWidget {
+  const _HighlightColourPicker(
       {Key? key, required this.initialColour, required this.onColourChanged})
       : super(key: key);
 
@@ -130,7 +130,7 @@ class _BackgroundColourPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text("Background Colour"),
+        const Text("Highlight Colour"),
         ColourPickerIcon(
           initialColour: initialColour,
           onColourChanged: onColourChanged,
