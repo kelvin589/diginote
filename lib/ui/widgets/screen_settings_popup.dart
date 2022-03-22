@@ -52,7 +52,7 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextFormField(controller: screenNameController,),
             ),
-            const Text("Delay between notifications:"),
+            const Text("Delay between low battery notifications:"),
             Text("${lowBatteryNotificationDelay.toInt()} minutes"),
             Slider(
               value: lowBatteryNotificationDelay,
