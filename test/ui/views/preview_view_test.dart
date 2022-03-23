@@ -40,6 +40,7 @@ void main() async {
             screenWidth: width,
             screenHeight: height,
             screenName: "Test",
+            isOnline: false,
           ),
         ),
       ),
