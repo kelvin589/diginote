@@ -34,7 +34,7 @@ class ScreenItemContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Last Updated: ${lastUpdatedString(lastUpdated)}'),
-          Text('Battery Percentage: $batteryPercentage%'),
+          _BatteryPercentageText(batteryPercentage: batteryPercentage),
         ],
       ),
       trailing: Row(
@@ -63,5 +63,35 @@ class ScreenItemContent extends StatelessWidget {
     String hour = lastUpdated.hour.toString().padLeft(2, '0');
     String minute = lastUpdated.minute.toString().padLeft(2, '0');
     return "$day/$month/$year - $hour:$minute";
+  }
+}
+
+class _BatteryPercentageText extends StatelessWidget {
+  const _BatteryPercentageText({Key? key, required this.batteryPercentage})
+      : super(key: key);
+
+  final int batteryPercentage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Text('Battery Percentage: '),
+        Text(
+          '$batteryPercentage%',
+          style: TextStyle(color: batteryPercentageColour(batteryPercentage)),
+        ),
+      ],
+    );
+  }
+
+  Color batteryPercentageColour(int batteryPercentage) {
+    if (batteryPercentage >= 60) {
+      return Colors.green;
+    } else if (batteryPercentage >= 30) {
+      return Colors.orange;
+    } else {
+      return Colors.red;
+    }
   }
 }
