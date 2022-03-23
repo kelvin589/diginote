@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefThemeManager {
@@ -23,6 +24,6 @@ class SharedPrefThemeManager {
 
   Future<int> getBackgroundColour() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getInt(PREF_KEY_BACKGROUND_COLOUR) ?? 0;
+    return sharedPreferences.getInt(PREF_KEY_BACKGROUND_COLOUR) ?? Colors.teal.value;
   }
 }
