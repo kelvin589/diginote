@@ -59,7 +59,7 @@ class _SettingsViewState extends State<SettingsView> {
               },
             ),
           ),
-          Spacer(),
+          const Spacer(),
           _LogoutButton(
             onPressed: () async {
               await Provider.of<FirebaseLoginProvider>(context, listen: false)

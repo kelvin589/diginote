@@ -221,7 +221,6 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
   }
 
   Future<void> _okPressed() async {
-    // TODO: Implement X/Y
     Message newMessage = Message(
         header: _headerController.text,
         message: _messageController.text,

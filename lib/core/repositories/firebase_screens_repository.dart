@@ -13,7 +13,7 @@ class FirebaseScreensRepository {
     print("ALERT: INITIALISED THE REPOSITORY");
     authInstance.userChanges().listen((User? user) {
       if (user == null) {
-        print("ALERT: USER LOGGED OUT ${user}");
+        print("ALERT: USER LOGGED OUT $user");
       } else {
         userID = user.uid;
         print("ALERT: USER LOGGED IN $userID");

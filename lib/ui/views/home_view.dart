@@ -1,4 +1,3 @@
-import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/navigation_page_enum.dart';
 import 'package:diginote/ui/widgets/add_screen_popup.dart';
 import 'package:diginote/ui/widgets/add_template_popup.dart';
@@ -71,7 +70,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
             context: context,
             builder: (context) => const AddScreenPopup(),
           ),
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         );
       case NavigationPage.templates:
         return FloatingActionButton(
@@ -79,7 +78,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
             context: context,
             builder: (context) => const AddTemplatePopup(),
           ),
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         );
       default:
         return null;

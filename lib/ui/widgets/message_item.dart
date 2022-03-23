@@ -28,7 +28,7 @@ class MessageItem extends StatefulWidget {
 
 class _MessageItemState extends State<MessageItem> {
   bool displayOptions = false;
-  late final messageScaling;
+  late final double messageScaling;
 
   @override
   void initState() {
