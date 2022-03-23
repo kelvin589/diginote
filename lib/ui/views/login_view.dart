@@ -73,7 +73,7 @@ class _LoginFormState extends State<LoginForm> {
                   TextFormField(
                     controller: _passwordController,
                     decoration: const InputDecoration(hintText: 'Password'),
-                    validator: Validator.isEmpty,
+                    validator: Validator.isValidPassword,
                     obscureText: true,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
