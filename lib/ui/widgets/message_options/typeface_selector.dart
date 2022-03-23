@@ -1,7 +1,6 @@
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:flutter/material.dart';
 
-// TODO: Implement type face selector
 class TypefaceSelector extends StatelessWidget {
   const TypefaceSelector({Key? key}) : super(key: key);
 
