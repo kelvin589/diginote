@@ -100,6 +100,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     footerText: "Already have an account?",
                     buttonText: 'Login',
                     onPressed: () async {
+                      Provider.of<FirebaseRegisterProvider>(context, listen: false).resetState();
                       Navigator.pushReplacementNamed(context, LoginView.route);
                     },
                   )

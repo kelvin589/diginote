@@ -23,4 +23,8 @@ class FirebaseRegisterProvider extends ChangeNotifier {
     notifyListeners();
     return userCredential;
   }
+
+  void resetState() {
+    _applicationRegisterState = ApplicationRegisterState.registering;
+  }
 }
