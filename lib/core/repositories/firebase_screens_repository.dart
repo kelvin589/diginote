@@ -69,6 +69,7 @@ class FirebaseScreensRepository {
         .collection('screenInfo')
         .doc(screenToken)
         .set({
+          "batteryPercentage": 0,
           "lowBatteryThreshold": 30,
           "lowBatteryNotificationDelay": 600,
           "batteryReportingDelay": 600,
