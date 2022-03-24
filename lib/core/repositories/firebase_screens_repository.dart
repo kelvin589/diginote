@@ -37,7 +37,9 @@ class FirebaseScreensRepository {
         await _updatescreen(screen, value.docs.map((e) => e.id).first);
         onSuccess();
       },
-    ).catchError((_) async => await onError());
+    ).catchError((_) async {
+      await onError();
+    });
   }
 
   Future<void> _updatescreen(Screen screen, String screenToken) async {
@@ -101,7 +103,9 @@ class FirebaseScreensRepository {
           snapshot.reference.delete();
         }
       },
-    ).catchError((onError) => print("Failed to delete error: $onError"));
+    ).catchError((onError) async {
+      print("Failed to delete error: $onError");
+    });
     // Remove screen from users screens list
     await firestoreInstance
         .collection('users')

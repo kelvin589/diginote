@@ -12,6 +12,7 @@ class FirebaseRegisterRepository {
       return userCredential;
     } on FirebaseAuthException catch (exception) {
       onError(exception);
+      return null;
     }
   }
 }
