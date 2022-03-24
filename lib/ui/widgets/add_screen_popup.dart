@@ -40,6 +40,7 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
               decoration: const InputDecoration(hintText: 'Pairing Code'),
               validator: Validator.isValidPairingCodeFormat,
               autovalidateMode: AutovalidateMode.onUserInteraction,
+              textCapitalization: TextCapitalization.characters,
             ),
           ],
         ),
