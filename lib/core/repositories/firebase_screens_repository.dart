@@ -122,12 +122,19 @@ class FirebaseScreensRepository {
         }, SetOptions(merge: true))
         .then((value) => print("Deleted user's screen"))
         .catchError((onError) => print("Couldn't delete the user's screen"));
+    // Set default values in screen screenInfo
     await firestoreInstance
         .collection('screenInfo')
         .doc(screenToken)
-        .delete()
-        .then((value) => print("Deleted screen info"))
-        .catchError(
-            (onError) => print("Failed to delete screen info: $onError"));
+        .set({
+          "batteryPercentage": 0,
+          "lowBatteryThreshold": 30,
+          "lowBatteryNotificationDelay": 600,
+          "batteryReportingDelay": 600,
+          "screenToken": screenToken,
+          "isOnline": true,
+        }, SetOptions(merge: true))
+        .then((value) => print("Updated screen info"))
+        .catchError((onError) => print("Couldn't update screen info"));
   }
 }
