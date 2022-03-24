@@ -64,20 +64,7 @@ class FirebaseScreensRepository {
         }, SetOptions(merge: true))
         .then((value) => print("Updated user's screens"))
         .catchError((onError) => print("Couldn't update the user's screens"));
-    // Set default values in screen screenInfo
-    await firestoreInstance
-        .collection('screenInfo')
-        .doc(screenToken)
-        .set({
-          "batteryPercentage": 0,
-          "lowBatteryThreshold": 30,
-          "lowBatteryNotificationDelay": 600,
-          "batteryReportingDelay": 600,
-          "screenToken": screenToken,
-          "isOnline": true,
-        }, SetOptions(merge: true))
-        .then((value) => print("Updated screen info"))
-        .catchError((onError) => print("Couldn't update screen info"));
+    await _setDefaultScreenInfo(screenToken);
   }
 
   Stream<Iterable<Screen>> getScreens() {
@@ -95,6 +82,7 @@ class FirebaseScreensRepository {
   }
 
   Future<void> deleteScreen(String screenToken) async {
+    // Delete screen from screens collection
     await firestoreInstance
         .collection('screens')
         .doc(screenToken)
@@ -114,6 +102,7 @@ class FirebaseScreensRepository {
         }
       },
     ).catchError((onError) => print("Failed to delete error: $onError"));
+    // Remove screen from users screens list
     await firestoreInstance
         .collection('users')
         .doc(userID)
@@ -122,7 +111,11 @@ class FirebaseScreensRepository {
         }, SetOptions(merge: true))
         .then((value) => print("Deleted user's screen"))
         .catchError((onError) => print("Couldn't delete the user's screen"));
-    // Set default values in screen screenInfo
+    await _setDefaultScreenInfo(screenToken);
+  }
+
+  Future<void> _setDefaultScreenInfo(String screenToken) async {
+    // Set default values in screen's screenInfo
     await firestoreInstance
         .collection('screenInfo')
         .doc(screenToken)
