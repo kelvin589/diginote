@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -46,7 +47,7 @@ class DateTimeSelector extends StatelessWidget {
     final DateTime? date = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: initialDate,
+      firstDate: clock.now(),
       lastDate: initialDate.add(const Duration(days: 365)),
     );
     if (date != null && date != initialDate) {
