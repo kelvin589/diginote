@@ -106,6 +106,7 @@ class MyApp extends StatelessWidget {
                     Provider.of<FirebaseRegisterProvider>(context)
                         .applicationRegisterState),
           },
+          debugShowCheckedModeBanner: false,
         );
       }),
     );
