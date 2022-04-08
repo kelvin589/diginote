@@ -10,6 +10,7 @@ class FirebaseLoginRepository {
       return await authInstance.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (exception) {
       onError(exception);
+      return null;
     }
   }
 

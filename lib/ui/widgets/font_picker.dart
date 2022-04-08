@@ -53,7 +53,14 @@ class _FontFamily extends StatelessWidget {
     'Caveat',
     'Amatic SC',
     'Tajawal',
-    'Parisienne'
+    'Parisienne',
+    'Ceviche One',
+    'Merienda',
+    'Gochi Hand',
+    'Just Me Again Down Here',
+    'La Belle Aurore',
+    'Walter Turncoat',
+    'Cedarville Cursive'
   ];
 
   @override

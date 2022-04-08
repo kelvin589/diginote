@@ -7,7 +7,6 @@ import 'package:diginote/ui/widgets/message_options/background_colour_selector.d
 import 'package:diginote/ui/widgets/message_options/font_selector.dart';
 import 'package:diginote/ui/widgets/message_options/foreground_colour_selector.dart';
 import 'package:diginote/ui/widgets/message_options/header_input.dart';
-import 'package:diginote/ui/widgets/message_options/listing_selector.dart';
 import 'package:diginote/ui/widgets/message_options/message_input.dart';
 import 'package:diginote/ui/widgets/message_options/message_size_selector.dart';
 import 'package:diginote/ui/widgets/message_options/text_alignment_selector.dart';
@@ -117,7 +116,6 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         onColourChanged: onBackgroundColourChanged,
         initialColour: backgroundColour,
       ),
-      // const ListingSelector(),
       TextAlignmentSelector(
         onTextAlignmentChanged: onTextAlignmentChanged,
         initialTextAlignment: textAlignment,

@@ -36,7 +36,7 @@ class ScreenItem extends StatelessWidget {
             lastUpdated: screen.lastUpdated,
             batteryPercentage: screenInfo.batteryPercentage,
             isOnline: screenInfo.isOnline,
-            onPreviewTapped: () => _showPreview(context, screen),
+            onPreviewTapped: () => _showPreview(context, screen, screenInfo.isOnline),
             onSettingsTapped: () => _showScreenSettings(
               context: context,
               screenToken: screen.screenToken,
@@ -51,7 +51,7 @@ class ScreenItem extends StatelessWidget {
     );
   }
 
-  void _showPreview(BuildContext context, Screen screen) {
+  void _showPreview(BuildContext context, Screen screen, bool isOnline) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -70,6 +70,7 @@ class ScreenItem extends StatelessWidget {
             screenWidth: screen.width,
             screenHeight: screen.height,
             screenName: screen.name,
+            isOnline: isOnline,
           ),
         ),
       ),

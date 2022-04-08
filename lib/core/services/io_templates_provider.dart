@@ -27,7 +27,7 @@ class TemplatesProvider extends ChangeNotifier {
   }
 
   Future<void> _addDefaultTemplates() async {
-    final uuid = Uuid();
+    const uuid = Uuid();
     Template doNotDisturb = Template(
         header: "",
         message: "Do Not Disturb",

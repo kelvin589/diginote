@@ -14,19 +14,42 @@ class PreviewView extends StatefulWidget {
       required this.screenToken,
       required this.screenWidth,
       required this.screenHeight,
-      required this.screenName})
+      required this.screenName,
+      required this.isOnline})
       : super(key: key);
 
   final String screenToken;
   final double screenWidth;
   final double screenHeight;
   final String screenName;
+  final bool isOnline;
 
   @override
   _PreviewViewState createState() => _PreviewViewState();
 }
 
 class _PreviewViewState extends State<PreviewView> {
+  @override
+  void initState() {
+    super.initState();
+    // Let user know if screen is online when showing preview
+    if (!widget.isOnline) {
+      // Must delay to show snackbar in init
+      WidgetsBinding.instance?.addPostFrameCallback(
+        (_) => ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                "This screen '${widget.screenName}' is offline. Messages will be updated when this screen is back online."),
+            action: SnackBarAction(
+              label: 'Return',
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Width and height of this device cosidering safe area

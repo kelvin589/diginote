@@ -52,7 +52,7 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextFormField(controller: screenNameController,),
             ),
-            const Text("Delay between notifications:"),
+            const Text("Delay between low battery notifications:"),
             Text("${lowBatteryNotificationDelay.toInt()} minutes"),
             Slider(
               value: lowBatteryNotificationDelay,
@@ -61,9 +61,9 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
                   lowBatteryNotificationDelay = newValue;
                 });
               },
-              min: 10,
+              min: 1,
               max: 60,
-              divisions: 50,
+              divisions: 59,
               label: "$lowBatteryNotificationDelay",
             ),
             const Text("Low battery notification threshold:"),
@@ -89,9 +89,9 @@ class _ScreenSettingsPopupState extends State<ScreenSettingsPopup> {
                   batteryReportingDelay = newValue;
                 });
               },
-              min: 10,
+              min: 1,
               max: 60,
-              divisions: 50,
+              divisions: 59,
               label: "$batteryReportingDelay",
             ),
             const Text("Delete Screen:"),

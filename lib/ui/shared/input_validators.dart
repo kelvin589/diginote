@@ -108,7 +108,7 @@ extension StringValidators on String {
     // Regex taken from:
     // https://stackoverflow.com/questions/49757486/how-to-use-regex-in-dart
     final nameRegExp = RegExp(r'^[a-zA-Z0-9]+$');
-    return nameRegExp.hasMatch(this) && isOfMinimumLength(6);
+    return nameRegExp.hasMatch(this) && isOfMinimumLength(3);
   }
 
   // Valid pairing code contains uppercase letters and digits, with a length of 6
