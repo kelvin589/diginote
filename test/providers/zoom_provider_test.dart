@@ -15,6 +15,7 @@ void main() async {
   });
 
   test('Zoom is decreased by the correct amount', () async {
+    zoomProvider.zoomIn();
     double currentZoom = zoomProvider.zoom;
     zoomProvider.zoomOut();
     expect(zoomProvider.zoom, currentZoom - ZoomProvider.zoomAmount);
