@@ -102,6 +102,21 @@ void main() async {
     expect(firstMessage?.header, equals("header"));
   });
 
+  test('Update message', () async {
+    Message message = messageBodyIDOnly("Message1", "id");
+    await previewRepository.addMessage(screenToken, message);
+    final firstMessage = await getFirstMessage();
+    expect(firstMessage, isNotNull);
+
+    // The id must be set to the same as the one inserted above
+    Message updatedMessage = messageBodyIDOnly("Message1 Updated", firstMessage!.id);
+    await previewRepository.updateMessage(screenToken, updatedMessage);
+
+    final secondMessage = await getFirstMessage();
+    expect(secondMessage, isNotNull);
+    expect(secondMessage?.message, equals("Message1 Updated"));
+  });
+
   test('Get messages', () async {
     final message1 = messageBodyIDOnly("message1", "messageID1");
     final message2 = messageBodyIDOnly("message2", "messageID2");
