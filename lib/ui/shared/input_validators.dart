@@ -61,8 +61,9 @@ class Validator {
 extension StringValidators on String {
   bool get isValidEmail {
     // Regex taken from:
-    // https://blog.logrocket.com/flutter-form-validation-complete-guide/#using-regex-methods-dart-extension-methods
-    final emailRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    // https://stackoverflow.com/questions/16800540/validate-email-address-in-dart/16888554#16888554
+    // Posted by user Airon Tark
+    final emailRegExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
     return emailRegExp.hasMatch(this);
   }
 
