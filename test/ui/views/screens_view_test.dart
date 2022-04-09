@@ -6,13 +6,23 @@ import 'package:diginote/core/providers/firebase_screen_info_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/views/home_view.dart';
+import 'package:diginote/ui/widgets/add_screen_popup.dart';
 import 'package:diginote/ui/widgets/screen_item.dart';
-import 'package:diginote/ui/widgets/screen_item_content.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+
+class _Descriptions {
+  static final emptyText = find.textContaining("Field cannot be empty");
+  static final invalidScreenName =
+      find.textContaining("Not a valid screen name");
+  static final invalidPairingCode =
+      find.textContaining("The format is incorrect");
+  static final nonExistentPairingCode =
+      find.textContaining("Already paired or the code wrong.");
+}
 
 void main() async {
   late FakeFirebaseFirestore firestoreInstance;
@@ -53,13 +63,15 @@ void main() async {
     await tester.pumpAndSettle();
   }
 
-  Future<void> addPairedScreen(
+  Future<void> addScreen(
       {required String name,
       required String userID,
-      required String token}) async {
+      required String token,
+      bool paired = true,
+      String pairingCode = "pairingCode"}) async {
     final toAddScreen = Screen(
-        pairingCode: "pairingCode",
-        paired: true,
+        pairingCode: pairingCode,
+        paired: paired,
         name: name,
         userID: userID,
         lastUpdated: clock.now(),
@@ -97,7 +109,7 @@ void main() async {
 
     expect(find.byType(ScreenItem), findsNothing);
 
-    await addPairedScreen(name: "Screen1", userID: user.uid, token: "Screen1");
+    await addScreen(name: "Screen1", userID: user.uid, token: "Screen1");
     await tester.idle();
     await tester.pump(); // One pump to load Screen
     await tester.pump(); // Another pump to load ScreenInfo
@@ -105,12 +117,12 @@ void main() async {
     expect(find.byType(ScreenItem), findsOneWidget);
     expect(find.text("Screen1"), findsOneWidget);
 
-    await addPairedScreen(name: "Screen2", userID: user.uid, token: "Screen2");
+    await addScreen(name: "Screen2", userID: user.uid, token: "Screen2");
     await tester.idle();
     await tester.pump();
     await tester.pump();
 
-    await addPairedScreen(name: "Screen3", userID: "Not_Mine", token: "Screen3");
+    await addScreen(name: "Screen3", userID: "Not_Mine", token: "Screen3");
     await tester.idle();
     await tester.pump();
     await tester.pump();
@@ -124,7 +136,7 @@ void main() async {
       (WidgetTester tester) async {
     await loadScreensView(tester);
 
-    await addPairedScreen(name: "Screen1", userID: user.uid, token: "Screen1");
+    await addScreen(name: "Screen1", userID: user.uid, token: "Screen1");
     await tester.idle();
     await tester.pump();
     await tester.pump();
@@ -143,5 +155,148 @@ void main() async {
     await tester.pump();
 
     expect(find.byType(ScreenItem), findsNothing);
+  });
+
+  // Fields in the add screen popup are ordered as follows: screen name, pairing code
+  TextFormField findScreenNameField(WidgetTester tester) {
+    final fieldFinder = find.byType(TextFormField);
+    List<TextFormField> fields =
+        fieldFinder.evaluate().map((e) => e.widget as TextFormField).toList();
+    return fields[0];
+  }
+
+  TextFormField findPairingCodeField(WidgetTester tester) {
+    final fieldFinder = find.byType(TextFormField);
+    List<TextFormField> fields =
+        fieldFinder.evaluate().map((e) => e.widget as TextFormField).toList();
+    return fields[1];
+  }
+
+  Future<void> tapAddScreen(WidgetTester tester) async {
+    final buttonFinder = find.byType(FloatingActionButton);
+    await tester.tap(buttonFinder.first);
+    await tester.idle();
+    await tester.pump();
+  }
+
+  Future<void> tapOK(WidgetTester tester) async {
+    final textFinder = find.text("OK");
+    await tester.tap(textFinder.first);
+    await tester.idle();
+    await tester.pump();
+  }
+
+  testWidgets(
+      'A null screen name and pairing code i.e. input field has not been pressed',
+      (WidgetTester tester) async {
+    await loadScreensView(tester);
+    await tapAddScreen(tester);
+    await tapOK(tester);
+
+    expect(_Descriptions.emptyText, findsNWidgets(2));
+  });
+
+  group('Test pairing code validation when pairing a new screen', () {
+    testWidgets("An empty pairing code", (WidgetTester tester) async {
+      await loadScreensView(tester);
+      await tapAddScreen(tester);
+
+      final TextFormField pairingCodeField = findPairingCodeField(tester);
+      await tester.enterText(find.byWidget(pairingCodeField), ' ');
+      await tapOK(tester);
+
+      expect(_Descriptions.invalidPairingCode, findsOneWidget);
+    });
+
+    testWidgets("A pairing code in the wrong format",
+        (WidgetTester tester) async {
+      await loadScreensView(tester);
+      await tapAddScreen(tester);
+
+      final TextFormField pairingCodeField = findPairingCodeField(tester);
+      await tester.enterText(find.byWidget(pairingCodeField), 'ab45gd');
+      await tapOK(tester);
+
+      expect(_Descriptions.invalidPairingCode, findsOneWidget);
+    });
+
+    testWidgets("A pairing code which does not exist",
+        (WidgetTester tester) async {
+      await loadScreensView(tester);
+      await tapAddScreen(tester);
+
+      await addScreen(
+          name: "Screen1", userID: user.uid, token: "AC45GD", paired: false);
+
+      final TextFormField screenNameField = findScreenNameField(tester);
+      await tester.enterText(find.byWidget(screenNameField), 'Screen1');
+      final TextFormField pairingCodeField = findPairingCodeField(tester);
+      await tester.enterText(find.byWidget(pairingCodeField), 'AB45GD');
+
+      await tapOK(tester);
+
+      expect(_Descriptions.nonExistentPairingCode, findsOneWidget);
+    });
+
+    testWidgets("A valid pairing code for an unpaired screen",
+        (WidgetTester tester) async {
+      await loadScreensView(tester);
+      await tapAddScreen(tester);
+
+      await addScreen(
+          name: "Screen1",
+          userID: user.uid,
+          token: "Screen1",
+          paired: false,
+          pairingCode: "AB45GD");
+
+      final TextFormField screenNameField = findScreenNameField(tester);
+      await tester.enterText(find.byWidget(screenNameField), 'Screen1');
+      final TextFormField pairingCodeField = findPairingCodeField(tester);
+      await tester.enterText(find.byWidget(pairingCodeField), 'AB45GD');
+
+      await tapOK(tester);
+
+      // Successfully paired screen closes the poup
+      expect(find.byType(AddScreenPopup), findsNothing);
+    });
+  });
+
+  group('Test screen name validation when pairing a new screen', () {
+    testWidgets("An empty screen name", (WidgetTester tester) async {
+      await loadScreensView(tester);
+      await tapAddScreen(tester);
+
+      final TextFormField screenNameField = findScreenNameField(tester);
+      await tester.enterText(find.byWidget(screenNameField), ' ');
+      await tapOK(tester);
+
+      expect(_Descriptions.invalidScreenName, findsOneWidget);
+    });
+
+    testWidgets(
+        "A screen name that meets other requirements but is one too short",
+        (WidgetTester tester) async {
+      await loadScreensView(tester);
+      await tapAddScreen(tester);
+
+      final TextFormField screenNameField = findScreenNameField(tester);
+      await tester.enterText(find.byWidget(screenNameField), 'ab');
+      await tapOK(tester);
+
+      expect(_Descriptions.invalidScreenName, findsOneWidget);
+    });
+
+    testWidgets("A screen name with length exactly as the minimum",
+        (WidgetTester tester) async {
+      await loadScreensView(tester);
+      await tapAddScreen(tester);
+
+      final TextFormField screenNameField = findScreenNameField(tester);
+      await tester.enterText(find.byWidget(screenNameField), 'abc');
+      await tapOK(tester);
+
+      expect(_Descriptions.invalidScreenName, findsNothing);
+    });
   });
 }
