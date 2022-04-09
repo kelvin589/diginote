@@ -33,13 +33,12 @@ void main() async {
         height: 100);
   }
 
-  Future<void> addPairedScreen(Screen screen) async {
+  Future<void> addScreen(Screen screen) async {
     await firestoreInstance
         .collection('screens')
         .doc(screen.screenToken)
         .withConverter<Screen>(
-          fromFirestore: (snapshot, _) =>
-              Screen.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) => Screen.fromJson(snapshot.data()!),
           toFirestore: (screen, _) => screen.toJson(),
         )
         .set(screen);
@@ -50,8 +49,7 @@ void main() async {
         .collection('screens')
         .where('screenToken', isEqualTo: screenToken)
         .withConverter<Screen>(
-          fromFirestore: (snapshot, _) =>
-              Screen.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) => Screen.fromJson(snapshot.data()!),
           toFirestore: (screen, _) => screen.toJson(),
         )
         .get();
@@ -70,7 +68,7 @@ void main() async {
         screenToken: screenToken,
         width: 100,
         height: 100);
-    addPairedScreen(screen);
+    addScreen(screen);
 
     await screensRepository.addScreen(screen, () => {}, () async => {});
     final pairedScreen = await getScreen(screenToken);
@@ -91,27 +89,24 @@ void main() async {
       emitsInOrder([
         [],
         [ScreenMatcher(screen1.toJson())],
-        [
-          ScreenMatcher(screen1.toJson()),
-          ScreenMatcher(screen2.toJson())
-        ],
+        [ScreenMatcher(screen1.toJson()), ScreenMatcher(screen2.toJson())],
       ]),
     );
 
     // Shouldn't contain a screen that's not mine
     await Future.delayed(Duration.zero);
-    await addPairedScreen(screen3);
+    await addScreen(screen3);
     // But should contain my screens
     await Future.delayed(Duration.zero);
-    await addPairedScreen(screen1);
+    await addScreen(screen1);
     await Future.delayed(Duration.zero);
-    await addPairedScreen(screen2);
+    await addScreen(screen2);
   });
 
   test("Delete a screen", () async {
     const screenToken = "screen1";
     final screen1 = screenIDTokenOnly(mockUser.uid, screenToken);
-    await addPairedScreen(screen1);
+    await addScreen(screen1);
 
     final pairedScreen = await getScreen(screenToken);
     expect(screen1 == pairedScreen, true);

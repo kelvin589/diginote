@@ -1,5 +1,6 @@
 import 'package:diginote/core/providers/firebase_login_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
+import 'package:diginote/core/providers/theme_provider.dart';
 import 'package:diginote/main.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -12,6 +13,7 @@ void main() async {
   late FirebaseScreensProvider screensProvider;
   late MockFirebaseAuth authInstance;
   late FakeFirebaseFirestore firestoreInstance;
+  late ThemeProvider themeProvider;
 
   setUp(() {
     authInstance = MockFirebaseAuth();
@@ -19,6 +21,8 @@ void main() async {
     loginProvider = FirebaseLoginProvider(authInstance: authInstance);
     screensProvider = FirebaseScreensProvider(
         firestoreInstance: firestoreInstance, authInstance: authInstance);
+    themeProvider = ThemeProvider();
+    themeProvider.init();
   });
 
   Future<void> loadLoginView(WidgetTester tester) async {
@@ -26,6 +30,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => loginProvider),
         ChangeNotifierProvider(create: (context) => screensProvider),
+        ChangeNotifierProvider<ThemeProvider>(create: (context) => themeProvider),
       ],
       child: const MyApp(),
     ));
@@ -34,7 +39,7 @@ void main() async {
   testWidgets('User can login and is taken to the home view',
       (WidgetTester tester) async {
     await loadLoginView(tester);
-    
+
     await loginProvider.signInWithEmailAndPassword(
         "email", "password", (exception) {});
     await tester.idle();

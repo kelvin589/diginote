@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
+import 'package:diginote/core/providers/zoom_provider.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/shared/timer_provider.dart';
 import 'package:diginote/ui/views/preview_view.dart';
@@ -15,6 +16,8 @@ void main() async {
   late FakeFirebaseFirestore firestoreInstance;
   late FirebasePreviewProvider previewProvider;
   late TimerProvider timer;
+  late ZoomProvider zoomProvider;
+    
   const token = "screenToken";
   const width = 500.0;
   const height = 500.0;
@@ -24,6 +27,7 @@ void main() async {
     timer = TimerProvider(duration: const Duration(seconds: 1));
     previewProvider =
         FirebasePreviewProvider(firestoreInstance: firestoreInstance);
+    zoomProvider = ZoomProvider();
   });
 
   Future<void> loadPreviewView(WidgetTester tester) async {
@@ -34,6 +38,7 @@ void main() async {
             ChangeNotifierProvider<FirebasePreviewProvider>(
                 create: (context) => previewProvider),
             ChangeNotifierProvider<TimerProvider>(create: (context) => timer),
+            ChangeNotifierProvider<ZoomProvider>(create: (context) => zoomProvider),
           ],
           child: const PreviewView(
             screenToken: token,

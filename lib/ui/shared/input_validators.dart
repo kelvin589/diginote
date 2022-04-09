@@ -98,7 +98,7 @@ extension StringValidators on String {
     return passwordRegExp.hasMatch(this);
   }
 
-  // Username contains a minimum of 6 characters
+  // Username contains a minimum of 3 characters
   // Contain only:
   //   Uppercase letters (A-Z)
   //   Lowercase letters (a-z)
