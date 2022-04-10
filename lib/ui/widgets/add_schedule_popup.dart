@@ -24,7 +24,7 @@ class _AddSchedulePopupState extends State<AddSchedulePopup> {
   DateTime toDate = clock.now();
   TimeOfDay toTime = TimeOfDay.now();
   bool scheduled = false;
-  String? showErrorText = null;
+  String? showErrorText;
 
   @override
   void initState() {
