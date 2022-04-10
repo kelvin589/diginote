@@ -2,7 +2,6 @@ import 'package:clock/clock.dart';
 import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/models/templates_model.dart';
 import 'package:diginote/core/providers/firebase_templates_provider.dart';
-import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:diginote/ui/widgets/add_template_popup.dart';

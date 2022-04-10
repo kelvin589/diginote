@@ -1,7 +1,5 @@
-import 'package:clock/clock.dart';
 import 'package:diginote/core/models/templates_model.dart';
 import 'package:diginote/core/providers/firebase_templates_provider.dart';
-import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/widgets/message_options/background_colour_selector.dart';
 import 'package:diginote/ui/widgets/message_options/font_selector.dart';
@@ -10,7 +8,6 @@ import 'package:diginote/ui/widgets/message_options/header_input.dart';
 import 'package:diginote/ui/widgets/message_options/message_input.dart';
 import 'package:diginote/ui/widgets/message_options/message_size_selector.dart';
 import 'package:diginote/ui/widgets/message_options/text_alignment_selector.dart';
-import 'package:diginote/ui/widgets/message_options/typeface_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';

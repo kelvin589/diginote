@@ -9,7 +9,6 @@ import 'package:diginote/ui/widgets/message_options/header_input.dart';
 import 'package:diginote/ui/widgets/message_options/message_input.dart';
 import 'package:diginote/ui/widgets/message_options/message_size_selector.dart';
 import 'package:diginote/ui/widgets/message_options/text_alignment_selector.dart';
-import 'package:diginote/ui/widgets/message_options/typeface_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
