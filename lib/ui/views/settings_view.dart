@@ -26,19 +26,10 @@ class _SettingsViewState extends State<SettingsView> {
 
   @override
   Widget build(BuildContext context) {
-    // Hide background/foreground selector if dark mode
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
         children: [
-          // _AllowNotificationsToggle(
-          //   value: allowNotifications,
-          //   onChanged: (newValue) => setState(
-          //     () {
-          //       allowNotifications = newValue;
-          //     },
-          //   ),
-          // ),
           _DarkModeToggle(
             value: isDarkMode,
             onChanged: (newValue) => setState(
@@ -68,28 +59,6 @@ class _SettingsViewState extends State<SettingsView> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _AllowNotificationsToggle extends StatelessWidget {
-  const _AllowNotificationsToggle(
-      {Key? key, required this.value, required this.onChanged})
-      : super(key: key);
-
-  final bool value;
-  final void Function(bool) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Text("Allow Notifications"),
-        Switch(
-          value: value,
-          onChanged: onChanged,
-        ),
-      ],
     );
   }
 }
