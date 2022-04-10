@@ -57,7 +57,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
 
   @override
   Widget build(BuildContext context) {
-    Widget messageBodyAndHeader = Container(
+    Widget messageBodyAndHeader = SizedBox(
       width: width,
       height: height,
       child: Column(
@@ -146,7 +146,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
                 ),
               ),
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: kIsWeb ? 400 : double.maxFinite,
                   child: Scrollbar(
                     child: ListView.separated(
