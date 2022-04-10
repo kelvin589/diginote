@@ -18,9 +18,9 @@ class TemplatesProvider extends ChangeNotifier {
     final directory = Directory('$path/$directoryName');
 
     if (await directory.exists()) {
-      print("Exists");
+      debugPrint("Exists");
     } else {
-      print("Doesn't exist so creating path");
+      debugPrint("Doesn't exist so creating path");
       await directory.create();
       await _addDefaultTemplates();
     }
@@ -77,13 +77,13 @@ class TemplatesProvider extends ChangeNotifier {
     final file = await _localFile(id);
 
     if (await file.exists()) {
-      print("File exists so delete it");
+      debugPrint("File exists so delete it");
       await file.delete();
       notifyListeners();
       return true;
     }
 
-    print("Couldn't delete the file");
+    debugPrint("Couldn't delete the file");
     return false;
   }
 
@@ -101,7 +101,7 @@ class TemplatesProvider extends ChangeNotifier {
 
       return templates;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return [];
     }
   }

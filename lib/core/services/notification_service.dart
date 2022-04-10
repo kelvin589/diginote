@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
@@ -25,7 +26,7 @@ class NotificationService {
     await localNotifications.initialize(initializationSettings);
 
     FirebaseMessaging.onMessage.listen((message) async {
-      print("Received");
+      debugPrint("Received");
       await showMessage(message, localNotifications);
     });
 
@@ -54,5 +55,5 @@ Future<void> showMessage(RemoteMessage message,
 }
 
 Future<void> _backgroundMessageHandler(RemoteMessage message) async {
-  print("received in background");
+  debugPrint("received in background");
 }

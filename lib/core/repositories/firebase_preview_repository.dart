@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginote/core/models/messages_model.dart';
+import 'package:flutter/material.dart';
 
 class FirebasePreviewRepository {
   final FirebaseFirestore firestoreInstance;
@@ -38,8 +39,8 @@ class FirebasePreviewRepository {
           toFirestore: (screen, _) => screen.toJson(),
         )
         .add(message)
-        .then((value) => print("Added a new message."))
-        .catchError((onError) => print("Unable to add message."));
+        .then((value) => debugPrint("Added a new message."))
+        .catchError((onError) => debugPrint("Unable to add message."));
     await updateLastUpdatedToNow(screenToken);
   }
 
@@ -58,8 +59,8 @@ class FirebasePreviewRepository {
           toFirestore: (screen, _) => screen.toJson(),
         )
         .set(message, SetOptions(merge: true))
-        .then((value) => print("Updated the new message."))
-        .catchError((onError) => print("Unable to update the message."));
+        .then((value) => debugPrint("Updated the new message."))
+        .catchError((onError) => debugPrint("Unable to update the message."));
     await updateLastUpdatedToNow(screenToken);
   }
 
@@ -71,9 +72,9 @@ class FirebasePreviewRepository {
         .collection('message')
         .doc(message.id)
         .update({"x": message.x, "y": message.y})
-        .then((value) => print("Updated coordinates of message."))
+        .then((value) => debugPrint("Updated coordinates of message."))
         .catchError((onError) =>
-            print("Unable to update message coordinates. $onError"));
+            debugPrint("Unable to update message coordinates. $onError"));
     await updateLastUpdatedToNow(screenToken);
   }
 
@@ -84,8 +85,8 @@ class FirebasePreviewRepository {
         .collection('message')
         .doc(message.id)
         .delete()
-        .then((value) => print("Deleted message"))
-        .catchError((onError) => print("Unable to delete message."));
+        .then((value) => debugPrint("Deleted message"))
+        .catchError((onError) => debugPrint("Unable to delete message."));
     await updateLastUpdatedToNow(screenToken);
   }
 
@@ -97,8 +98,8 @@ class FirebasePreviewRepository {
         .collection('message')
         .doc(message.id)
         .update({"from": from, "to": to, "scheduled": scheduled})
-        .then((value) => print("Updated message scheduling"))
-        .catchError((onError) => print("Unable to update message scheduling."));
+        .then((value) => debugPrint("Updated message scheduling"))
+        .catchError((onError) => debugPrint("Unable to update message scheduling."));
     await updateLastUpdatedToNow(screenToken);
   }
 
@@ -109,7 +110,7 @@ class FirebasePreviewRepository {
         .update({
           'lastUpdated': clock.now(),
         })
-        .then((value) => print("Updated last updated"))
-        .catchError((onError) => print("Couldn't update last updated"));
+        .then((value) => debugPrint("Updated last updated"))
+        .catchError((onError) => debugPrint("Couldn't update last updated"));
   }
 }

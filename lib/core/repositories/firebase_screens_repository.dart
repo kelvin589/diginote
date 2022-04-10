@@ -3,6 +3,8 @@ import 'package:diginote/core/models/screen_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
+
 class FirebaseScreensRepository {
   final FirebaseFirestore firestoreInstance;
   final FirebaseAuth authInstance;
@@ -10,13 +12,13 @@ class FirebaseScreensRepository {
 
   FirebaseScreensRepository(
       {required this.firestoreInstance, required this.authInstance}) {
-    print("ALERT: INITIALISED THE REPOSITORY");
+    debugPrint("ALERT: INITIALISED THE REPOSITORY");
     authInstance.userChanges().listen((User? user) {
       if (user == null) {
-        print("ALERT: USER LOGGED OUT $user");
+        debugPrint("ALERT: USER LOGGED OUT $user");
       } else {
         userID = user.uid;
-        print("ALERT: USER LOGGED IN $userID");
+        debugPrint("ALERT: USER LOGGED IN $userID");
       }
     });
   }
@@ -55,8 +57,8 @@ class FirebaseScreensRepository {
           'screenToken': screenToken,
           'pairingCode': ""
         })
-        .then((value) => print("Updated paired Boolean"))
-        .catchError((onError) => print("Couldn't update the paired Boolean"));
+        .then((value) => debugPrint("Updated paired Boolean"))
+        .catchError((onError) => debugPrint("Couldn't update the paired Boolean"));
     // Update users collection screen's table with the token
     await firestoreInstance
         .collection('users')
@@ -64,13 +66,13 @@ class FirebaseScreensRepository {
         .set({
           "screens": FieldValue.arrayUnion([screenToken])
         }, SetOptions(merge: true))
-        .then((value) => print("Updated user's screens"))
-        .catchError((onError) => print("Couldn't update the user's screens"));
+        .then((value) => debugPrint("Updated user's screens"))
+        .catchError((onError) => debugPrint("Couldn't update the user's screens"));
     await _setDefaultScreenInfo(screenToken);
   }
 
   Stream<Iterable<Screen>> getScreens() {
-    print("ALERT: GETTING SCREENS FOR $userID");
+    debugPrint("ALERT: GETTING SCREENS FOR $userID");
     return firestoreInstance
         .collection('screens')
         .where('userID', isEqualTo: userID)
@@ -89,8 +91,8 @@ class FirebaseScreensRepository {
         .collection('screens')
         .doc(screenToken)
         .delete()
-        .then((value) => print("Deleted screen"))
-        .catchError((onError) => print("Failed to delete error: $onError"));
+        .then((value) => debugPrint("Deleted screen"))
+        .catchError((onError) => debugPrint("Failed to delete error: $onError"));
     // Currently no method to delete all docs in a collection
     await firestoreInstance
         .collection('messages')
@@ -104,7 +106,7 @@ class FirebaseScreensRepository {
         }
       },
     ).catchError((onError) async {
-      print("Failed to delete error: $onError");
+      debugPrint("Failed to delete error: $onError");
     });
     // Remove screen from users screens list
     await firestoreInstance
@@ -113,8 +115,8 @@ class FirebaseScreensRepository {
         .set({
           "screens": FieldValue.arrayRemove([screenToken])
         }, SetOptions(merge: true))
-        .then((value) => print("Deleted user's screen"))
-        .catchError((onError) => print("Couldn't delete the user's screen"));
+        .then((value) => debugPrint("Deleted user's screen"))
+        .catchError((onError) => debugPrint("Couldn't delete the user's screen"));
     await _setDefaultScreenInfo(screenToken);
   }
 
@@ -131,7 +133,7 @@ class FirebaseScreensRepository {
           "screenToken": screenToken,
           "isOnline": true,
         }, SetOptions(merge: true))
-        .then((value) => print("Updated screen info"))
-        .catchError((onError) => print("Couldn't update screen info"));
+        .then((value) => debugPrint("Updated screen info"))
+        .catchError((onError) => debugPrint("Couldn't update screen info"));
   }
 }
