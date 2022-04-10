@@ -374,18 +374,3 @@ void main() async {
     });
   });
 }
-
-
-
-
-
-      // final TextFormField emailField = findEmailField(tester);
-      
-      // print(emailField.validator);
-
-      // await loginProvider.signInWithEmailAndPassword(
-      //     "email", "password", (exception) {});
-      // await tester.idle();
-      // await tester.pump();
-
-      // expect(find.byType(HomeView), findsOneWidget);
