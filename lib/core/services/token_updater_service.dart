@@ -26,13 +26,15 @@ class TokenUpdaterService {
       }
     });
 
-    if (token != null  && userID.isEmpty == false) {
+    if (token != null) {
       await _updateToken(token);
     }
     messagingInstance.onTokenRefresh.listen(_updateToken);
   }
 
   Future<void> _updateToken(String token) async {
+    if (userID.isEmpty) return;
+
     await FirebaseFirestore.instance.collection('users').doc(userID).set(
       {
         'FCMTokens': FieldValue.arrayUnion([token]),
