@@ -1,7 +1,6 @@
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:flutter/material.dart';
 
-// TODO: Implement text alignemnt selector
 class TextAlignmentSelector extends StatelessWidget {
   const TextAlignmentSelector(
       {Key? key,
