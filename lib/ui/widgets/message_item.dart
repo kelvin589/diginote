@@ -70,10 +70,8 @@ class _MessageItemState extends State<MessageItem> {
             // Code adapted from here.
             // https://stackoverflow.com/questions/64114904/why-is-draggable-widget-not-being-placed-in-correct-position
             RenderBox? renderBox = context.findRenderObject() as RenderBox;
-            if (renderBox != null) {
-              await onDragEnd(renderBox.globalToLocal(details.offset),
-                  widget.scaleFactorX, widget.scaleFactorY);
-            }
+            await onDragEnd(renderBox.globalToLocal(details.offset),
+                widget.scaleFactorX, widget.scaleFactorY);
           },
         ),
       ),
