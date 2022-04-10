@@ -83,12 +83,12 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: themeProvider.isDarkMode
               ? ThemeData(
-                  colorScheme: ColorScheme.dark().copyWith(
+                  colorScheme: const ColorScheme.dark().copyWith(
                       primary: themeProvider.backgroundColour,
                       secondary: themeProvider.backgroundColour,),
                 )
               : ThemeData(
-                  colorScheme: ColorScheme.light().copyWith(
+                  colorScheme: const ColorScheme.light().copyWith(
                       primary: themeProvider.backgroundColour,
                       secondary: themeProvider.backgroundColour),
                 ),
