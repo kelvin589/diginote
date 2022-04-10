@@ -42,17 +42,17 @@ class Message {
   final String message;
   double x;
   double y;
-  String id;
-  DateTime from;
-  DateTime to;
-  bool scheduled;
+  final String id;
+  final DateTime from;
+  final DateTime to;
+  final bool scheduled;
   final String fontFamily;
   final double fontSize;
   final int backgrondColour;
   final int foregroundColour;
   final double width;
   final double height;
-  String textAlignment;
+  final String textAlignment;
 
   // Don't add id as field in firebase doc
   Map<String, Object?> toJson() {

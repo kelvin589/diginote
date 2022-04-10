@@ -28,14 +28,14 @@ class Template {
 
   final String header;
   final String message;
-  String id;
+  final String id;
   final String fontFamily;
   final double fontSize;
   final int backgrondColour;
   final int foregroundColour;
   final double width;
   final double height;
-  String textAlignment;
+  final String textAlignment;
 
   Map<String, Object?> toJson() {
     return {
