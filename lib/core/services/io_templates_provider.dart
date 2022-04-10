@@ -109,7 +109,10 @@ class TemplatesProvider extends ChangeNotifier {
   Future<void> deleteAll() async {
     final files = await _localDirectoryFiles;
 
-    files.forEach((file) async => await file.delete());
+    for (var file in files) {
+      await file.delete();
+    }
+    
     notifyListeners();
   }
 }
