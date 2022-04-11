@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 /// A provider using the [SharedPrefThemeManager].
 /// 
 /// Manages the dark mode and background colour of the application.
+/// The [init] method must be called to initialise [ThemeProvider].
 class ThemeProvider extends ChangeNotifier {
   /// The [SharedPrefThemeManager] instance.
   SharedPrefThemeManager themeManager = SharedPrefThemeManager();
