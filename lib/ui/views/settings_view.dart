@@ -4,6 +4,8 @@ import 'package:diginote/ui/widgets/colour_picker_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Displays the settings view containing the options to toggle dark mode,
+/// adjust the background colour and logout.
 class SettingsView extends StatefulWidget {
   const SettingsView({Key? key}) : super(key: key);
 
@@ -12,10 +14,13 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
+  /// The selected dark mode toggle status.
   bool isDarkMode = false;
-  bool allowNotifications = false;
+
+  /// The selected background colour;
   Color backgroundColour = Colors.transparent;
 
+  /// In [initState], retrieve the current dark mode status and background colour.
   @override
   void initState() {
     super.initState();
@@ -31,7 +36,7 @@ class _SettingsViewState extends State<SettingsView> {
       child: Column(
         children: [
           _DarkModeToggle(
-            value: isDarkMode,
+            initialValue: isDarkMode,
             onChanged: (newValue) => setState(
               () {
                 Provider.of<ThemeProvider>(context, listen: false)
@@ -63,12 +68,15 @@ class _SettingsViewState extends State<SettingsView> {
   }
 }
 
+/// A toggle for displaying the current dark mode status.
 class _DarkModeToggle extends StatelessWidget {
-  const _DarkModeToggle(
-      {Key? key, required this.value, required this.onChanged})
-      : super(key: key);
+  const _DarkModeToggle({
+    Key? key,
+    required this.initialValue,
+    required this.onChanged,
+  }) : super(key: key);
 
-  final bool value;
+  final bool initialValue;
   final void Function(bool) onChanged;
 
   @override
@@ -77,7 +85,7 @@ class _DarkModeToggle extends StatelessWidget {
       children: [
         const Text("Dark Mode"),
         Switch(
-          value: value,
+          value: initialValue,
           onChanged: onChanged,
         ),
       ],
@@ -85,10 +93,13 @@ class _DarkModeToggle extends StatelessWidget {
   }
 }
 
+/// A colour picker to select the background colour.
 class _HighlightColourPicker extends StatelessWidget {
-  const _HighlightColourPicker(
-      {Key? key, required this.initialColour, required this.onColourChanged})
-      : super(key: key);
+  const _HighlightColourPicker({
+    Key? key,
+    required this.initialColour,
+    required this.onColourChanged,
+  }) : super(key: key);
 
   final Color initialColour;
   final void Function(Color) onColourChanged;
@@ -107,6 +118,7 @@ class _HighlightColourPicker extends StatelessWidget {
   }
 }
 
+/// A logout button.
 class _LogoutButton extends StatelessWidget {
   const _LogoutButton({Key? key, required this.onPressed}) : super(key: key);
 
