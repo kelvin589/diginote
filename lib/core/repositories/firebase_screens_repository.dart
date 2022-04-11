@@ -36,7 +36,7 @@ class FirebaseScreensRepository {
   /// The starting function to pair a new screen for [userID]. This function
   /// finds the screen which should be paired.
   /// 
-  /// Calls on [_updatescreen] to insert additional pairing information.
+  /// Calls on [_updateScreen] to insert additional pairing information.
   Future<void> addScreen(Screen screen, void Function() onSuccess,
       Future<void> Function() onError) async {
     await firestoreInstance
@@ -50,7 +50,7 @@ class FirebaseScreensRepository {
         .get()
         .then(
       (value) async {
-        await _updatescreen(screen, value.docs.map((e) => e.id).first);
+        await _updateScreen(screen, value.docs.map((e) => e.id).first);
         onSuccess();
       },
     ).catchError((_) async {
@@ -61,7 +61,7 @@ class FirebaseScreensRepository {
   /// The rest of the pairing function from [addScreen].
   /// 
   /// Updates 'screens', 'users' and 'screenInfo'.
-  Future<void> _updatescreen(Screen screen, String screenToken) async {
+  Future<void> _updateScreen(Screen screen, String screenToken) async {
     // Update screens collection with screenToken.
     await firestoreInstance
         .collection('screens')
