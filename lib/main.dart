@@ -30,7 +30,7 @@ void main() async {
 
   final FirebaseLoginProvider loginProvider =
       FirebaseLoginProvider(authInstance: authInstance);
-  loginProvider.listen(authInstance);
+  loginProvider.init();
 
   final FirebaseRegisterProvider registerProvider =
       FirebaseRegisterProvider(authInstance: authInstance);
