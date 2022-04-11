@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// A representation of a sticky note.
 class Message {
+
+  /// Constructs a [Message] instance with the specified customisations.
   Message({
     required this.header,
     required this.message,
@@ -19,6 +22,7 @@ class Message {
     required this.textAlignment,
   });
 
+  /// Named constructor to create [Message] from a Map.
   Message.fromJson(Map<String, Object?> json)
       : this(
           header: json['header']! as String,
@@ -38,24 +42,58 @@ class Message {
           textAlignment: json['textAlignment']! as String, 
         );
 
+  /// The content in header.
   final String header;
+
+  /// The content in the main body.
   final String message;
+
+  /// The x position on the screen device.
   double x;
+
+  /// The y position on the screen device.
   double y;
+
+  /// The id retrieved of this message, retrieved from storage.
   final String id;
+
+  /// The [DateTime] from which this message is displayed.
   final DateTime from;
+
+  /// The [DateTime] until which this message is displayed.
   final DateTime to;
+
+  /// The scheduling status.
+  /// 
+  /// True if the message has a schedule, otherwise false.
   final bool scheduled;
+
+  /// The font family of the [header] and [message].
   final String fontFamily;
-  final double fontSize;
+
+  /// The font size of the [header] and [message].
+  final double fontSize; 
+
+  /// The background colour of the message.
   final int backgrondColour;
+
+  /// The foreground colour of the message i.e., text colour.
   final int foregroundColour;
+
+  /// The width of this message.
   final double width;
+
+  /// The height of this message.
   final double height;
+
+  /// The text alignment.
+  /// 
+  /// Valid alignments: left, right, center and justify.
   final String textAlignment;
 
-  // Don't add id as field in firebase doc
+  /// The current instance as a [Map].
   Map<String, Object?> toJson() {
+    // The id is not added to the map as it is not necessary.
     return {
       'header': header,
       'message': message,
