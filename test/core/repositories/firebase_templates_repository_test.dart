@@ -60,7 +60,7 @@ void main() async {
   }
 
   test('A new template can be added', () async {
-    await templatesRepository.addTemplate(mockTemplate);
+    await templatesRepository.setTemplate(mockTemplate);
 
     final retrievedTemplate = await getTemplate(mockUser.uid, mockTemplate.id);
     expect(retrievedTemplate, isNotNull);
@@ -68,7 +68,7 @@ void main() async {
   });
 
   test('A template can be removed', () async {
-    await templatesRepository.addTemplate(mockTemplate);
+    await templatesRepository.setTemplate(mockTemplate);
     await templatesRepository.deleteTemplate(mockTemplate.id);
 
     final retrievedTemplate = await getTemplate(mockUser.uid, mockTemplate.id);
@@ -89,15 +89,15 @@ void main() async {
     );
 
     await Future.delayed(Duration.zero);
-    await templatesRepository.addTemplate(mockTemplate);
+    await templatesRepository.setTemplate(mockTemplate);
 
     await Future.delayed(Duration.zero);
-    await templatesRepository.addTemplate(mockTemplate2);
+    await templatesRepository.setTemplate(mockTemplate2);
   });
 
   test('All templates can be deleted', () async {
-    await templatesRepository.addTemplate(mockTemplate);
-    await templatesRepository.addTemplate(mockTemplate2);
+    await templatesRepository.setTemplate(mockTemplate);
+    await templatesRepository.setTemplate(mockTemplate2);
 
     await templatesRepository.deleteAll();
     final retrievedTemplate = await getTemplate(mockUser.uid, mockTemplate.id);

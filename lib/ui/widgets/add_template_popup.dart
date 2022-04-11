@@ -233,7 +233,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         isLoading = true;
       });
       await Provider.of<FirebaseTemplatesProvider>(context, listen: false)
-          .addTemplate(newTemplate);
+          .setTemplate(newTemplate);
       Navigator.pop(context);
     }
   }
@@ -255,7 +255,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         isLoading = true;
       });
       await Provider.of<FirebaseTemplatesProvider>(context, listen: false)
-          .addTemplate(newTemplate);
+          .setTemplate(newTemplate);
       Navigator.pop(context);
     }
   }

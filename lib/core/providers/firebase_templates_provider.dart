@@ -13,8 +13,8 @@ class FirebaseTemplatesProvider extends ChangeNotifier {
       : _templatesRepository = FirebaseTemplatesRepository(
             firestoreInstance: firestoreInstance, authInstance: authInstance);
 
-  Future<void> addTemplate(Template template) async {
-    await _templatesRepository.addTemplate(template);
+  Future<void> setTemplate(Template template) async {
+    await _templatesRepository.setTemplate(template);
   }
 
   Future<void> deleteTemplate(String id) async {

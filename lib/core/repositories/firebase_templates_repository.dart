@@ -28,7 +28,7 @@ class FirebaseTemplatesRepository {
   }
 
   /// Adds a new template or updates an existing template for [userID].
-  Future<void> addTemplate(Template template) async {
+  Future<void> setTemplate(Template template) async {
     await firestoreInstance
         .collection('templates')
         .doc(userID)
