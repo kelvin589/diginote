@@ -11,29 +11,15 @@ class FirebaseScreenInfoRepository {
   /// The [FirebaseAuth] instance.
   final FirebaseAuth authInstance;
 
-  /// The currently logged in user's ID.
-  String userID = "";
-
   /// Creates a [FirebaseScreenInfoRepository] using a [FirebaseFirestore] and
   /// [FirebaseAuth] instance.
-  ///
-  /// Listens to [FirebaseAuth] user changes to update the [userID].
   FirebaseScreenInfoRepository(
       {required this.firestoreInstance, required this.authInstance}) {
     debugPrint("ALERT: INITIALISED THE REPOSITORY");
-    authInstance.userChanges().listen((User? user) {
-      if (user == null) {
-        debugPrint("ALERT: USER LOGGED OUT $user");
-      } else {
-        userID = user.uid;
-        debugPrint("ALERT: USER LOGGED IN $userID");
-      }
-    });
   }
 
   /// Retreives a stream of [ScreenInfo] for this [screenToken].
   Stream<Iterable<ScreenInfo>> getScreenInfo(String screenToken) {
-    debugPrint("ALERT: GETTING SCREEN INFO FOR $userID");
     return firestoreInstance
         .collection('screenInfo')
         .where('screenToken', isEqualTo: screenToken)
