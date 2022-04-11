@@ -10,9 +10,11 @@ import 'package:diginote/ui/widgets/screen_settings_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Displays a screen's basic information and extra information using [ScreenItemContent].
 class ScreenItem extends StatelessWidget {
   const ScreenItem({Key? key, required this.screen}) : super(key: key);
 
+  /// The screen's basic information to display.
   final Screen screen;
 
   @override
@@ -51,6 +53,9 @@ class ScreenItem extends StatelessWidget {
     );
   }
 
+  /// Called to display the screen's [PreviewView] as a new page.
+  /// 
+  /// [TimerProvider] is necessary to progress the countdown of scheduled messages.
   void _showPreview(BuildContext context, Screen screen, bool isOnline) {
     Navigator.push(
       context,
@@ -77,6 +82,7 @@ class ScreenItem extends StatelessWidget {
     );
   }
 
+  /// Called to display a dialogue of the screen's settings.
   void _showScreenSettings(
       {required BuildContext context,
       required String screenToken,
@@ -95,6 +101,7 @@ class ScreenItem extends StatelessWidget {
     );
   }
 
+  /// Called when a screen is to be deleted.
   Future<void> _onDelete(BuildContext context, String screenToken) async {
     await Provider.of<FirebaseScreensProvider>(context, listen: false)
         .deleteScreen(screenToken);

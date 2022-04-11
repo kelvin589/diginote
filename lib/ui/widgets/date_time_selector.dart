@@ -2,18 +2,26 @@ import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// Displays a [_DateItem] and [_TimeItem] to select the date and time.
 class DateTimeSelector extends StatelessWidget {
-  const DateTimeSelector(
-      {Key? key,
-      required this.date,
-      required this.time,
-      required this.onDateSelected,
-      required this.onTimeSelected})
-      : super(key: key);
+  const DateTimeSelector({
+    Key? key,
+    required this.date,
+    required this.time,
+    required this.onDateSelected,
+    required this.onTimeSelected,
+  }) : super(key: key);
 
+  /// The initial date selected.
   final DateTime date;
+
+  /// The initial time selected.
   final TimeOfDay time;
+
+  /// Called when the date is selected.
   final void Function(DateTime) onDateSelected;
+
+  /// Called when the time is selected.
   final void Function(TimeOfDay) onTimeSelected;
 
   @override
@@ -40,6 +48,7 @@ class DateTimeSelector extends StatelessWidget {
     );
   }
 
+  /// Shows the date picker.
   void _showDateSelector(
       {required BuildContext context,
       required DateTime initialDate,
@@ -48,13 +57,15 @@ class DateTimeSelector extends StatelessWidget {
       context: context,
       initialDate: initialDate,
       firstDate: clock.now(),
-      lastDate: initialDate.add(const Duration(days: 365)),
+      // Limit scheduling to a year from now
+      lastDate: initialDate.add(const Duration(days: 365)), 
     );
     if (date != null && date != initialDate) {
       onSelected(date);
     }
   }
 
+  /// Shows the time picker.
   void _showTimeSelector(
       {required BuildContext context,
       required TimeOfDay initialTime,
@@ -69,10 +80,14 @@ class DateTimeSelector extends StatelessWidget {
   }
 }
 
+/// A widget which displays the [date].
 class _DateItem extends StatelessWidget {
   const _DateItem({Key? key, required this.date}) : super(key: key);
 
+  /// The format to display the date in.
   static DateFormat dateFormat = DateFormat("d MMM y");
+
+  /// The date to display.
   final DateTime date;
 
   @override
@@ -92,9 +107,11 @@ class _DateItem extends StatelessWidget {
   }
 }
 
+/// A widget which displays the [time].
 class _TimeItem extends StatelessWidget {
   const _TimeItem({Key? key, required this.time}) : super(key: key);
 
+  /// The time to display.
   final TimeOfDay time;
 
   @override

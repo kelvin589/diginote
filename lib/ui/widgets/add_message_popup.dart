@@ -13,12 +13,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+/// An [AlertDialog] for creating or editing a message with
+/// various message customisations.
 class AddMessagePopup extends StatefulWidget {
-  const AddMessagePopup({Key? key, required this.screenToken, this.message})
-      : super(key: key);
+  /// [message] is optional to enable reuse of this popup for editing and creating.
+  const AddMessagePopup({
+    Key? key,
+    required this.screenToken,
+    this.message,
+  }) : super(key: key);
 
+  /// The screen token.
   final String screenToken;
-  // If message is not null, it means we are editing
+
+  /// The message to edit.
+  ///
+  /// If [message] is not null, it means we are editing.
   final Message? message;
 
   @override
@@ -26,20 +36,40 @@ class AddMessagePopup extends StatefulWidget {
 }
 
 class _AddMessagePopupState extends State<AddMessagePopup> {
+  /// The [GlobalKey] for this form.
   final _formKey = GlobalKey<FormState>();
+
+  /// The [TextEditingController] for the header input.
   final TextEditingController _headerController = TextEditingController();
+
+  /// The [TextEditingController] for the message input.
   final TextEditingController _messageController = TextEditingController();
 
+  /// The currently selected font family.
   String fontFamily = "Roboto";
+
+  /// The currently selected font size.
   double fontSize = 16.0;
+
+  /// The currently selected background colour.
   Color backgroundColour = const Color.fromARGB(255, 255, 255, 153);
+
+  /// The currently selected foreground colour.
   Color foregroundColour = Colors.black;
+
+  /// The currently selected width.
   double width = 100;
+
+  /// The currently selected height.
   double height = 100;
+
+  /// The currently selected text aligment.
   TextAlign textAlignment = TextAlign.left;
 
+  /// [isLoading] is true if we are waiting to save or add the message.
   bool isLoading = false;
 
+  /// [initState] initialises the above fields if we are editing a message.
   @override
   void initState() {
     super.initState();
@@ -93,13 +123,13 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
       ),
     );
 
+    /// The customisation options displayed in the alert.
     List<Widget> formOptions = [
       MessageSizeSelector(
         currentWidth: width,
         currentHeight: height,
         onMessageSizeChanged: onMessageSizeChanged,
       ),
-      // const TypefaceSelector(),
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
@@ -121,6 +151,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
     ];
 
     return GestureDetector(
+      // Tap away from the keyboard to remove focus.
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -132,8 +163,10 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
         title: widget.message == null
             ? const Text('Add Message')
             : const Text('Save Message'),
-        insetPadding:
-            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: 8.0,
+          vertical: 50.0,
+        ),
         contentPadding: const EdgeInsets.all(8.0),
         content: Form(
           key: _formKey,
@@ -190,6 +223,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
     );
   }
 
+  /// Called when the message size is changed.
   void onMessageSizeChanged(double width, double height) {
     setState(() {
       this.width = width;
@@ -197,26 +231,32 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
     });
   }
 
+  /// Called when the font family is changed.
   void onFontFamilyChanged(String fontFamily) {
     setState(() => this.fontFamily = fontFamily);
   }
 
+  /// Called when the font size is changed.
   void onFontSizeChanged(double fontSize) {
     setState(() => this.fontSize = fontSize);
   }
 
+  /// Called when the foreground colour is changed.
   void onForegroundColourChanged(Color newColour) {
     setState(() => foregroundColour = newColour);
   }
 
+  /// Called when the background colour is changed.
   void onBackgroundColourChanged(Color newColour) {
     setState(() => backgroundColour = newColour);
   }
 
+  /// Called when the text alignment is changed.
   void onTextAlignmentChanged(TextAlign newTextAlignment) {
     setState(() => textAlignment = newTextAlignment);
   }
 
+  /// Called when 'OK' is pressed.
   Future<void> _okPressed() async {
     Message newMessage = Message(
         header: _headerController.text,
@@ -244,6 +284,7 @@ class _AddMessagePopupState extends State<AddMessagePopup> {
     }
   }
 
+  /// Called instead if 'Save' is pressed.
   Future<void> _savePressed() async {
     Message newMessage = Message(
         header: _headerController.text,
