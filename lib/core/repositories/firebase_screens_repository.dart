@@ -5,11 +5,21 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
+/// The repository to deal with retrieving [Screen] information.
 class FirebaseScreensRepository {
+  /// The [FirebaseFirestore] instance.
   final FirebaseFirestore firestoreInstance;
+
+  /// The [FirebaseAuth] instance.
   final FirebaseAuth authInstance;
+
+  /// The currently logged in user's ID.
   String userID = "";
 
+  /// Creates a [FirebaseScreensRepository] using a [FirebaseFirestore] and
+  /// [FirebaseAuth] instance.
+  ///
+  /// Listens to [FirebaseAuth] user changes to update the [userID].
   FirebaseScreensRepository(
       {required this.firestoreInstance, required this.authInstance}) {
     debugPrint("ALERT: INITIALISED THE REPOSITORY");
@@ -23,6 +33,10 @@ class FirebaseScreensRepository {
     });
   }
 
+  /// The starting function to pair a new screen for [userID]. This function
+  /// finds the screen which should be paired.
+  /// 
+  /// Calls on [_updatescreen] to insert additional pairing information.
   Future<void> addScreen(Screen screen, void Function() onSuccess,
       Future<void> Function() onError) async {
     await firestoreInstance
@@ -44,8 +58,11 @@ class FirebaseScreensRepository {
     });
   }
 
+  /// The rest of the pairing function from [addScreen].
+  /// 
+  /// Updates 'screens', 'users' and 'screenInfo'.
   Future<void> _updatescreen(Screen screen, String screenToken) async {
-    // Update screens collection with screenToken
+    // Update screens collection with screenToken.
     await firestoreInstance
         .collection('screens')
         .doc(screenToken)
@@ -59,7 +76,8 @@ class FirebaseScreensRepository {
         })
         .then((value) => debugPrint("Updated paired Boolean"))
         .catchError((onError) => debugPrint("Couldn't update the paired Boolean"));
-    // Update users collection screen's table with the token
+    
+    // Update users collection screen's table with the token.
     await firestoreInstance
         .collection('users')
         .doc(userID)
@@ -68,9 +86,12 @@ class FirebaseScreensRepository {
         }, SetOptions(merge: true))
         .then((value) => debugPrint("Updated user's screens"))
         .catchError((onError) => debugPrint("Couldn't update the user's screens"));
+    
+    // Initialises screen info for this screen so it's not empty.
     await _setDefaultScreenInfo(screenToken);
   }
 
+  /// Retreives a stream of paired [Screen] associated with [userID].
   Stream<Iterable<Screen>> getScreens() {
     debugPrint("ALERT: GETTING SCREENS FOR $userID");
     return firestoreInstance
@@ -85,15 +106,20 @@ class FirebaseScreensRepository {
         .map((snapshot) => snapshot.docs.map((e) => e.data()));
   }
 
+  /// Deletes all information related to this screen with [screenToken].
+  /// 
+  /// Note: That includes removing all messages associated with this screen.
   Future<void> deleteScreen(String screenToken) async {
-    // Delete screen from screens collection
+    // Deletes the screen from the screens collection.
     await firestoreInstance
         .collection('screens')
         .doc(screenToken)
         .delete()
         .then((value) => debugPrint("Deleted screen"))
         .catchError((onError) => debugPrint("Failed to delete error: $onError"));
-    // Currently no method to delete all docs in a collection
+    
+    // Currently no method to delete all docs in a collection. 
+    // Must iterate through the messages and delete them.
     await firestoreInstance
         .collection('messages')
         .doc(screenToken)
@@ -108,7 +134,8 @@ class FirebaseScreensRepository {
     ).catchError((onError) async {
       debugPrint("Failed to delete error: $onError");
     });
-    // Remove screen from users screens list
+    
+    // Remove screen from users screens list.
     await firestoreInstance
         .collection('users')
         .doc(userID)
@@ -117,11 +144,13 @@ class FirebaseScreensRepository {
         }, SetOptions(merge: true))
         .then((value) => debugPrint("Deleted user's screen"))
         .catchError((onError) => debugPrint("Couldn't delete the user's screen"));
+    
+    // Initialises screen info for this screen so it's not empty.
     await _setDefaultScreenInfo(screenToken);
   }
 
+  /// Sets the default ScreenInfo for the [screenToken].
   Future<void> _setDefaultScreenInfo(String screenToken) async {
-    // Set default values in screen's screenInfo
     await firestoreInstance
         .collection('screenInfo')
         .doc(screenToken)
