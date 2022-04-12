@@ -18,11 +18,10 @@ import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Initialises providers and passes them to descendants of [MyApp].
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
   FirebaseAuth authInstance = FirebaseAuth.instance;
@@ -44,7 +43,6 @@ void main() async {
 
   final FirebaseTemplatesProvider templatesProvider = FirebaseTemplatesProvider(
       firestoreInstance: firestoreInstance, authInstance: authInstance);
-  // await templatesProvider.init();
 
   final TokenUpdaterService tokenUpdater = TokenUpdaterService(
       authInstance: authInstance,
@@ -72,6 +70,9 @@ void main() async {
   ));
 }
 
+/// The home of the app opens to the [LoginView].
+///
+/// The theme is provided by [ThemeProvider].
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -80,25 +81,27 @@ class MyApp extends StatelessWidget {
     return Consumer<ThemeProvider>(
       builder: ((context, themeProvider, child) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Diginote',
           theme: themeProvider.isDarkMode
               ? ThemeData(
                   colorScheme: const ColorScheme.dark().copyWith(
-                      primary: themeProvider.backgroundColour,
-                      secondary: themeProvider.backgroundColour,),
+                    primary: themeProvider.backgroundColour,
+                    secondary: themeProvider.backgroundColour,
+                  ),
                 )
               : ThemeData(
                   colorScheme: const ColorScheme.light().copyWith(
-                      primary: themeProvider.backgroundColour,
-                      secondary: themeProvider.backgroundColour),
+                    primary: themeProvider.backgroundColour,
+                    secondary: themeProvider.backgroundColour,
+                  ),
                 ),
           initialRoute: LoginView.route,
           routes: {
             HomeView.route: (context) => const HomeView(),
             LoginView.route: (_) => Consumer<FirebaseLoginProvider>(
                   builder: (context, loginProvider, child) => LoginView(
-                      applicationLoginState:
-                          loginProvider.applicationLoginState),
+                    applicationLoginState: loginProvider.applicationLoginState,
+                  ),
                 ),
             RegisterView.route: (_) => RegisterView(
                 applicationRegisterState:
