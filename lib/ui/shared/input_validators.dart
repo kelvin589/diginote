@@ -23,7 +23,7 @@ class Validator {
   ///   Uppercase letter (A-Z),
   ///   Lowercase letter (a-z),
   ///   Numeric digit (0-9),
-  ///   Special character (~`!@#$%^&*()_+={[}]|\:;"'<,>.?/),
+  ///   Special character (~`!@#$%^&*()_+={]}[|\:;"'<,>.?/),
   /// Contain no other types of characters, symbols, or spaces.
   static String? isValidPassword(String? value) {
     if (value == null || value.isEmpty) {

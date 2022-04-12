@@ -27,7 +27,7 @@ class TimerProvider extends ChangeNotifier {
     }
   }
 
-  /// Stop the timer when this instance is [disposed] of.
+  /// Stop the timer when this instance is [dispose] of.
   @override
   void dispose() {
     super.dispose();
