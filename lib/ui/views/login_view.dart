@@ -9,12 +9,17 @@ import 'package:diginote/ui/widgets/header_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// A view which displays a [LoginForm] if there is no logged in user,
+/// otherwise it displays a [HomeView] if there is a logged in user.
 class LoginView extends StatelessWidget {
+  /// The [applicationLoginState] determines which view is displayed.
   const LoginView({Key? key, required this.applicationLoginState})
       : super(key: key);
 
+  /// The named route for [LoginView].
   static const String route = '/login';
 
+  /// The current [ApplicationLoginState].
   final ApplicationLoginState applicationLoginState;
 
   @override
@@ -30,6 +35,8 @@ class LoginView extends StatelessWidget {
   }
 }
 
+/// The form which allows a user to login with an existing account, or
+/// switch to the [RegisterView] to create a new account.
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
 
@@ -38,10 +45,15 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  // Global key uniquely identifies the form + allows validation
-  // Global key is the recommended way to access a form
+  /// The global key for this form.
+  /// A global key uniquely identifies the form and allows for validation.
+  /// A global key is the recommended way to access a form.
   final _formKey = GlobalKey<FormState>();
+
+  /// The [TextEditingController] for the email input.
   final TextEditingController _emailController = TextEditingController();
+
+  /// The [TextEditingController] for the password input.
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -103,6 +115,10 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+  /// Tries to log in the user using the values input to 
+  /// [_emailController] and [_passwordController].
+  /// 
+  /// If the user could not log in, an error dialogue is displayed to alert the user.
   Future<void> _login(FirebaseLoginProvider loginProvider) async {
     if (_formKey.currentState!.validate()) {
       await loginProvider.signInWithEmailAndPassword(

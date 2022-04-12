@@ -6,7 +6,6 @@ import 'package:diginote/core/providers/firebase_screen_info_provider.dart';
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/core/providers/firebase_templates_provider.dart';
 import 'package:diginote/core/providers/theme_provider.dart';
-import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/core/services/notification_service.dart';
 import 'package:diginote/core/services/token_updater_service.dart';
 import 'package:diginote/ui/views/home_view.dart';
@@ -19,11 +18,10 @@ import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Initialises providers and passes them to descendants of [MyApp].
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
   FirebaseAuth authInstance = FirebaseAuth.instance;
@@ -31,7 +29,7 @@ void main() async {
 
   final FirebaseLoginProvider loginProvider =
       FirebaseLoginProvider(authInstance: authInstance);
-  loginProvider.listen(authInstance);
+  loginProvider.init();
 
   final FirebaseRegisterProvider registerProvider =
       FirebaseRegisterProvider(authInstance: authInstance);
@@ -45,7 +43,6 @@ void main() async {
 
   final FirebaseTemplatesProvider templatesProvider = FirebaseTemplatesProvider(
       firestoreInstance: firestoreInstance, authInstance: authInstance);
-  // await templatesProvider.init();
 
   final TokenUpdaterService tokenUpdater = TokenUpdaterService(
       authInstance: authInstance,
@@ -73,6 +70,9 @@ void main() async {
   ));
 }
 
+/// The home of the app opens to the [LoginView].
+///
+/// The theme is provided by [ThemeProvider].
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -81,25 +81,27 @@ class MyApp extends StatelessWidget {
     return Consumer<ThemeProvider>(
       builder: ((context, themeProvider, child) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Diginote',
           theme: themeProvider.isDarkMode
               ? ThemeData(
-                  colorScheme: ColorScheme.dark().copyWith(
-                      primary: themeProvider.backgroundColour,
-                      secondary: themeProvider.backgroundColour,),
+                  colorScheme: const ColorScheme.dark().copyWith(
+                    primary: themeProvider.backgroundColour,
+                    secondary: themeProvider.backgroundColour,
+                  ),
                 )
               : ThemeData(
-                  colorScheme: ColorScheme.light().copyWith(
-                      primary: themeProvider.backgroundColour,
-                      secondary: themeProvider.backgroundColour),
+                  colorScheme: const ColorScheme.light().copyWith(
+                    primary: themeProvider.backgroundColour,
+                    secondary: themeProvider.backgroundColour,
+                  ),
                 ),
           initialRoute: LoginView.route,
           routes: {
             HomeView.route: (context) => const HomeView(),
             LoginView.route: (_) => Consumer<FirebaseLoginProvider>(
                   builder: (context, loginProvider, child) => LoginView(
-                      applicationLoginState:
-                          loginProvider.applicationLoginState),
+                    applicationLoginState: loginProvider.applicationLoginState,
+                  ),
                 ),
             RegisterView.route: (_) => RegisterView(
                 applicationRegisterState:

@@ -1,6 +1,5 @@
 import 'package:diginote/core/providers/firebase_register_provider.dart';
 import 'package:diginote/ui/views/register_view.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,11 +25,9 @@ class _Descriptions {
 void main() async {
   late FirebaseRegisterProvider registerProvider;
   late MockFirebaseAuth authInstance;
-  late FakeFirebaseFirestore firestoreInstance;
 
   setUp(() {
     authInstance = MockFirebaseAuth();
-    firestoreInstance = FakeFirebaseFirestore();
     registerProvider = FirebaseRegisterProvider(authInstance: authInstance);
   });
 
@@ -377,18 +374,3 @@ void main() async {
     });
   });
 }
-
-
-
-
-
-      // final TextFormField emailField = findEmailField(tester);
-      
-      // print(emailField.validator);
-
-      // await loginProvider.signInWithEmailAndPassword(
-      //     "email", "password", (exception) {});
-      // await tester.idle();
-      // await tester.pump();
-
-      // expect(find.byType(HomeView), findsOneWidget);

@@ -4,6 +4,8 @@ import 'package:diginote/ui/widgets/screen_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Displays a list of [ScreenItem]s which displays
+/// information about the logged in user's screens.
 class ScreensView extends StatelessWidget {
   const ScreensView({Key? key}) : super(key: key);
 
@@ -23,6 +25,7 @@ class ScreensView extends StatelessWidget {
 
         Iterable<Screen>? screens = snapshot.data;
         if (screens != null) {
+          // Build the list of ScreenItems
           List<Widget> items = screens
               .map(
                 (screen) => ScreenItem(

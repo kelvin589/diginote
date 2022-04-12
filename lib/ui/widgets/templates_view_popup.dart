@@ -3,16 +3,20 @@ import 'package:diginote/core/models/messages_model.dart';
 import 'package:diginote/core/models/templates_model.dart';
 import 'package:diginote/core/providers/firebase_preview_provider.dart';
 import 'package:diginote/core/providers/firebase_templates_provider.dart';
-import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/widgets/message_item_content.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Displays an [AlertDialog] containing the user's list of templates,
+/// where a template can be tapped to insert it into the preview.
 class TemplatesViewPopup extends StatelessWidget {
-  const TemplatesViewPopup({Key? key, required this.screenToken})
-      : super(key: key);
+  const TemplatesViewPopup({
+    Key? key,
+    required this.screenToken,
+  }) : super(key: key);
 
+  /// The screen token.
   final String screenToken;
 
   @override
@@ -67,15 +71,20 @@ class TemplatesViewPopup extends StatelessWidget {
 }
 
 class _TemplateItem extends StatelessWidget {
-  const _TemplateItem(
-      {Key? key,
-      required this.template,
-      required this.context,
-      required this.screenToken})
-      : super(key: key);
+  const _TemplateItem({
+    Key? key,
+    required this.template,
+    required this.context,
+    required this.screenToken,
+  }) : super(key: key);
 
+  /// The [Template] to display.
   final Template template;
+
+  /// The [BuildContext].
   final BuildContext context;
+
+  /// The screen token.
   final String screenToken;
 
   @override
@@ -106,6 +115,7 @@ class _TemplateItem extends StatelessWidget {
     );
   }
 
+  /// Inserts a template by adding it as a message.
   Future<void> insertTemplate() async {
     await Provider.of<FirebasePreviewProvider>(context, listen: false)
         .addMessage(

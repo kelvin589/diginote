@@ -8,20 +8,40 @@ import 'package:diginote/ui/widgets/templates_view_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// The 'preview' for a screen which displays the messages current and future. 
+///
+/// From the preview, messages can be added, edited, deleted and scheduled.
+/// Messages can be instead created from templates to save time. The preview also
+/// facilitates positioning of messages by dragging and adjusting the zoom scale.
 class PreviewView extends StatefulWidget {
-  const PreviewView(
-      {Key? key,
-      required this.screenToken,
-      required this.screenWidth,
-      required this.screenHeight,
-      required this.screenName,
-      required this.isOnline})
-      : super(key: key);
+  /// Creates a [PreviewView] to view a 'preview' of a screen.
+  const PreviewView({
+    Key? key,
+    required this.screenToken,
+    required this.screenWidth,
+    required this.screenHeight,
+    required this.screenName,
+    required this.isOnline,
+  }) : super(key: key);
 
+  /// The token of the screen to display.
   final String screenToken;
+
+  /// The logical pixel width of the screen.
   final double screenWidth;
+
+  /// The logical pixel height of the screen.
   final double screenHeight;
+
+  /// The screen's name.
+  /// 
+  /// This is displayed in the title.
   final String screenName;
+
+  /// The online status of the screen.
+  /// 
+  /// This is used to show a snack bar if the sceen is offline when accessing
+  /// the preview. This enforces the message that the screen is offline currently.
   final bool isOnline;
 
   @override
@@ -29,12 +49,14 @@ class PreviewView extends StatefulWidget {
 }
 
 class _PreviewViewState extends State<PreviewView> {
+  /// In [initState], a snack bar is shown if the screen is offline to
+  /// alert users to this.
   @override
   void initState() {
     super.initState();
-    // Let user know if screen is online when showing preview
+    // Let the user know if screen is online when showing the preview.
     if (!widget.isOnline) {
-      // Must delay to show snackbar in init
+      // Must delay to show the snack bar in initState.
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) => ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -52,17 +74,29 @@ class _PreviewViewState extends State<PreviewView> {
 
   @override
   Widget build(BuildContext context) {
-    // Width and height of this device cosidering safe area
+    // The parts of the display which are obscured.
     final devicePadding = MediaQuery.of(context).viewPadding;
+
+    // The size of this device.
     final deviceSize = MediaQuery.of(context).size;
+
+    // The width of this device, considering its safe area
     final deviceWidth = MediaQuery.of(context).size.width;
+
+    // The height of this device, considering its safe area
     final deviceHeight = MediaQuery.of(context).size.height -
         devicePadding.top -
         devicePadding.bottom;
-    // Scaling from screen to device
+
+    // Scaling x from screen to device
     final scaleFactorX = widget.screenWidth / deviceWidth;
+
+    // Scaling y from screen to device
     final scaleFactorY = widget.screenHeight / deviceHeight;
 
+    // The buttons which are shown in the actions of the app bar.
+    //
+    // A button to insert a template or add a new message.
     List<Widget> actionItems = [
       IconButton(
         onPressed: () => showDialog(
@@ -113,11 +147,12 @@ class _PreviewViewState extends State<PreviewView> {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    Iterable<Message>? screens = snapshot.data;
-                    if (screens != null) {
+                    Iterable<Message>? messages = snapshot.data;
+                    if (messages != null) {
+                      // Builds a stack of MessageItems to display the messages
                       return Stack(
                         children: _updateScreenItems(
-                            context, screens, scaleFactorX, scaleFactorY),
+                            context, messages, scaleFactorX, scaleFactorY),
                       );
                     } else {
                       return const Text('Error occurred');
@@ -148,6 +183,7 @@ class _PreviewViewState extends State<PreviewView> {
     );
   }
 
+  /// Builds a list of widgets, which are the MessageItems, to display.
   List<Widget> _updateScreenItems(BuildContext context,
       Iterable<Message>? messages, double scaleFactorX, double scaleFactorY) {
     if (messages != null) {

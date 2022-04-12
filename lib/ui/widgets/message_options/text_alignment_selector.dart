@@ -1,21 +1,28 @@
 import 'package:diginote/ui/shared/icon_helper.dart';
 import 'package:flutter/material.dart';
 
-// TODO: Implement text alignemnt selector
+/// Displays buttons which adjust the text alignment of message and header
+/// based alignments found in [TextAlign].
 class TextAlignmentSelector extends StatelessWidget {
-  const TextAlignmentSelector(
-      {Key? key,
-      required this.initialTextAlignment,
-      required this.onTextAlignmentChanged})
-      : super(key: key);
+  const TextAlignmentSelector({
+    Key? key,
+    required this.initialTextAlignment,
+    required this.onTextAlignmentChanged,
+  }) : super(key: key);
 
+  /// The padding between the text alignment buttons.
   final buttonPadding = EdgeInsets.zero;
+
+  /// The initial text alignment.
   final TextAlign initialTextAlignment;
+
+  /// Called with the new text alignemnt when it is adjusted.
   final void Function(TextAlign) onTextAlignmentChanged;
 
   @override
   Widget build(BuildContext context) {
-    final Widget alignment = Row(
+    // The row of widgets containing the possible alignment options.
+    final Widget alignmentOptions = Row(
       children: [
         Expanded(
           child: IconButton(
@@ -68,7 +75,7 @@ class TextAlignmentSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Text Alignment'),
-        alignment,
+        alignmentOptions,
       ],
     );
   }

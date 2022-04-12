@@ -1,7 +1,6 @@
 import 'package:diginote/core/providers/firebase_screens_provider.dart';
 import 'package:diginote/core/providers/firebase_templates_provider.dart';
 import 'package:diginote/core/providers/theme_provider.dart';
-import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/views/home_view.dart';
 import 'package:diginote/ui/views/screens_view.dart';
 import 'package:diginote/ui/views/settings_view.dart';

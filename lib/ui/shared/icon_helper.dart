@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// A helper class which contains the icons used throughout the UI.
+/// 
+/// Use this class to ensure consistency in the design.
 class IconHelper {
   static Icon screensIcon = const Icon(Icons.tablet);
   static Icon templatesIcon = const Icon(Icons.sticky_note_2_outlined);

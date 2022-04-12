@@ -6,6 +6,8 @@ import 'package:diginote/ui/shared/input_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// An [AlertDialog] which allows the user to insert a new screen
+/// with a name and pairing code displayed on the screen.
 class AddScreenPopup extends StatefulWidget {
   const AddScreenPopup({Key? key}) : super(key: key);
 
@@ -14,8 +16,13 @@ class AddScreenPopup extends StatefulWidget {
 }
 
 class _AddScreenPopupState extends State<AddScreenPopup> {
+  /// The [GlobalKey] for this form.
   final _formKey = GlobalKey<FormState>();
+
+  /// The [TextEditingController] for the pairing code input.
   final TextEditingController _pairingCodeController = TextEditingController();
+
+  /// The [TextEditingController] for the screen name input.
   final TextEditingController _nameController = TextEditingController();
 
   @override
@@ -54,6 +61,10 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
     );
   }
 
+  /// Called when 'OK' is pressed to pair a new screen.
+  /// 
+  /// The pairing code is checked first the pairing code is valid and matches a
+  /// screen to be paired, if not an error is displayed.
   Future<void> _okPressed() async {
     Screen partialScreen = Screen(
       pairingCode: _pairingCodeController.text,
@@ -65,6 +76,7 @@ class _AddScreenPopupState extends State<AddScreenPopup> {
       width: 0,
       height: 0,
     );
+    // Ensure the entered pairing code is of the correct format before continuing.
     if (_formKey.currentState!.validate()) {
       await Provider.of<FirebaseScreensProvider>(context, listen: false)
           .addScreen(

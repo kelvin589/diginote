@@ -1,7 +1,5 @@
-import 'package:clock/clock.dart';
 import 'package:diginote/core/models/templates_model.dart';
 import 'package:diginote/core/providers/firebase_templates_provider.dart';
-import 'package:diginote/core/services/io_templates_provider.dart';
 import 'package:diginote/ui/shared/dialogue_helper.dart';
 import 'package:diginote/ui/widgets/message_options/background_colour_selector.dart';
 import 'package:diginote/ui/widgets/message_options/font_selector.dart';
@@ -10,16 +8,20 @@ import 'package:diginote/ui/widgets/message_options/header_input.dart';
 import 'package:diginote/ui/widgets/message_options/message_input.dart';
 import 'package:diginote/ui/widgets/message_options/message_size_selector.dart';
 import 'package:diginote/ui/widgets/message_options/text_alignment_selector.dart';
-import 'package:diginote/ui/widgets/message_options/typeface_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+/// An [AlertDialog] for creating or editing a template with
+/// various template customisations.
 class AddTemplatePopup extends StatefulWidget {
+  /// [template] is optional to enable reuse of this popup for editing and creating.
   const AddTemplatePopup({Key? key, this.template}) : super(key: key);
 
-  // If template is not null, it means we are editing
+  /// The message to edit.
+  ///
+  /// If [template] is not null, it means we are editing.
   final Template? template;
 
   @override
@@ -27,21 +29,45 @@ class AddTemplatePopup extends StatefulWidget {
 }
 
 class _AddTemplatePopupState extends State<AddTemplatePopup> {
+  /// The [GlobalKey] for this form.
   final _formKey = GlobalKey<FormState>();
+
+  /// The [TextEditingController] for the header input.
   final TextEditingController _headerController = TextEditingController();
+
+  /// The [TextEditingController] for the message input.
   final TextEditingController _messageController = TextEditingController();
+
+  /// The [Uuid] instance.
+  ///
+  /// For generating a unique id for the template.
   final uuid = const Uuid();
 
+  /// The currently selected font family.
   String fontFamily = "Roboto";
+
+  /// The currently selected font size.
   double fontSize = 16.0;
+
+  /// The currently selected background colour.
   Color backgroundColour = const Color.fromARGB(255, 255, 255, 153);
+
+  /// The currently selected foreground colour.
   Color foregroundColour = Colors.black;
+
+  /// The currently selected width.
   double width = 100;
+
+  /// The currently selected height.
   double height = 100;
+
+  /// The currently selected text aligment.
   TextAlign textAlignment = TextAlign.left;
 
+  /// [isLoading] is true if we are waiting to save or add the template.
   bool isLoading = false;
 
+  /// [initState] initialises the above fields if we are editing a template.
   @override
   void initState() {
     super.initState();
@@ -60,7 +86,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
 
   @override
   Widget build(BuildContext context) {
-    Widget messageBodyAndHeader = Container(
+    Widget messageBodyAndHeader = SizedBox(
       width: width,
       height: height,
       child: Column(
@@ -95,13 +121,13 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
       ),
     );
 
+    /// The customisation options displayed in the alert.
     List<Widget> formOptions = [
       MessageSizeSelector(
         currentWidth: width,
         currentHeight: height,
         onMessageSizeChanged: onMessageSizeChanged,
       ),
-      // const TypefaceSelector(),
       FontSelector(
         onFontFamilyChanged: onFontFamilyChanged,
         onFontSizeChanged: onFontSizeChanged,
@@ -123,6 +149,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
     ];
 
     return GestureDetector(
+      // Tap away from the keyboard to remove focus.
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -134,8 +161,10 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         title: widget.template == null
             ? const Text('Add Template')
             : const Text('Save Template'),
-        insetPadding:
-            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50.0),
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: 8.0,
+          vertical: 50.0,
+        ),
         contentPadding: const EdgeInsets.all(8.0),
         content: Form(
           key: _formKey,
@@ -149,7 +178,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
                 ),
               ),
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: kIsWeb ? 400 : double.maxFinite,
                   child: Scrollbar(
                     child: ListView.separated(
@@ -192,6 +221,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
     );
   }
 
+  /// Called when the message size is changed.
   void onMessageSizeChanged(double width, double height) {
     setState(() {
       this.width = width;
@@ -199,26 +229,32 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
     });
   }
 
+  /// Called when the font family is changed.
   void onFontFamilyChanged(String fontFamily) {
     setState(() => this.fontFamily = fontFamily);
   }
 
+  /// Called when the font size is changed.
   void onFontSizeChanged(double fontSize) {
     setState(() => this.fontSize = fontSize);
   }
 
+  /// Called when the foreground colour is changed.
   void onForegroundColourChanged(Color newColour) {
     setState(() => foregroundColour = newColour);
   }
 
+  /// Called when the background colour is changed.
   void onBackgroundColourChanged(Color newColour) {
     setState(() => backgroundColour = newColour);
   }
 
+  /// Called when the text alignment is changed.
   void onTextAlignmentChanged(TextAlign newTextAlignment) {
     setState(() => textAlignment = newTextAlignment);
   }
 
+  /// Called when 'OK' is pressed.
   Future<void> _okPressed() async {
     Template newTemplate = Template(
         header: _headerController.text,
@@ -236,11 +272,12 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         isLoading = true;
       });
       await Provider.of<FirebaseTemplatesProvider>(context, listen: false)
-          .addTemplate(newTemplate);
+          .setTemplate(newTemplate);
       Navigator.pop(context);
     }
   }
 
+  /// Called instead if 'Save' is pressed.
   Future<void> _savePressed() async {
     Template newTemplate = Template(
         header: _headerController.text,
@@ -258,7 +295,7 @@ class _AddTemplatePopupState extends State<AddTemplatePopup> {
         isLoading = true;
       });
       await Provider.of<FirebaseTemplatesProvider>(context, listen: false)
-          .addTemplate(newTemplate);
+          .setTemplate(newTemplate);
       Navigator.pop(context);
     }
   }

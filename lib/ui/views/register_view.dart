@@ -8,12 +8,19 @@ import 'package:diginote/ui/widgets/header_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// A view which displays a [RegisterForm] to allow a user to create a new account.
+///
+/// After successfully creating an account, a dialogue is shown informing the user
+/// to success. After which, the user presses the 'Login' button to login.
 class RegisterView extends StatelessWidget {
+  /// The [applicationRegisterState] determines the current state of registration.
   const RegisterView({Key? key, required this.applicationRegisterState})
       : super(key: key);
 
+  /// The named route for [RegisterView].
   static const String route = '/register';
 
+  /// The current [ApplicationRegisterState].
   final ApplicationRegisterState applicationRegisterState;
 
   @override
@@ -21,11 +28,12 @@ class RegisterView extends StatelessWidget {
     switch (applicationRegisterState) {
       case ApplicationRegisterState.registered:
         Future.delayed(
-            Duration.zero,
-            () => DialogueHelper.showSuccessDialogue(
-                context,
-                'Successful Registration',
-                'Successfully created an account. You can login.'));
+          Duration.zero,
+          () => DialogueHelper.showSuccessDialogue(
+              context,
+              'Successful Registration',
+              'Successfully created an account. You can login.'),
+        );
         return const RegisterForm();
       case ApplicationRegisterState.registering:
         return const RegisterForm();
@@ -35,6 +43,8 @@ class RegisterView extends StatelessWidget {
   }
 }
 
+/// The form which allows a user to register for a new account, or
+/// switch to the [LoginView] to login with an existing account.
 class RegisterForm extends StatefulWidget {
   const RegisterForm({Key? key}) : super(key: key);
 
@@ -100,7 +110,9 @@ class _RegisterFormState extends State<RegisterForm> {
                     footerText: "Already have an account?",
                     buttonText: 'Login',
                     onPressed: () async {
-                      Provider.of<FirebaseRegisterProvider>(context, listen: false).resetState();
+                      Provider.of<FirebaseRegisterProvider>(context,
+                              listen: false)
+                          .resetState();
                       Navigator.pushReplacementNamed(context, LoginView.route);
                     },
                   )
@@ -113,6 +125,10 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
+  /// Tries to register the user using the values input to 
+  /// [_emailController], [_passwordController] and [_usernameController].
+  /// 
+  /// If the account could not registered, an error dialogue is displayed to alert the user.
   Future<void> _register(FirebaseRegisterProvider registerProvider) async {
     if (_formKey.currentState!.validate()) {
       await registerProvider.createUserWithEmailAndPassword(
