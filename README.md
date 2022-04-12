@@ -1,6 +1,6 @@
 # diginote
 
-This app uses a companion app [Diginote Screen](https://github.com/kelvin589/diginotescreen) to display messages. 
+This app uses a companion app [Diginote Screen](https://github.com/kelvin589/diginotescreen) to display messages. A documentation page for the public libraries can be found [here](https://kelvin589.github.io/diginote/).
 
 ## Table of Contents
 * [Overview](#overview)
