@@ -43,6 +43,7 @@ Its core purpose was to ensure that availability is communicated clearly and eas
 * Make the preview view easier to use.
 * Speech to text.
 * Favourites option for templates.
+* Help section or tutorial for new users.
 
 ## Setup
 1. Setup your development environment by following the official Flutter guide
